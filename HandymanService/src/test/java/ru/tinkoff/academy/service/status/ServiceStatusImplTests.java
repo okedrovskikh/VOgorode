@@ -25,7 +25,6 @@ public class ServiceStatusImplTests {
     @Autowired
     private BuildProperties buildProperties;
 
-
     @Test
     public void testGetReadiness() {
         ReadinessResponse expectedReadinessResponse = ReadinessResponse.newBuilder()
