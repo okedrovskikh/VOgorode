@@ -27,6 +27,9 @@ services:
     build: ../LandscapeService
     container_name: landscape-service
     restart: always
+    environment:
+      HANDYMAN_GRPC_SERVER_ADDRESS: handyman-service:9090
+      RANCHER_GRPC_SERVER_ADDRESS: rancher-service:9091
     ports:
       - 8082:8082
     networks:
@@ -43,5 +46,28 @@ services:
       - 5432
     ports:
       - 5432:5432
+    networks:
+      - vogorode-network
+  prometheus:
+    image: prom/prometheus
+    container_name: vogorode-prometheus
+    restart: always
+    command: --web.listen-address=:10000 --config.file=/etc/prometheus/prometheus.yml
+    expose: 
+      - 10000
+    ports:
+      - 10000:10000
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - vogorode-network
+  grafana:
+    image: grafana/grafana:8.2.6
+    container_name: vogorode-grafana
+    restart: always
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
     networks:
       - vogorode-network
