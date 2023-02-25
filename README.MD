@@ -4,10 +4,6 @@
 
 [Запуск и настройка](/dev/README.md)
 
-## Запуск с использованием Docker
-
-[Docker-readme](/dev/README.md)
-
 ## Описание домашних работ
 [HW1](/docs/HW1/HW1.md)
 
