@@ -74,15 +74,27 @@ public class ServiceStatusService {
 
     private ServiceStatus getServiceStatus(Channel serviceChannel) {
         ServiceStatusGrpc.ServiceStatusBlockingStub serviceStatusBlockingStub = ServiceStatusGrpc.newBlockingStub(serviceChannel);
-        ReadinessResponse readinessResponse = serviceStatusBlockingStub.getReadiness(Empty.getDefaultInstance());
-        VersionResponse versionResponse = serviceStatusBlockingStub.getVersion(Empty.getDefaultInstance());
+        ConnectivityState connectivityState = grpcChannelFactory.getConnectivityState().get(serviceName);
+
+        if (isConnectionOk(connectivityState)) {
+            VersionResponse versionResponse = serviceStatusBlockingStub.getVersion(Empty.getDefaultInstance());
+            return ServiceStatus.builder()
+                    .host(serviceStatusBlockingStub.getChannel().authority())
+                    .status(connectivityState.name())
+                    .artifact(versionResponse.getArtifact())
+                    .name(versionResponse.getName())
+                    .group(versionResponse.getGroup())
+                    .version(versionResponse.getVersion())
+                    .build();
+        }
+
         return ServiceStatus.builder()
                 .host(serviceStatusBlockingStub.getChannel().authority())
-                .status(readinessResponse.getStatus())
-                .artifact(versionResponse.getArtifact())
-                .name(versionResponse.getName())
-                .group(versionResponse.getGroup())
-                .version(versionResponse.getVersion())
+                .status(connectivityState.name())
                 .build();
+    }
+
+    private boolean isConnectionOk(ConnectivityState connectivityState) {
+        return !connectivityState.equals(ConnectivityState.SHUTDOWN) && !connectivityState.equals(ConnectivityState.TRANSIENT_FAILURE);
     }
 }
