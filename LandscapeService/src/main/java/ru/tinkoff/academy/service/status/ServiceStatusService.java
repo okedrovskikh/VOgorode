@@ -104,7 +104,7 @@ public class ServiceStatusService {
         }
 
         return buildNotConnectedServiceStatus(serviceStatusBlockingStub.getChannel().authority(),
-                connectivityState.name());
+                grpcChannelFactory.getConnectivityState().get(serviceName).name());
     }
 
     private boolean isConnectionOk(ConnectivityState connectivityState) {
