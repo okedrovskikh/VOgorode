@@ -7,6 +7,7 @@ import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.channelfactory.GrpcChannelFactory;
 import net.devh.boot.grpc.client.config.GrpcChannelsProperties;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.proto.ServiceStatusGrpc;
 import ru.tinkoff.academy.proto.VersionResponse;
@@ -20,7 +21,10 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class ServiceStatusService {
-    private final GrpcChannelsProperties grpcChannelsProperties;
+    @GrpcClient("HandymanService")
+    private ServiceStatusGrpc.ServiceStatusBlockingStub handymanBlockingStub;
+    @GrpcClient("RancherService")
+    private ServiceStatusGrpc.ServiceStatusBlockingStub rancherBlockingStub;
     private final GrpcChannelFactory grpcChannelFactory;
 
     /**
@@ -29,27 +33,14 @@ public class ServiceStatusService {
      * @return {@link Map} with service name as key and {@link ServiceStatus} as value
      */
     public Map<String, List<ServiceStatus>> getServicesStatuses() {
-        Map<String, List<ServiceStatus>> connectedToServicesStatus = new HashMap<>();
-        for (String connectedToServiceName : grpcChannelsProperties.getClient().keySet()) {
-
-            if (isServiceNameInvalid(connectedToServiceName)) {
-                continue;
-            }
-
-            connectedToServicesStatus.computeIfAbsent(connectedToServiceName, key -> new ArrayList<>());
-            connectedToServicesStatus.get(connectedToServiceName).add(getServiceStatus(connectedToServiceName));
-        }
-        return connectedToServicesStatus;
+        return Map.of(
+                "HandymanService", List.of(getServiceStatus(handymanBlockingStub, "HandymanService")),
+                "RancherService", List.of(getServiceStatus(rancherBlockingStub, "RancherService"))
+        );
     }
 
-    private boolean isServiceNameInvalid(String serviceName) {
-        final String excludedGlobalName = "GLOBAL";
-        return serviceName.equals(excludedGlobalName);
-    }
-
-    private ServiceStatus getServiceStatus(String serviceName) {
-        Channel serviceChannel = grpcChannelFactory.createChannel(serviceName);
-        ServiceStatusGrpc.ServiceStatusBlockingStub serviceStatusBlockingStub = ServiceStatusGrpc.newBlockingStub(serviceChannel);
+    private ServiceStatus getServiceStatus(ServiceStatusGrpc.ServiceStatusBlockingStub serviceStatusBlockingStub,
+                                           String serviceName) {
         ConnectivityState connectivityState = grpcChannelFactory.getConnectivityState().get(serviceName);
 
         if (isConnectionOk(connectivityState)) {
@@ -65,12 +56,13 @@ public class ServiceStatusService {
                         .version(versionResponse.getVersion())
                         .build();
             } catch (StatusRuntimeException e) {
-                return buildNotConnectedServiceStatus(serviceChannel.authority(),
+                return buildNotConnectedServiceStatus(serviceStatusBlockingStub.getChannel().authority(),
                         grpcChannelFactory.getConnectivityState().get(serviceName).name());
             }
         }
 
-        return buildNotConnectedServiceStatus(serviceChannel.authority(), connectivityState.name());
+        return buildNotConnectedServiceStatus(serviceStatusBlockingStub.getChannel().authority(),
+                connectivityState.name());
     }
 
     private boolean isConnectionOk(ConnectivityState connectivityState) {
