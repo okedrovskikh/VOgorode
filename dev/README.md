@@ -15,6 +15,7 @@
 3) После выполнить docker run -p <Порт которые проброситься во вне>:<Порт определнный в **SERVER_PORT**> <Название image'а>
 
 ![./docker_photo/handyman_run.jpg](./docker_photo/handyman_run.jpg)
+![./docker_photo/handyman_ok.jpg](./docker_photo/handyman_ok.jpg)
 
 ## LandscapeService
 
@@ -29,6 +30,7 @@
 3) После выполнить docker run -p <Порт которые проброситься во вне>:<Порт определнный в **SERVER_PORT**> <Название image'а>
 
 ![./docker_photo/landscape_run.jpg](./docker_photo/landscape_run.jpg)
+![./docker_photo/landscape_ok.jpg](./docker_photo/landscape_ok.jpg)
 
 ## RancherService
 
@@ -43,6 +45,7 @@
 3) После выполнить docker run -p <Порт которые проброситься во вне>:<Порт определнный в **SERVER_PORT**> <Название image'а>
 
 ![./docker_photo/rancher_run.jpg](./docker_photo/rancher_run.jpg)
+![./docker_photo/rancher_ok.jpg](./docker_photo/rancher_ok.jpg)
 
 ## VOgorode
 
@@ -51,7 +54,9 @@
 1) Для запуска приложения обязательным является переопределение **RANCHER_GRPC_SERVER_ADDRESS** и **HANDYMAN_GRPC_SERVER_ADDRESS** в сервисе LandscapeService.
 В docker-compose они переопределены как 'rancher-service:9091' и 'handyman-service:9090' соответсвенно. 
 
-2) После командами cd ./dev и docker-compose up запустить сервис.
+2) После командой docker-compose up запустить сервис.
+
+![./docker_photo/docker-compose_ok.jpg](./docker_photo/docker-compose_ok.jpg)
 
 **Запуск с использованием Docker**
 
@@ -71,3 +76,4 @@
 
 ![./gradle_photo/gradle.jpg](./gradle_photo/gradle.jpg)
 ![./gradle_photo/java_jar.jpg](./gradle_photo/java_jar.jpg)
+![./gradle_photo/java_ok.jpg](./gradle_photo/java_ok.jpg)
