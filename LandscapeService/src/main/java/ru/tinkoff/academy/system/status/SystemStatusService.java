@@ -10,7 +10,6 @@ public class SystemStatusService {
     @Getter
     private SystemStatus systemStatus = SystemStatus.OK;
 
-
     private final Logger logger = LoggerFactory.getLogger(SystemStatusService.class);
 
     /**
