@@ -32,26 +32,19 @@ public class ServiceStatusService {
         for (String connectedToServiceName : this.grpcChannelsProperties.getClient().keySet()) {
             String serviceName = mapValidServiceName(connectedToServiceName);
 
-            if (serviceName == null) {
+            if (isServiceNameInvalid(connectedToServiceName)) {
                 continue;
             }
 
-            connectedToServicesStatus.computeIfAbsent(serviceName, key -> new ArrayList<>());
-            connectedToServicesStatus.get(serviceName).add(getServiceStatus(connectedToServiceName));
+            connectedToServicesStatus.computeIfAbsent(connectedToServiceName, key -> new ArrayList<>());
+            connectedToServicesStatus.get(connectedToServiceName).add(getServiceStatus(connectedToServiceName));
         }
         return connectedToServicesStatus;
     }
 
-    private String mapValidServiceName(String serviceName) {
-        List<String> mapValidServicesName = List.of("HandymanService", "RancherService");
-        for (String mapValidServiceName : mapValidServicesName) {
-
-            if (serviceName.contains(mapValidServiceName)) {
-                return mapValidServiceName;
-            }
-
-        }
-        return null;
+    private boolean isServiceNameInvalid(String serviceName) {
+        final String excludedGlobalName = "GLOBAL";
+        return serviceName.equals(excludedGlobalName);
     }
 
     private ServiceStatus getServiceStatus(String serviceName) {
@@ -77,24 +70,33 @@ public class ServiceStatusService {
         ConnectivityState connectivityState = grpcChannelFactory.getConnectivityState().get(serviceName);
 
         if (isConnectionOk(connectivityState)) {
-            VersionResponse versionResponse = serviceStatusBlockingStub.getVersion(Empty.getDefaultInstance());
-            return ServiceStatus.builder()
-                    .host(serviceStatusBlockingStub.getChannel().authority())
-                    .status(connectivityState.name())
-                    .artifact(versionResponse.getArtifact())
-                    .name(versionResponse.getName())
-                    .group(versionResponse.getGroup())
-                    .version(versionResponse.getVersion())
-                    .build();
+            try {
+                VersionResponse versionResponse = serviceStatusBlockingStub.getVersion(Empty.getDefaultInstance());
+                return ServiceStatus.builder()
+                        .host(serviceStatusBlockingStub.getChannel().authority())
+                        .status(connectivityState.name())
+                        .artifact(versionResponse.getArtifact())
+                        .name(versionResponse.getName())
+                        .group(versionResponse.getGroup())
+                        .version(versionResponse.getVersion())
+                        .build();
+            } catch (StatusRuntimeException e) {
+                return buildNotConnectedServiceStatus(serviceChannel.authority(),
+                        grpcChannelFactory.getConnectivityState().get(serviceName).name());
+            }
         }
 
-        return ServiceStatus.builder()
-                .host(serviceStatusBlockingStub.getChannel().authority())
-                .status(connectivityState.name())
-                .build();
+        return buildNotConnectedServiceStatus(serviceChannel.authority(), connectivityState.name());
     }
 
     private boolean isConnectionOk(ConnectivityState connectivityState) {
         return !connectivityState.equals(ConnectivityState.SHUTDOWN) && !connectivityState.equals(ConnectivityState.TRANSIENT_FAILURE);
+    }
+
+    private ServiceStatus buildNotConnectedServiceStatus(String host, String connectionState) {
+        return ServiceStatus.builder()
+                .host(host)
+                .status(connectionState)
+                .build();
     }
 }
