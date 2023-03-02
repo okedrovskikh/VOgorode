@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +72,8 @@ public class ServiceStatusService {
 
         if (isConnectionOk(connectivityState)) {
             try {
-                VersionResponse versionResponse = serviceStatusBlockingStub.getVersion(Empty.getDefaultInstance());
+                VersionResponse versionResponse = serviceStatusBlockingStub.withDeadlineAfter(100, TimeUnit.SECONDS)
+                        .getVersion(Empty.getDefaultInstance());
                 return ServiceStatus.builder()
                         .host(serviceStatusBlockingStub.getChannel().authority())
                         .status(connectivityState.name())
