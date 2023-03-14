@@ -1,9 +1,6 @@
 import datetime
 import random
 import argparse
-import zipfile
-import warnings
-
 from faker import Faker
 from faker.providers.internet import Provider as EmailProvider
 from faker.providers.phone_number import Provider as PhoneProvider
@@ -36,11 +33,11 @@ def create_type():
     rand = random.Random().randint(a=0, b=1)
     if rand == 0:
         if type_counter == 3:
-            type_counter += 1
-            return user_types[0]
-        else:
             type_counter = 0
             return user_types[2]
+        else:
+            type_counter += 1
+            return user_types[0]
     else:
         return user_types[1]
 
@@ -54,8 +51,6 @@ sql_str = 'insert into users ({}, {}, {}, {}, {}, {}) values'.format(args['type'
                                                                      args['telephone'], args['creation_date'],
                                                                      args['update_date']) + ' {};\n'
 
-with zipfile.ZipFile(file='users_data.zip', mode='w', compression=zipfile.ZIP_BZIP2) as zip_file:
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore')
-        for _ in range(3_140_000):
-            zip_file.writestr(zinfo_or_arcname='users_data.sql', data=sql_str.format(str(generate_data())))
+with open(file='users_data.sql', mode='w') as file:
+    for _ in range(3_140_000):
+        file.write(sql_str.format(str(generate_data())))
