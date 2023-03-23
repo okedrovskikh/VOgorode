@@ -29,7 +29,7 @@ public class ServiceStatusService {
      */
     public Map<String, List<ServiceStatus>> getServicesStatuses() {
         Map<String, List<ServiceStatus>> connectedToServicesStatus = new HashMap<>();
-        for (String connectedToServiceName : grpcChannelsProperties.getClient().keySet()) {
+        for (String connectedToServiceName : this.grpcChannelsProperties.getClient().keySet()) {
             String serviceName = mapValidServiceName(connectedToServiceName);
 
             if (serviceName == null) {
@@ -55,8 +55,8 @@ public class ServiceStatusService {
     }
 
     private ServiceStatus getServiceStatus(String serviceName) {
-        Channel serviceChannel = grpcChannelFactory.createChannel(serviceName);
-        ConnectivityState connectivityState = grpcChannelFactory.getConnectivityState().get(serviceName);
+        Channel serviceChannel = this.grpcChannelFactory.createChannel(serviceName);
+        ConnectivityState connectivityState = this.grpcChannelFactory.getConnectivityState().get(serviceName);
 
         if (isConnectionOk(connectivityState)) {
             return getServiceStatus(serviceChannel);

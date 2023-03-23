@@ -20,7 +20,7 @@ public class SystemService {
      * @return {@link Map} with service name as key and {@link SystemStatus} readiness state as value
      */
     public Map<String, SystemStatus> getReadiness() {
-        return Map.of(buildProperties.getName(), systemStatusService.getSystemStatus());
+        return Map.of(this.buildProperties.getName(), this.systemStatusService.getSystemStatus());
     }
 
     /**
@@ -30,6 +30,6 @@ public class SystemService {
      *                   if {@code false} change status to {@link SystemStatus#OK}
      */
     public void forceMalfunction(boolean isChangeTo) {
-        systemStatusService.changeToMalfunction(isChangeTo);
+        this.systemStatusService.changeToMalfunction(isChangeTo);
     }
 }
