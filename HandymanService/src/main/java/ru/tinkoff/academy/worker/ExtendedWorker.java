@@ -7,7 +7,10 @@ import java.util.List;
 
 @Data
 @Builder
-public class Worker {
+public class ExtendedWorker {
     private Long id;
     private List<WorkEnum> works;
+    private String login;
+    private String email;
+    private String telephone;
 }

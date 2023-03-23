@@ -37,8 +37,10 @@ dependencies {
     implementation 'io.micrometer:micrometer-registry-prometheus:1.10.3'
     implementation 'org.mongodb:mongodb-driver-sync'
     compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.mapstruct:mapstruct:1.5.3.Final'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.testcontainers:junit-jupiter'
 }

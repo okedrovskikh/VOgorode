@@ -1,10 +1,12 @@
 package ru.tinkoff.academy.user;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Data
+@Builder
 public class User {
     private Long id;
     private String type;

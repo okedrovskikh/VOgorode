@@ -8,10 +8,12 @@ import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 @Service
 @RequiredArgsConstructor
 public class WorkerService {
+    private final WorkerMapper workerMapper;
     private final WorkerRepository workerRepository;
 
     public Worker save(WorkerCreateDto workerCreateDto) {
-        return null;
+        Worker worker = this.workerMapper.dtoToWorker(workerCreateDto);
+        return worker;
     }
 
     public Worker getById(Long id) {
@@ -19,7 +21,8 @@ public class WorkerService {
     }
 
     public Worker update(WorkerUpdateDto workerUpdateDto) {
-        return null;
+        Worker worker = this.workerMapper.dtoToWorker(workerUpdateDto);
+        return worker;
     }
 
     public void delete(Long id) {

@@ -8,10 +8,12 @@ import ru.tinkoff.academy.user.dto.UserUpdateDto;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     public User save(UserCreateDto userCreateDto) {
-        return null;
+        User user = this.userMapper.dtoToUser(userCreateDto);
+        return user;
     }
 
     public User getById(Long id) {
@@ -19,7 +21,8 @@ public class UserService {
     }
 
     public User update(UserUpdateDto userUpdateDto) {
-        return null;
+        User user = this.userMapper.dtoToUser(userUpdateDto);
+        return user;
     }
 
     public void delete(Long id) {

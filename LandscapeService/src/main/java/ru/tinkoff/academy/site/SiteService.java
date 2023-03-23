@@ -8,10 +8,12 @@ import ru.tinkoff.academy.site.dto.SiteUpdateDto;
 @Service
 @RequiredArgsConstructor
 public class SiteService {
+    private final SiteMapper siteMapper;
     private final SiteRepository siteRepository;
 
     public Site save(SiteCreateDto siteCreateDto) {
-        return null;
+        Site site = this.siteMapper.dtoToSite(siteCreateDto);
+        return site;
     }
 
     public Site getById(Long id) {
@@ -19,7 +21,8 @@ public class SiteService {
     }
 
     public Site update(SiteUpdateDto siteUpdateDto) {
-        return null;
+        Site site = this.siteMapper.dtoToSite(siteUpdateDto);
+        return site;
     }
 
     public void delete(Long id) {
