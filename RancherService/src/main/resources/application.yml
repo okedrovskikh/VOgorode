@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8082}
+  port: ${SERVER_PORT:8083}
 management:
   endpoints:
     web:
@@ -24,6 +24,9 @@ spring:
     password: ${POSTGRES_PASSWORD:123}
   data:
     mongodb:
-      uri: mongodb://localhost:27017/vogorode
-      authentication-database: root
+      authentication-database: admin
+      username: root
       password: example
+      database: vogorode
+      host: localhost
+      port: 27017

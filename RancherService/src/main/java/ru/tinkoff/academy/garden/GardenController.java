@@ -13,7 +13,7 @@ import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 
 @RestController()
-@RequestMapping("/sites")
+@RequestMapping("/gardens")
 @RequiredArgsConstructor
 public class GardenController {
     private final GardenService gardenService;
@@ -24,7 +24,7 @@ public class GardenController {
     }
 
     @GetMapping("/{id}")
-    public Garden getById(@PathVariable("id") Long id) {
+    public ExtendedGarden getById(@PathVariable("id") Long id) {
         return this.gardenService.getById(id);
     }
 

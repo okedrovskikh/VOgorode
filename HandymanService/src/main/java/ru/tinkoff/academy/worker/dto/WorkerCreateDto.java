@@ -7,5 +7,9 @@ import java.util.List;
 
 @Data
 public class WorkerCreateDto {
+    private String type;
+    private String login;
+    private String email;
+    private String telephone;
     private List<WorkEnum> works;
 }

@@ -24,7 +24,7 @@ public class WorkerController {
     }
 
     @GetMapping("/{id}")
-    public Worker getById(@PathVariable("id") Long id) {
+    public ExtendedWorker getById(@PathVariable("id") Long id) {
         return this.workerService.getById(id);
     }
 

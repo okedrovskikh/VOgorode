@@ -1,4 +1,4 @@
-create table if not exists area
+create table if not exists site
 (
     id bigserial primary key,
     latitude double precision not null,
