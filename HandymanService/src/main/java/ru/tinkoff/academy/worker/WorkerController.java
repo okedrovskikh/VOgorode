@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/workers")
 @RequiredArgsConstructor
@@ -24,8 +26,13 @@ public class WorkerController {
     }
 
     @GetMapping("/{id}")
-    public ExtendedWorker getById(@PathVariable("id") Long id) {
+    public ExtendedWorker getById(@PathVariable("id") String id) {
         return this.workerService.getById(id);
+    }
+
+    @GetMapping("")
+    public List<ExtendedWorker> findAll() {
+        return this.workerService.findAllExtended();
     }
 
     @PutMapping("")
@@ -34,7 +41,7 @@ public class WorkerController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         this.workerService.delete(id);
     }
 }

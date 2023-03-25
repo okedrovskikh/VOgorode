@@ -8,7 +8,8 @@ import java.util.List;
 @Data
 @Builder
 public class ExtendedGarden {
-    private Long id;
+    private String id;
+    private Long landscapeId;
     private Long ownerId;
     private Double x1;
     private Double y1;

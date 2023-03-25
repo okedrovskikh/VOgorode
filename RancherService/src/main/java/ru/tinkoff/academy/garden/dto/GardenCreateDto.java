@@ -12,6 +12,5 @@ public class GardenCreateDto {
     private Double y1;
     private Double x2;
     private Double y2;
-    private Double square;
     private List<GardenWorks> works;
 }

@@ -10,8 +10,6 @@ import java.sql.Timestamp;
 @Builder
 public class User {
     private Long id;
-    @JsonIgnore
-    private Long landscapeId;
     private String type;
     private String login;
     private String email;

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.site.dto.SiteCreateDto;
 import ru.tinkoff.academy.site.dto.SiteUpdateDto;
 
+import java.util.List;
+
 @RestController()
 @RequestMapping("/sites")
 @RequiredArgsConstructor
@@ -26,6 +28,16 @@ public class SiteController {
     @GetMapping("/{id}")
     public Site getById(@PathVariable("id") Long id) {
         return this.siteService.getById(id);
+    }
+
+    @GetMapping("")
+    public List<Site> findAll() {
+        return this.siteService.findAll();
+    }
+
+    @GetMapping("/{ids}")
+    public List<Site> findAllById(@PathVariable("ids") List<Long> ids) {
+        return this.siteService.findAllById(ids);
     }
 
     @PutMapping

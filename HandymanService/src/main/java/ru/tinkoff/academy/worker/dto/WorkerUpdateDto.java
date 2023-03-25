@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class WorkerUpdateDto {
-    private Long id;
+    private String id;
+    private Long landscapeId;
     private List<WorkEnum> works;
 }

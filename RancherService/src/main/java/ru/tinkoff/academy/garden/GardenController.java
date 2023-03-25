@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 
+import java.util.List;
+
 @RestController()
 @RequestMapping("/gardens")
 @RequiredArgsConstructor
@@ -24,8 +26,13 @@ public class GardenController {
     }
 
     @GetMapping("/{id}")
-    public ExtendedGarden getById(@PathVariable("id") Long id) {
+    public ExtendedGarden getById(@PathVariable("id") String id) {
         return this.gardenService.getById(id);
+    }
+
+    @GetMapping("")
+    public List<ExtendedGarden> findAllExtended() {
+        return this.gardenService.findAllExtended();
     }
 
     @PutMapping
@@ -34,7 +41,7 @@ public class GardenController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         this.gardenService.delete(id);
     }
 }

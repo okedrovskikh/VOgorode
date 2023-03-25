@@ -2,11 +2,12 @@ package ru.tinkoff.academy.site;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.site.dto.SiteCreateDto;
 import ru.tinkoff.academy.site.dto.SiteUpdateDto;
-import ru.tinkoff.academy.user.User;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,11 +22,20 @@ public class SiteService {
     }
 
     public Site getById(Long id) {
-        return this.findById(id).orElseThrow(() -> new IllegalArgumentException());
+        return this.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Site wasn't find by id: %s", id)));
     }
 
     public Optional<Site> findById(Long id) {
         return this.siteRepository.findById(id);
+    }
+
+    public List<Site> findAll() {
+        return this.siteRepository.findAll();
+    }
+
+    public List<Site> findAllById(Iterable<Long> ids) {
+        return this.siteRepository.findAllById(ids);
     }
 
     @Transactional
@@ -34,7 +44,7 @@ public class SiteService {
         if (this.siteRepository.update(site) == 1) {
             return site;
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("No site was update");
     }
 
     public void delete(Long id) {

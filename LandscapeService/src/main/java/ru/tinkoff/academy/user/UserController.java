@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -26,6 +28,16 @@ public class UserController {
     @GetMapping("/{id}")
     public User getById(@PathVariable("id") Long id) {
         return this.userService.getById(id);
+    }
+
+    @GetMapping("")
+    public List<User> findAll() {
+        return this.userService.findAll();
+    }
+
+    @GetMapping("/{ids}")
+    public List<User> findAllById(@PathVariable("ids") List<Long> ids) {
+        return this.userService.findAllById(ids);
     }
 
     @PutMapping("")

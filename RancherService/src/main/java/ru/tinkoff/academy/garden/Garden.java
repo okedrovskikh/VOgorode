@@ -1,6 +1,5 @@
 package ru.tinkoff.academy.garden;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -14,7 +13,6 @@ import java.util.List;
 public class Garden {
     @Id
     private String id;
-    @JsonIgnore
     private Long landscapeId;
     private Long ownerId;
     private Double x1;

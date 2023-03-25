@@ -11,8 +11,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -37,6 +40,16 @@ public class User {
     @Column(name = "creation_date", nullable = false)
     private Timestamp creationDate;
     @Column(name = "update_date", nullable = false)
-    @Builder.ObtainVia(field = "creationDate")
     private Timestamp updateDate;
+
+    @PrePersist
+    public void prePersist() {
+        this.creationDate = Timestamp.from(Instant.now());
+        this.updateDate = creationDate;
+    }
+
+    @PreUpdate
+    public void updateDate() {
+        this.updateDate = Timestamp.from(Instant.now());
+    }
 }
