@@ -13,6 +13,6 @@ import java.util.List;
 public class Worker {
     @Id
     private String id;
-    private Long landscapeId;
+    private String landscapeId;
     private List<WorkEnum> works;
 }

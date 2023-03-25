@@ -1,5 +1,6 @@
 server:
   port: ${PORT:8082}
+
 management:
   endpoints:
     web:
@@ -11,6 +12,7 @@ management:
     export:
       prometheus:
         enabled: true
+
 grpc:
   client:
     HandymanService:
@@ -19,6 +21,7 @@ grpc:
     RancherService:
       address: ${RANCHER_GRPC_SERVER_ADDRESS:localhost:9091}
       negotiation-type: PLAINTEXT
+
 spring:
   liquibase:
     enabled: true

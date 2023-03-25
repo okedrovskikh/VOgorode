@@ -9,8 +9,7 @@ import java.util.List;
 @Builder
 public class ExtendedGarden {
     private String id;
-    private Long landscapeId;
-    private Long ownerId;
+    private String ownerId;
     private Double x1;
     private Double y1;
     private Double x2;

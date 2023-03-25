@@ -8,4 +8,6 @@ public class UserCreateDto {
     private String login;
     private String email;
     private String telephone;
+    private String latitude;
+    private String longitude;
 }

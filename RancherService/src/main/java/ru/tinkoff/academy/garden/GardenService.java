@@ -21,8 +21,10 @@ public class GardenService {
     private final GardenRepository gardenRepository;
     private final WebClientHelper webHelper;
 
-    @Transactional()
+    @Transactional
     public Garden save(GardenCreateDto gardenCreateDto) {
+        Garden garden = this.gardenMapper.dtoToGarden(gardenCreateDto);
+        garden = this.gardenRepository.save(garden);
         Site site = webHelper.webClient().post()
                 .uri("/sites")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -30,19 +32,13 @@ public class GardenService {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(Site.class).block();
-        Garden garden = this.gardenMapper.toGarden(gardenCreateDto, site);
-        return this.gardenRepository.save(garden);
+        return garden;
     }
 
     public ExtendedGarden getById(String id) {
         Garden garden = this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Garden wasn't find by id: %s", id)));
-        Site site = webHelper.webClient().get()
-                .uri(String.format("/sites/%s", garden.getLandscapeId()))
-                .accept(MediaType.APPLICATION_JSON)
-                .retrieve()
-                .bodyToMono(Site.class).block();
-        return this.gardenMapper.toExtendedGarden(garden, site);
+        return this.mapToExtended(garden);
     }
 
     public Optional<Garden> findById(String id) {
@@ -55,7 +51,7 @@ public class GardenService {
 
     private ExtendedGarden mapToExtended(Garden garden) {
         Site site = webHelper.webClient().get()
-                .uri(String.format("/sites/%s", garden.getLandscapeId()))
+                .uri(String.format("/sites/%s", garden.getId()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(Site.class).block();

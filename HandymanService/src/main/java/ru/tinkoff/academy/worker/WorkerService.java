@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 import ru.tinkoff.academy.landscape.WebClientHelper;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
@@ -25,7 +23,7 @@ public class WorkerService {
 
     @Transactional
     public Worker save(WorkerCreateDto workerCreateDto) {
-        User user = webHelper.webClient().post()
+        User user = this.webHelper.webClient().post()
                 .uri("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(this.userMapper.workerCreateDtoToUserCreateDto(workerCreateDto))
@@ -39,7 +37,7 @@ public class WorkerService {
     public ExtendedWorker getById(String id) {
         Worker worker = this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Worker wasn't find by id: %s", id)));
-        User user = webHelper.webClient().get()
+        User user = this.webHelper.webClient().get()
                 .uri(String.format("/users/%s", worker.getLandscapeId()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -56,7 +54,7 @@ public class WorkerService {
     }
 
     private ExtendedWorker mapToExtended(Worker worker) {
-        User user = webHelper.webClient().get()
+        User user = this.webHelper.webClient().get()
                 .uri(String.format("/users/%s", worker.getLandscapeId()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
@@ -72,6 +70,13 @@ public class WorkerService {
     public Worker update(WorkerUpdateDto workerUpdateDto) {
         Worker worker = this.workerMapper.dtoToWorker(workerUpdateDto);
         if (this.workerRepository.updateById(worker.getId(), worker) == 1) {
+            this.webHelper.webClient().put()
+                    .uri("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(this.userMapper.workerUpdateDtoToUserUpdateDto(workerUpdateDto))
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(User.class).block();
             return worker;
         }
         throw new IllegalArgumentException("No entity was update");

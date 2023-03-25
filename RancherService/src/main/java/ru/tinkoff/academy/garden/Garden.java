@@ -13,8 +13,7 @@ import java.util.List;
 public class Garden {
     @Id
     private String id;
-    private Long landscapeId;
-    private Long ownerId;
+    private String ownerId;
     private Double x1;
     private Double y1;
     private Double x2;

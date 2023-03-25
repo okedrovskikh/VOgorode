@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SiteRepository extends JpaRepository<Site, Long> {
+public interface SiteRepository extends JpaRepository<Site, String> {
     @Modifying
     @Query("update ru.tinkoff.academy.site.Site s set s = :site where s = :site")
     int update(@Param("site") Site site);

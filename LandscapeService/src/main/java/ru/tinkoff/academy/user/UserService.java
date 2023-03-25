@@ -20,12 +20,18 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public User getById(Long id) {
+    public User save(String id, UserCreateDto userCreateDto) {
+        User user = this.userMapper.dtoToUser(userCreateDto);
+        user.setId(id);
+        return this.userRepository.save(user);
+    }
+
+    public User getById(String id) {
         return this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("User wasn't find by id: %s", id)));
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<User> findById(String id) {
         return this.userRepository.findById(id);
     }
 
@@ -33,7 +39,7 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public List<User> findAllById(Iterable<Long> ids) {
+    public List<User> findAllById(Iterable<String> ids) {
         return this.userRepository.findAllById(ids);
     }
 
@@ -46,7 +52,7 @@ public class UserService {
         throw new IllegalArgumentException("No user was update");
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         this.userRepository.deleteById(id);
     }
 }

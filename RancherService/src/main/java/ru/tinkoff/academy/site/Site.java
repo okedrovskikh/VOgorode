@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class Site {
-    private Long id;
+    private String id;
     private Double latitude;
     private Double longitude;
 }

@@ -19,3 +19,8 @@ databaseChangeLog:
       author: o.kedrovskikh
       sqlFile:
         path: classpath:db/changelog/v6/CREATE_site_TABLE.sql
+  - changeSet:
+      id: ADD_laitude_longitude_USERS
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v6/ADD_latitude_longitude_USERS.sql

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.site.dto.SiteCreateDto;
 import ru.tinkoff.academy.site.dto.SiteUpdateDto;
@@ -25,8 +26,13 @@ public class SiteController {
         return this.siteService.save(siteCreateDto);
     }
 
+    @PostMapping("/{id}")
+    public Site save(@PathVariable("id") String id, @RequestBody SiteCreateDto siteCreateDto) {
+        return this.siteService.save(id, siteCreateDto);
+    }
+
     @GetMapping("/{id}")
-    public Site getById(@PathVariable("id") Long id) {
+    public Site getById(@PathVariable("id") String id) {
         return this.siteService.getById(id);
     }
 
@@ -36,7 +42,7 @@ public class SiteController {
     }
 
     @GetMapping("/{ids}")
-    public List<Site> findAllById(@PathVariable("ids") List<Long> ids) {
+    public List<Site> findAllById(@PathVariable("ids") List<String> ids) {
         return this.siteService.findAllById(ids);
     }
 
@@ -46,7 +52,7 @@ public class SiteController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         this.siteService.delete(id);
     }
 }

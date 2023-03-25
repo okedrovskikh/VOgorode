@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class UserUpdateDto {
-    private Long id;
+    private String id;
     private String type;
     private String login;
     private String email;
     private String telephone;
+    private String latitude;
+    private String longitude;
 }

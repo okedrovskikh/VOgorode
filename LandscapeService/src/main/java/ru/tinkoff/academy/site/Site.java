@@ -24,7 +24,7 @@ public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
     @Column(name = "latitude", nullable = false)
     private Double latitude;
     @Column(name = "longitude", nullable = false)

@@ -1,6 +1,5 @@
 package ru.tinkoff.academy.system;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +11,18 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.system.status.SystemStatus;
 
 import java.util.Map;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class SystemControllerTests {
+public class SystemControllerTests extends AbstractIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private BuildProperties buildProperties;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testGetLiveness() throws Exception {

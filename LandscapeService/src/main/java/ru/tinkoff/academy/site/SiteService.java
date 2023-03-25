@@ -2,7 +2,6 @@ package ru.tinkoff.academy.site;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.site.dto.SiteCreateDto;
 import ru.tinkoff.academy.site.dto.SiteUpdateDto;
@@ -21,12 +20,18 @@ public class SiteService {
         return this.siteRepository.save(site);
     }
 
-    public Site getById(Long id) {
+    public Site save(String id, SiteCreateDto siteCreateDto) {
+        Site site = this.siteMapper.dtoToSite(siteCreateDto);
+        site.setId(id);
+        return this.siteRepository.save(site);
+    }
+
+    public Site getById(String id) {
         return this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Site wasn't find by id: %s", id)));
     }
 
-    public Optional<Site> findById(Long id) {
+    public Optional<Site> findById(String id) {
         return this.siteRepository.findById(id);
     }
 
@@ -34,7 +39,7 @@ public class SiteService {
         return this.siteRepository.findAll();
     }
 
-    public List<Site> findAllById(Iterable<Long> ids) {
+    public List<Site> findAllById(Iterable<String> ids) {
         return this.siteRepository.findAllById(ids);
     }
 
@@ -47,7 +52,7 @@ public class SiteService {
         throw new IllegalArgumentException("No site was update");
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         this.siteRepository.deleteById(id);
     }
 }

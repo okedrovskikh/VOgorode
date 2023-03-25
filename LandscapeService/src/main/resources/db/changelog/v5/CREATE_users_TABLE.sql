@@ -1,6 +1,8 @@
+create extension if not exists "uuid-ossp";
+
 create table if not exists users
 (
-    id bigserial primary key,
+    id uuid default uuid_generate_v4() primary key,
     u_type text not null,
     u_login varchar(42) not null,
     email text not null,

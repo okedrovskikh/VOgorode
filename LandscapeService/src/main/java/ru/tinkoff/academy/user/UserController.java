@@ -25,8 +25,13 @@ public class UserController {
         return this.userService.save(userCreateDto);
     }
 
+    @PostMapping("/{id}")
+    public User save(@PathVariable("id") String id, @RequestBody UserCreateDto userCreateDto) {
+        return this.userService.save(id, userCreateDto);
+    }
+
     @GetMapping("/{id}")
-    public User getById(@PathVariable("id") Long id) {
+    public User getById(@PathVariable("id") String id) {
         return this.userService.getById(id);
     }
 
@@ -36,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping("/{ids}")
-    public List<User> findAllById(@PathVariable("ids") List<Long> ids) {
+    public List<User> findAllById(@PathVariable("ids") List<String> ids) {
         return this.userService.findAllById(ids);
     }
 
@@ -46,7 +51,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         this.userService.delete(id);
     }
 }

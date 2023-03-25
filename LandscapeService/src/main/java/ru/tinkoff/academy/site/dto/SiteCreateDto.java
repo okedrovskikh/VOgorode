@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SiteCreateDto {
-    private Double latitude;
-    private Double longitude;
+    private String latitude;
+    private String longitude;
 }

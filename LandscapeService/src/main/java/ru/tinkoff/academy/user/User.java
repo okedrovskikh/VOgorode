@@ -28,7 +28,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
     @Column(name = "u_type", nullable = false)
     private String type;
     @Column(name = "u_login", nullable = false)
@@ -41,6 +41,10 @@ public class User {
     private Timestamp creationDate;
     @Column(name = "update_date", nullable = false)
     private Timestamp updateDate;
+    @Column(name = "latitude")
+    private Double latitude;
+    @Column(name = "longitude")
+    private Double longitude;
 
     @PrePersist
     public void prePersist() {

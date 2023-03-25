@@ -7,7 +7,12 @@ import java.util.List;
 
 @Data
 public class WorkerUpdateDto {
+    private String login;
+    private String email;
+    private String telephone;
     private String id;
     private Long landscapeId;
     private List<WorkEnum> works;
+    private Double latitude;
+    private Double longitude;
 }
