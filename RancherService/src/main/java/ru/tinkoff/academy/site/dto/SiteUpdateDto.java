@@ -3,10 +3,12 @@ package ru.tinkoff.academy.site.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Builder
 public class SiteUpdateDto {
-    private String id;
+    private UUID id;
     private Double latitude;
     private Double longitude;
 }

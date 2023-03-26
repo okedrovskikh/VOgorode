@@ -9,9 +9,9 @@ import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mapping(target = "type", expression = "java(\"handyman\")")
+    @Mapping(target = "type", expression = "java(\"HANDYMAN\")")
     UserCreateDto workerCreateDtoToUserCreateDto(WorkerCreateDto workerCreateDto);
 
-    @Mapping(target = "type", expression = "java(\"handyman\")")
+    @Mapping(target = "type", expression = "java(\"HANDYMAN\")")
     UserUpdateDto workerUpdateDtoToUserUpdateDto(WorkerUpdateDto workerUpdateDto);
 }

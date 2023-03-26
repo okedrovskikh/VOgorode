@@ -4,11 +4,12 @@ import lombok.Data;
 import ru.tinkoff.academy.garden.GardenWorks;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class GardenUpdateDto {
-    private String id;
-    private String ownerId;
+    private UUID id;
+    private UUID ownerId;
     private Double x1;
     private Double y1;
     private Double x2;

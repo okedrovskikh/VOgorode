@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -13,7 +14,7 @@ import java.util.List;
 public class Garden {
     @Id
     private String id;
-    private String ownerId;
+    private UUID ownerId;
     private Double x1;
     private Double y1;
     private Double x2;

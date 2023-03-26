@@ -8,6 +8,7 @@ import ru.tinkoff.academy.site.dto.SiteUpdateDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,18 +21,18 @@ public class SiteService {
         return this.siteRepository.save(site);
     }
 
-    public Site save(String id, SiteCreateDto siteCreateDto) {
+    public Site save(UUID id, SiteCreateDto siteCreateDto) {
         Site site = this.siteMapper.dtoToSite(siteCreateDto);
         site.setId(id);
         return this.siteRepository.save(site);
     }
 
-    public Site getById(String id) {
+    public Site getById(UUID id) {
         return this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Site wasn't find by id: %s", id)));
     }
 
-    public Optional<Site> findById(String id) {
+    public Optional<Site> findById(UUID id) {
         return this.siteRepository.findById(id);
     }
 
@@ -39,7 +40,7 @@ public class SiteService {
         return this.siteRepository.findAll();
     }
 
-    public List<Site> findAllById(Iterable<String> ids) {
+    public List<Site> findAllById(Iterable<UUID> ids) {
         return this.siteRepository.findAllById(ids);
     }
 
@@ -52,7 +53,7 @@ public class SiteService {
         throw new IllegalArgumentException("No site was update");
     }
 
-    public void delete(String id) {
+    public void delete(UUID id) {
         this.siteRepository.deleteById(id);
     }
 }

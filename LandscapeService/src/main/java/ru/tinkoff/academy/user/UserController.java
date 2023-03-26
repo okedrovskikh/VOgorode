@@ -13,6 +13,7 @@ import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -26,12 +27,12 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    public User save(@PathVariable("id") String id, @RequestBody UserCreateDto userCreateDto) {
+    public User save(@PathVariable("id") UUID id, @RequestBody UserCreateDto userCreateDto) {
         return this.userService.save(id, userCreateDto);
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable("id") String id) {
+    public User getById(@PathVariable("id") UUID id) {
         return this.userService.getById(id);
     }
 
@@ -41,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/{ids}")
-    public List<User> findAllById(@PathVariable("ids") List<String> ids) {
+    public List<User> findAllById(@PathVariable("ids") List<UUID> ids) {
         return this.userService.findAllById(ids);
     }
 
@@ -51,7 +52,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") String id) {
+    public void delete(@PathVariable("id") UUID id) {
         this.userService.delete(id);
     }
 }

@@ -12,6 +12,7 @@ import ru.tinkoff.academy.site.SiteMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +26,8 @@ public class GardenService {
     public Garden save(GardenCreateDto gardenCreateDto) {
         Garden garden = this.gardenMapper.dtoToGarden(gardenCreateDto);
         garden = this.gardenRepository.save(garden);
-        Site site = webHelper.webClient().post()
-                .uri("/sites")
+        webHelper.webClient().post()
+                .uri(String.format("/sites/%s", garden.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(this.siteMapper.gardenDtoToSiteCreateDto(gardenCreateDto))
                 .accept(MediaType.APPLICATION_JSON)
@@ -35,13 +36,13 @@ public class GardenService {
         return garden;
     }
 
-    public ExtendedGarden getById(String id) {
+    public ExtendedGarden getById(UUID id) {
         Garden garden = this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Garden wasn't find by id: %s", id)));
         return this.mapToExtended(garden);
     }
 
-    public Optional<Garden> findById(String id) {
+    public Optional<Garden> findById(UUID id) {
         return this.gardenRepository.findById(id);
     }
 
@@ -65,7 +66,7 @@ public class GardenService {
     @Transactional
     public Garden update(GardenUpdateDto gardenUpdateDto) {
         Garden garden = this.gardenMapper.dtoToGarden(gardenUpdateDto);
-        if (this.gardenRepository.updateById(garden.getId(), garden) == 1) {
+        if (this.gardenRepository.updateById(UUID.fromString(garden.getId()), garden) == 1) {
             webHelper.webClient().put()
                     .uri("/sites")
                     .contentType(MediaType.APPLICATION_JSON)
@@ -78,7 +79,7 @@ public class GardenService {
         throw new IllegalArgumentException("No entity was update");
     }
 
-    public void delete(String id) {
+    public void delete(UUID id) {
         this.gardenRepository.deleteById(id);
     }
 }

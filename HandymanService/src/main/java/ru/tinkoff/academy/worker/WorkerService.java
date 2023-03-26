@@ -12,6 +12,7 @@ import ru.tinkoff.academy.user.UserMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,29 +24,30 @@ public class WorkerService {
 
     @Transactional
     public Worker save(WorkerCreateDto workerCreateDto) {
-        User user = this.webHelper.webClient().post()
-                .uri("/users")
+        Worker worker = this.workerMapper.dtoToWorker(workerCreateDto);
+        worker = this.workerRepository.save(worker);
+        this.webHelper.webClient().post()
+                .uri(String.format("/users/%s", worker.getId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(this.userMapper.workerCreateDtoToUserCreateDto(workerCreateDto))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(User.class).block();
-        Worker worker = this.workerMapper.toWorker(workerCreateDto, user);
-        return this.workerRepository.save(worker);
+        return worker;
     }
 
-    public ExtendedWorker getById(String id) {
+    public ExtendedWorker getById(UUID id) {
         Worker worker = this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Worker wasn't find by id: %s", id)));
         User user = this.webHelper.webClient().get()
-                .uri(String.format("/users/%s", worker.getLandscapeId()))
+                .uri(String.format("/users/%s", worker.getId()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(User.class).block();
         return this.workerMapper.toExtendedWorker(worker, user);
     }
 
-    public Optional<Worker> findById(String id) {
+    public Optional<Worker> findById(UUID id) {
         return this.workerRepository.findById(id);
     }
 
@@ -55,7 +57,7 @@ public class WorkerService {
 
     private ExtendedWorker mapToExtended(Worker worker) {
         User user = this.webHelper.webClient().get()
-                .uri(String.format("/users/%s", worker.getLandscapeId()))
+                .uri(String.format("/users/%s", worker.getId()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(User.class).block();
@@ -82,7 +84,7 @@ public class WorkerService {
         throw new IllegalArgumentException("No entity was update");
     }
 
-    public void delete(String id) {
+    public void delete(UUID id) {
         this.workerRepository.deleteById(id);
     }
 }

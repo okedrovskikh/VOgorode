@@ -6,13 +6,21 @@ import ru.tinkoff.academy.site.dto.SiteCreateDto;
 import ru.tinkoff.academy.site.dto.SiteUpdateDto;
 
 @Mapper(componentModel = "spring")
-public interface SiteMapper {
+public abstract class SiteMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "latitude", expression = "java(java.lang.Double.valueOf(siteCreateDto.getLatitude()))")
-    @Mapping(target = "longitude", expression = "java(java.lang.Double.valueOf(siteCreateDto.getLongitude()))")
-    Site dtoToSite(SiteCreateDto siteCreateDto);
+    @Mapping(target = "latitude", expression = "java(this.fromStringToDouble(siteCreateDto.getLatitude()))")
+    @Mapping(target = "longitude", expression = "java(this.fromStringToDouble(siteCreateDto.getLongitude()))")
+    public abstract Site dtoToSite(SiteCreateDto siteCreateDto);
 
-    @Mapping(target = "latitude", expression = "java(java.lang.Double.valueOf(siteUpdateDto.getLatitude()))")
-    @Mapping(target = "longitude", expression = "java(java.lang.Double.valueOf(siteUpdateDto.getLongitude()))")
-    Site dtoToSite(SiteUpdateDto siteUpdateDto);
+    @Mapping(target = "latitude", expression = "java(this.fromStringToDouble(siteUpdateDto.getLatitude()))")
+    @Mapping(target = "longitude", expression = "java(this.fromStringToDouble(siteUpdateDto.getLongitude()))")
+    public abstract Site dtoToSite(SiteUpdateDto siteUpdateDto);
+
+    protected final Double fromStringToDouble(String s) {
+        if (s == null) {
+            return null;
+        }
+
+        return Double.valueOf(s);
+    }
 }

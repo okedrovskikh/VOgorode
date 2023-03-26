@@ -9,8 +9,7 @@ import ru.tinkoff.academy.user.User;
 @Mapper(componentModel = "spring")
 public interface WorkerMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "landscapeId", source = "user.id")
-    Worker toWorker(WorkerCreateDto workerCreateDto, User user);
+    Worker dtoToWorker(WorkerCreateDto workerCreateDto);
 
     Worker dtoToWorker(WorkerUpdateDto workerCreateDto);
 

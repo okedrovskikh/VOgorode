@@ -13,6 +13,7 @@ import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController()
 @RequestMapping("/gardens")
@@ -26,7 +27,7 @@ public class GardenController {
     }
 
     @GetMapping("/{id}")
-    public ExtendedGarden getById(@PathVariable("id") String id) {
+    public ExtendedGarden getById(@PathVariable("id") UUID id) {
         return this.gardenService.getById(id);
     }
 
@@ -41,7 +42,7 @@ public class GardenController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") String id) {
+    public void delete(@PathVariable("id") UUID id) {
         this.gardenService.delete(id);
     }
 }

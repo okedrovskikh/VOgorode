@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
+import ru.tinkoff.academy.converter.UuidConverter;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -32,9 +32,8 @@ import java.util.UUID;
 @TypeDef(name = "user_enum_type", typeClass = UserEnumType.class)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, columnDefinition = "uuid default uuid_generate_v4()")
-    @Type(type = "org.hibernate.type.PostgresUUIDType")
+    @Column(name = "id", nullable = false, unique = true, updatable = false, columnDefinition = "uuid")
+    @Convert(converter = UuidConverter.class)
     private UUID id;
     @Column(name = "u_type", nullable = false, columnDefinition = "user_types")
     @Enumerated(EnumType.STRING)

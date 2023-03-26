@@ -192,7 +192,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testGetByNotExistId() throws Exception {
-        String id = UUID.randomUUID().toString();
+        UUID id = UUID.randomUUID();
 
         this.mockMvc.perform(MockMvcRequestBuilders.get(String.format(this.usersById, id))
                         .accept(MediaType.APPLICATION_JSON))
@@ -229,7 +229,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .build();
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
-        userUpdateDto.setId(id.toString());
+        userUpdateDto.setId(id);
         userUpdateDto.setType(UserType.LANDSCAPE);
         userUpdateDto.setLogin("new-login");
         userUpdateDto.setEmail("email@email.com");
@@ -251,7 +251,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testUpdateCorrectUserWithNotExistId() throws Exception {
-        String id = UUID.randomUUID().toString();
+        UUID id = UUID.randomUUID();
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
         userUpdateDto.setId(id);
@@ -271,7 +271,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testUpdateIncorrectUserWithNotExistId() throws Exception {
-        String id = UUID.randomUUID().toString();
+        UUID id = UUID.randomUUID();
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
         userUpdateDto.setId(id);
@@ -288,7 +288,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testUpdateIncorrectUserWithExistId() throws Exception {
-        String id = ""; //todo id
+        UUID id = UUID.fromString(""); //todo id
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
         userUpdateDto.setId(id);
@@ -308,7 +308,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteByExistId() throws Exception {
-        String id = ""; //todo id
+        UUID id = UUID.fromString(""); //todo id
 
         Assertions.assertTrue(this.userRepository.existsById(id));
 
@@ -321,7 +321,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteByNotExistId() throws Exception {
-        String id = UUID.randomUUID().toString();
+        UUID id = UUID.randomUUID();
 
         Assertions.assertFalse(this.userRepository.existsById(id));
 

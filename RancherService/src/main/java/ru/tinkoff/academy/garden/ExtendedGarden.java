@@ -4,12 +4,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 public class ExtendedGarden {
-    private String id;
-    private String ownerId;
+    private UUID id;
+    private UUID ownerId;
     private Double x1;
     private Double y1;
     private Double x2;
