@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: base_migrations
+      author: o.kedrovskikh
+      context: test
+      changeLog:
+        path: classpath:db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: add_test_data
+      author: o.kedrovskikh
+      context: test
+      sqlFile:
+        path: classpath:db/changelog/v6/users_test_data.sql

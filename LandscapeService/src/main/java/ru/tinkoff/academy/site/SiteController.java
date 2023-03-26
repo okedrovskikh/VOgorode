@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.site.dto.SiteCreateDto;
 import ru.tinkoff.academy.site.dto.SiteUpdateDto;
@@ -36,13 +37,13 @@ public class SiteController {
         return this.siteService.getById(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Site> findAll() {
         return this.siteService.findAll();
     }
 
-    @GetMapping("/{ids}")
-    public List<Site> findAllById(@PathVariable("ids") List<UUID> ids) {
+    @GetMapping("")
+    public List<Site> findAllById(@RequestParam("ids") List<UUID> ids) {
         return this.siteService.findAllById(ids);
     }
 

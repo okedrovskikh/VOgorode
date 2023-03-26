@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
@@ -36,13 +37,13 @@ public class UserController {
         return this.userService.getById(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public List<User> findAll() {
         return this.userService.findAll();
     }
 
-    @GetMapping("/{ids}")
-    public List<User> findAllById(@PathVariable("ids") List<UUID> ids) {
+    @GetMapping("")
+    public List<User> findAllById(@RequestParam("ids") List<UUID> ids) {
         return this.userService.findAllById(ids);
     }
 

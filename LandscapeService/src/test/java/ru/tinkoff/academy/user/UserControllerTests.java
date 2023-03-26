@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.user;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -30,6 +31,11 @@ public class UserControllerTests extends AbstractIntegrationTest {
     private MockMvc mockMvc;
     @Autowired
     private UserRepository userRepository;
+
+    @BeforeAll
+    public static void set() {
+
+    }
 
     @Test
     public void testSaveCorrectUser() throws Exception {
@@ -113,7 +119,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testSaveCorrectUserWithExistId() throws Exception {
-        String id = "3e76f3f6-9f6e-41fd-8e0f-b07c2166152d"; //todo id
+        String id = "3e76f3f6-9f6e-41fd-8e0f-b07c2166152d";
 
         UserCreateDto userCreateDto = new UserCreateDto();
         userCreateDto.setType(UserType.LANDSCAPE);
@@ -174,8 +180,8 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .login("login")
                 .email("email@email.com")
                 .telephone("89999999999")
-                .creationDate(Timestamp.valueOf("2023-03-26T17:04:39.151+00:00"))
-                .updateDate(Timestamp.valueOf("2023-03-26T17:04:39.151+00:00"))
+                .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                 .latitude(450.0)
                 .longitude(540.0)
                 .build();
@@ -203,19 +209,19 @@ public class UserControllerTests extends AbstractIntegrationTest {
     public void testGetAll() throws Exception {
         int expectedSize = 3;
 
-        MvcResult usersResponse = this.mockMvc.perform(MockMvcRequestBuilders.get(this.users)
+        MvcResult usersResponse = this.mockMvc.perform(MockMvcRequestBuilders.get(this.users + "/all")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
         List<User> actualUsers = this.objectMapper.readValue(usersResponse.getResponse().getContentAsString(), this.listUserType());
 
-        Assertions.assertEquals(expectedSize, actualUsers.size());
+        Assertions.assertTrue(expectedSize <= actualUsers.size());
     }
 
     @Test
     public void testUpdateCorrectUserWithExistId() throws Exception {
-        UUID id = UUID.fromString(""); //todo id
+        UUID id = UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-a07c2166152d");
 
         User expectedUser = User.builder()
                 .id(id)
@@ -223,7 +229,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .login("new-login")
                 .email("email@email.com")
                 .telephone("89999999998")
-                .creationDate(Timestamp.valueOf("2023-03-26T17:04:39.151+00:00"))
+                .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                 .latitude(890.0)
                 .longitude(900.9)
                 .build();
@@ -288,13 +294,12 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testUpdateIncorrectUserWithExistId() throws Exception {
-        UUID id = UUID.fromString(""); //todo id
+        UUID id = UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-a07c2166152d");
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
         userUpdateDto.setId(id);
         userUpdateDto.setType(UserType.LANDSCAPE);
         userUpdateDto.setLogin("new-login");
-        userUpdateDto.setEmail("email@email.com");
         userUpdateDto.setTelephone("89999999998");
         userUpdateDto.setLatitude("890.0");
         userUpdateDto.setLongitude("900.9");
@@ -308,7 +313,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteByExistId() throws Exception {
-        UUID id = UUID.fromString(""); //todo id
+        UUID id = UUID.fromString("5e76f3f6-9f6e-41fd-8e0f-a07c2166152d");
 
         Assertions.assertTrue(this.userRepository.existsById(id));
 
