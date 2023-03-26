@@ -5,9 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +20,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -24,13 +29,17 @@ import java.time.Instant;
 @Builder
 @Entity(name = "users")
 @Table(schema = "public", catalog = "vogorode")
+@TypeDef(name = "user_enum_type", typeClass = UserEnumType.class)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private String id;
-    @Column(name = "u_type", nullable = false)
-    private String type;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false, columnDefinition = "uuid default uuid_generate_v4()")
+    @Type(type = "org.hibernate.type.PostgresUUIDType")
+    private UUID id;
+    @Column(name = "u_type", nullable = false, columnDefinition = "user_types")
+    @Enumerated(EnumType.STRING)
+    @Type(type = "user_enum_type")
+    private UserType type;
     @Column(name = "u_login", nullable = false)
     private String login;
     @Column(name = "email", nullable = false)

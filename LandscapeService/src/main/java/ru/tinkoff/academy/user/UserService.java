@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
@@ -8,6 +9,7 @@ import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +24,13 @@ public class UserService {
 
     public User save(String id, UserCreateDto userCreateDto) {
         User user = this.userMapper.dtoToUser(userCreateDto);
-        user.setId(id);
+        user.setId(UUID.fromString(id));
         return this.userRepository.save(user);
     }
 
     public User getById(String id) {
         return this.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("User wasn't find by id: %s", id)));
+                .orElseThrow(() -> new EmptyResultDataAccessException(String.format("User wasn't find by id: %s", id), 1));
     }
 
     public Optional<User> findById(String id) {
