@@ -1,23 +1,24 @@
 package ru.tinkoff.academy.user;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import ru.tinkoff.academy.converter.UuidConverter;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
@@ -29,15 +30,15 @@ import java.util.UUID;
 @Builder
 @Entity(name = "users")
 @Table(schema = "public", catalog = "vogorode")
-@TypeDef(name = "user_enum_type", typeClass = UserEnumType.class)
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, unique = true, updatable = false, columnDefinition = "uuid")
     @Convert(converter = UuidConverter.class)
     private UUID id;
     @Column(name = "u_type", nullable = false, columnDefinition = "user_types")
     @Enumerated(EnumType.STRING)
-    @Type(type = "user_enum_type")
+    @Type(value = UserEnumType.class)
     private UserType type;
     @Column(name = "u_login", nullable = false)
     private String login;

@@ -1,7 +1,8 @@
 package ru.tinkoff.academy.converter;
 
-import javax.persistence.AttributeConverter;
-import javax.persistence.Converter;
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Converter;
+
 import java.util.UUID;
 
 @Converter

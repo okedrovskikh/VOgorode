@@ -11,22 +11,22 @@ import java.sql.Types;
 
 public class UserEnumType extends EnumType<UserType> {
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SharedSessionContractImplementor session)
+    public void nullSafeSet(PreparedStatement st, UserType value, int index, SharedSessionContractImplementor session)
             throws HibernateException, SQLException {
         if(value == null) {
-            st.setNull( index, Types.OTHER );
+            st.setNull(index, Types.OTHER);
         } else {
-            st.setObject( index, value.toString().toLowerCase(), Types.OTHER );
+            st.setObject(index, value.toString().toLowerCase(), Types.OTHER);
         }
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner)
+    public UserType nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
             throws SQLException {
         if (rs.wasNull()) {
             return null;
         }
-        String label = rs.getString(names[0]);
+        String label = rs.getString(position);
         return UserType.valueOf(label.toUpperCase());
     }
 }
