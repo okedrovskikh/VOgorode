@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.user;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
@@ -22,15 +22,9 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public User save(UUID id, UserCreateDto userCreateDto) {
-        User user = this.userMapper.dtoToUser(userCreateDto);
-        user.setId(id);
-        return this.userRepository.save(user);
-    }
-
     public User getById(UUID id) {
         return this.findById(id)
-                .orElseThrow(() -> new EmptyResultDataAccessException(String.format("User wasn't find by id: %s", id), 1));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by id: %s", id)));
     }
 
     public Optional<User> findById(UUID id) {
@@ -47,11 +41,9 @@ public class UserService {
 
     @Transactional
     public User update(UserUpdateDto userUpdateDto) {
-        User user = this.userMapper.dtoToUser(userUpdateDto);
-        if (this.userRepository.update(user) == 1) {
-            return user;
-        }
-        throw new IllegalArgumentException("No user was update");
+        User user = this.userRepository.getReferenceById(userUpdateDto.getId());
+        user = this.userMapper.updateUser(userUpdateDto, user);
+        return this.userRepository.save(user);
     }
 
     public void delete(UUID id) {

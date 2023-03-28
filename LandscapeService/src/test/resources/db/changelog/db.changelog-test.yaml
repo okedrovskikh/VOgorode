@@ -1,10 +1,7 @@
 databaseChangeLog:
-  - changeSet:
-      id: base_migrations
-      author: o.kedrovskikh
+  - include:
       context: test
-      changeLog:
-        path: classpath:db/changelog/db.changelog-master.yaml
+      file: classpath:db/changelog/db.changelog-master.yaml
   - changeSet:
       id: add_test_data
       author: o.kedrovskikh

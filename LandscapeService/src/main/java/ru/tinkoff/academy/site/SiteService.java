@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.site;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class SiteService {
 
     public Site getById(UUID id) {
         return this.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Site wasn't find by id: %s", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Site wasn't find by id: %s", id)));
     }
 
     public Optional<Site> findById(UUID id) {
@@ -40,11 +41,9 @@ public class SiteService {
 
     @Transactional
     public Site update(SiteUpdateDto siteUpdateDto) {
-        Site site = this.siteMapper.dtoToSite(siteUpdateDto);
-        if (this.siteRepository.update(site) == 1) {
-            return site;
-        }
-        throw new IllegalArgumentException("No site was update");
+        Site site = this.siteRepository.getReferenceById(siteUpdateDto.getId());
+        site = this.siteMapper.updateSite(siteUpdateDto, site);
+        return this.siteRepository.save(site);
     }
 
     public void delete(UUID id) {

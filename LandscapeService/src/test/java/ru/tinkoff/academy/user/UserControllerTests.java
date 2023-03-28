@@ -1,7 +1,6 @@
 package ru.tinkoff.academy.user;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -32,15 +31,10 @@ public class UserControllerTests extends AbstractIntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    @BeforeAll
-    public static void set() {
-
-    }
-
     @Test
     public void testSaveCorrectUser() throws Exception {
         User expectedUser = User.builder()
-                .type(UserType.LANDSCAPE)
+                .type(UserType.landscape)
                 .login("login")
                 .email("email@email.com")
                 .telephone("89999999999")
@@ -49,7 +43,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
                 .build();
 
         UserCreateDto userCreateDto = new UserCreateDto();
-        userCreateDto.setType(UserType.LANDSCAPE);
+        userCreateDto.setType(UserType.landscape);
         userCreateDto.setLogin("login");
         userCreateDto.setEmail("email@email.com");
         userCreateDto.setTelephone("89999999999");
@@ -84,106 +78,19 @@ public class UserControllerTests extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testSaveCorrectWithNotExistId() throws Exception {
-        UUID id = UUID.randomUUID();
-
-        User expectedUser = User.builder()
-                .id(id)
-                .type(UserType.LANDSCAPE)
-                .login("login")
-                .email("email@email.com")
-                .telephone("89999999999")
-                .latitude(800.9)
-                .longitude(809.7)
-                .build();
-
-        UserCreateDto userCreateDto = new UserCreateDto();
-        userCreateDto.setType(UserType.LANDSCAPE);
-        userCreateDto.setLogin("login");
-        userCreateDto.setEmail("email@email.com");
-        userCreateDto.setTelephone("89999999999");
-        userCreateDto.setLatitude("800.9");
-        userCreateDto.setLongitude("809.7");
-
-        MvcResult userResponse = this.mockMvc.perform(MockMvcRequestBuilders.post(String.format(this.usersById, id))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(userCreateDto))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andReturn();
-
-        User actualUser = this.objectMapper.readValue(userResponse.getResponse().getContentAsString(), User.class);
-
-        this.assertWithId(expectedUser, actualUser);
-    }
-
-    @Test
-    public void testSaveCorrectUserWithExistId() throws Exception {
-        String id = "3e76f3f6-9f6e-41fd-8e0f-b07c2166152d";
-
-        UserCreateDto userCreateDto = new UserCreateDto();
-        userCreateDto.setType(UserType.LANDSCAPE);
-        userCreateDto.setLogin("login");
-        userCreateDto.setEmail("email@email.com");
-        userCreateDto.setTelephone("89999999999");
-        userCreateDto.setLatitude("800.9");
-        userCreateDto.setLongitude("809.7");
-
-        this.mockMvc.perform(MockMvcRequestBuilders.post(String.format(this.usersById, id))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(userCreateDto))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
-
-    @Test
-    public void testSaveIncorrectUserWithNotExistId() throws Exception {
-        String id = UUID.randomUUID().toString();
-
-        UserCreateDto userCreateDto = new UserCreateDto();
-        userCreateDto.setLogin("login");
-        userCreateDto.setTelephone("89999999999");
-        userCreateDto.setLatitude("100.0");
-        userCreateDto.setLongitude("100.0");
-
-        this.mockMvc.perform(MockMvcRequestBuilders.post(String.format(this.usersById, id))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(userCreateDto))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
-
-    @Test
-    public void testSaveIncorrectUserWithExistId() throws Exception {
-        String id = "3e76f3f6-9f6e-41fd-8e0f-b07c2166152d";
-
-        UserCreateDto userCreateDto = new UserCreateDto();
-        userCreateDto.setLogin("login");
-        userCreateDto.setTelephone("89999999999");
-        userCreateDto.setLatitude("100.0");
-        userCreateDto.setLongitude("100.0");
-
-        this.mockMvc.perform(MockMvcRequestBuilders.post(String.format(this.usersById, id))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(userCreateDto))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
-
-    @Test
     public void testGetByExistId() throws Exception {
-        UUID id = UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b07c2166152d");
+        UUID id = UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b07c2166152c");
 
         User expectedUser = User.builder()
                 .id(id)
-                .type(UserType.LANDSCAPE)
+                .type(UserType.rancher)
                 .login("login")
                 .email("email@email.com")
                 .telephone("89999999999")
                 .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                 .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
-                .latitude(450.0)
-                .longitude(540.0)
+                .latitude(900.0)
+                .longitude(900.0)
                 .build();
 
         MvcResult userResponse = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format(this.usersById, id))
@@ -225,7 +132,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
         User expectedUser = User.builder()
                 .id(id)
-                .type(UserType.LANDSCAPE)
+                .type(UserType.landscape)
                 .login("new-login")
                 .email("email@email.com")
                 .telephone("89999999998")
@@ -236,7 +143,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
         userUpdateDto.setId(id);
-        userUpdateDto.setType(UserType.LANDSCAPE);
+        userUpdateDto.setType(UserType.landscape);
         userUpdateDto.setLogin("new-login");
         userUpdateDto.setEmail("email@email.com");
         userUpdateDto.setTelephone("89999999998");
@@ -261,7 +168,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
         UserUpdateDto userUpdateDto = new UserUpdateDto();
         userUpdateDto.setId(id);
-        userUpdateDto.setType(UserType.LANDSCAPE);
+        userUpdateDto.setType(UserType.landscape);
         userUpdateDto.setLogin("new-login");
         userUpdateDto.setEmail("email@email.com");
         userUpdateDto.setTelephone("89999999998");
@@ -272,43 +179,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(this.objectMapper.writeValueAsString(userUpdateDto))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
-
-    @Test
-    public void testUpdateIncorrectUserWithNotExistId() throws Exception {
-        UUID id = UUID.randomUUID();
-
-        UserUpdateDto userUpdateDto = new UserUpdateDto();
-        userUpdateDto.setId(id);
-        userUpdateDto.setType(UserType.LANDSCAPE);
-        userUpdateDto.setLogin("new-login");
-        userUpdateDto.setEmail("email@email.com");
-
-        this.mockMvc.perform(MockMvcRequestBuilders.put(this.users)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(userUpdateDto))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
-    }
-
-    @Test
-    public void testUpdateIncorrectUserWithExistId() throws Exception {
-        UUID id = UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-a07c2166152d");
-
-        UserUpdateDto userUpdateDto = new UserUpdateDto();
-        userUpdateDto.setId(id);
-        userUpdateDto.setType(UserType.LANDSCAPE);
-        userUpdateDto.setLogin("new-login");
-        userUpdateDto.setTelephone("89999999998");
-        userUpdateDto.setLatitude("890.0");
-        userUpdateDto.setLongitude("900.9");
-
-        this.mockMvc.perform(MockMvcRequestBuilders.put(this.users)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(this.objectMapper.writeValueAsString(userUpdateDto))
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isConflict());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
@@ -332,7 +203,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format(this.usersById, id))
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isOk());
 
         Assertions.assertFalse(this.userRepository.existsById(id));
     }

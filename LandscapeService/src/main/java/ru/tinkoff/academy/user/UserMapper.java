@@ -10,21 +10,33 @@ public abstract class UserMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "updateDate", ignore = true)
-    @Mapping(target = "latitude", expression = "java(this.fromStringToDouble(userCreateDto.getLatitude()))")
-    @Mapping(target = "longitude", expression = "java(this.fromStringToDouble(userCreateDto.getLongitude()))")
     public abstract User dtoToUser(UserCreateDto userCreateDto);
 
-    @Mapping(target = "creationDate", ignore = true)
-    @Mapping(target = "updateDate", ignore = true)
-    @Mapping(target = "latitude", expression = "java(this.fromStringToDouble(userUpdateDto.getLatitude()))")
-    @Mapping(target = "longitude", expression = "java(this.fromStringToDouble(userUpdateDto.getLongitude()))")
-    public abstract User dtoToUser(UserUpdateDto userUpdateDto);
-
-    protected final Double fromStringToDouble(String s) {
-        if (s == null) {
-            return null;
+    public User updateUser(UserUpdateDto userUpdateDto, User user) {
+        if (userUpdateDto.getType() != null) {
+            user.setType(userUpdateDto.getType());
         }
 
-        return Double.valueOf(s);
+        if (userUpdateDto.getEmail() != null) {
+            user.setEmail(userUpdateDto.getEmail());
+        }
+
+        if (userUpdateDto.getLogin() != null) {
+            user.setLogin(userUpdateDto.getLogin());
+        }
+
+        if (userUpdateDto.getTelephone() != null) {
+            user.setTelephone(userUpdateDto.getTelephone());
+        }
+
+        if (userUpdateDto.getLatitude() != null) {
+            user.setLatitude(Double.valueOf(userUpdateDto.getLatitude()));
+        }
+
+        if (userUpdateDto.getLongitude() != null) {
+            user.setLongitude(Double.valueOf(userUpdateDto.getLongitude()));
+        }
+
+        return user;
     }
 }

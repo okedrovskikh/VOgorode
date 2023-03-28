@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Locale;
 
 public class UserEnumType extends EnumType<UserType> {
     @Override
@@ -16,7 +17,7 @@ public class UserEnumType extends EnumType<UserType> {
         if(value == null) {
             st.setNull(index, Types.OTHER);
         } else {
-            st.setObject(index, value.toString().toLowerCase(), Types.OTHER);
+            st.setObject(index, value.toString(), Types.OTHER);
         }
     }
 
@@ -27,6 +28,6 @@ public class UserEnumType extends EnumType<UserType> {
             return null;
         }
         String label = rs.getString(position);
-        return UserType.valueOf(label.toUpperCase());
+        return UserType.valueOf(label);
     }
 }
