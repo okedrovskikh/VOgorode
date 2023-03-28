@@ -21,12 +21,6 @@ public class SiteService {
         return this.siteRepository.save(site);
     }
 
-    public Site save(UUID id, SiteCreateDto siteCreateDto) {
-        Site site = this.siteMapper.dtoToSite(siteCreateDto);
-        site.setId(id);
-        return this.siteRepository.save(site);
-    }
-
     public Site getById(UUID id) {
         return this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Site wasn't find by id: %s", id)));

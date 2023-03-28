@@ -23,7 +23,7 @@ import java.util.UUID;
 @Table(schema = "public", catalog = "vogorode")
 public class Site {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false, columnDefinition = "uuid")
     private UUID id;
     @Column(name = "latitude", nullable = false)

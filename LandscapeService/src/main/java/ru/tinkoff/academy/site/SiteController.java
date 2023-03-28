@@ -27,11 +27,6 @@ public class SiteController {
         return this.siteService.save(siteCreateDto);
     }
 
-    @PostMapping("/{id}")
-    public Site save(@PathVariable("id") UUID id, @RequestBody SiteCreateDto siteCreateDto) {
-        return this.siteService.save(id, siteCreateDto);
-    }
-
     @GetMapping("/{id}")
     public Site getById(@PathVariable("id") UUID id) {
         return this.siteService.getById(id);

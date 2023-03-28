@@ -1,7 +1,6 @@
 package ru.tinkoff.academy.user;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -17,7 +16,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import ru.tinkoff.academy.converter.UuidConverter;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -32,9 +30,8 @@ import java.util.UUID;
 @Table(schema = "public", catalog = "vogorode")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, unique = true, updatable = false, columnDefinition = "uuid")
-    @Convert(converter = UuidConverter.class)
     private UUID id;
     @Column(name = "u_type", nullable = false, columnDefinition = "user_types")
     @Enumerated(EnumType.STRING)

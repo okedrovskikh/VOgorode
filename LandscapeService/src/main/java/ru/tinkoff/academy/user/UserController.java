@@ -27,11 +27,6 @@ public class UserController {
         return this.userService.save(userCreateDto);
     }
 
-    @PostMapping("/{id}")
-    public User save(@PathVariable("id") UUID id, @RequestBody UserCreateDto userCreateDto) {
-        return this.userService.save(id, userCreateDto);
-    }
-
     @GetMapping("/{id}")
     public User getById(@PathVariable("id") UUID id) {
         return this.userService.getById(id);
