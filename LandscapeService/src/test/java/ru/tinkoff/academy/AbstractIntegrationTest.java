@@ -12,7 +12,6 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ExtendWith(Containers.class)
-@TestPropertySource(locations = "classpath:application-test.yml")
 public class AbstractIntegrationTest {
     protected final ObjectMapper objectMapper = new ObjectMapper();
 
