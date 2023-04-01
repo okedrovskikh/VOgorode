@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Builder
 @Entity(name = "site")
 @Table(schema = "public", catalog = "vogorode")
+@EqualsAndHashCode
 public class Site {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

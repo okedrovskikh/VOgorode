@@ -100,7 +100,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
         User actualUser = this.objectMapper.readValue(userResponse.getResponse().getContentAsString(), User.class);
 
-        this.assertWithId(expectedUser, actualUser);
+        Assertions.assertEquals(expectedUser, actualUser);
     }
 
     @Test
@@ -114,16 +114,50 @@ public class UserControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testGetAll() throws Exception {
-        int expectedSize = 3;
+        List<User> expectedUsers = List.of(
+                User.builder()
+                        .id(UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b07c2166152d"))
+                        .type(UserType.rancher)
+                        .login("login")
+                        .email("email@email.com")
+                        .telephone("89999999999")
+                        .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                        .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                        .latitude(900.0)
+                        .longitude(900.0)
+                        .build(),
+                User.builder()
+                        .id(UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b08c2166152d"))
+                        .type(UserType.rancher)
+                        .login("login")
+                        .email("email@email.com")
+                        .telephone("89999999999")
+                        .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                        .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                        .latitude(900.0)
+                        .longitude(900.0)
+                        .build(),
+                User.builder()
+                        .id(UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b07c2166152c"))
+                        .type(UserType.rancher)
+                        .login("login")
+                        .email("email@email.com")
+                        .telephone("89999999999")
+                        .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                        .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
+                        .latitude(900.0)
+                        .longitude(900.0)
+                        .build()
+        );
 
-        MvcResult usersResponse = this.mockMvc.perform(MockMvcRequestBuilders.get(this.users + "/all")
+        MvcResult usersResponse = this.mockMvc.perform(MockMvcRequestBuilders.get(String.format(this.usersById, "/all"))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
         List<User> actualUsers = this.objectMapper.readValue(usersResponse.getResponse().getContentAsString(), this.listUserType());
 
-        Assertions.assertTrue(expectedSize <= actualUsers.size());
+        Assertions.assertTrue(actualUsers.containsAll(expectedUsers));
     }
 
     @Test
@@ -228,6 +262,7 @@ public class UserControllerTests extends AbstractIntegrationTest {
     }
 
     private JavaType listUserType() {
-        return this.objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, User.class);
+        return this.objectMapper.getTypeFactory()
+                .constructCollectionType(ArrayList.class, User.class);
     }
 }
