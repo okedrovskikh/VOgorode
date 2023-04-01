@@ -13,6 +13,7 @@ import java.util.UUID;
 @Document(collection = "worker")
 public class Worker {
     @Id
-    private UUID id;
+    private String id;
+    private UUID userId;
     private List<WorkEnum> works;
 }

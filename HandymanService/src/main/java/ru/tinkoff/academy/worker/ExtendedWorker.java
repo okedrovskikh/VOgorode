@@ -9,7 +9,8 @@ import java.util.UUID;
 @Data
 @Builder
 public class ExtendedWorker {
-    private UUID id;
+    private String id;
+    private UUID userId;
     private List<WorkEnum> works;
     private String login;
     private String email;

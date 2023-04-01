@@ -9,8 +9,9 @@ import java.util.UUID;
 @Data
 @Builder
 public class ExtendedGarden {
-    private UUID id;
+    private String id;
     private UUID ownerId;
+    private UUID siteId;
     private Double x1;
     private Double y1;
     private Double x2;

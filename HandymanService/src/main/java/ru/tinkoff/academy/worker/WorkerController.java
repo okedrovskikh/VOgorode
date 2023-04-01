@@ -13,7 +13,6 @@ import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/workers")
@@ -27,11 +26,11 @@ public class WorkerController {
     }
 
     @GetMapping("/{id}")
-    public ExtendedWorker getById(@PathVariable("id") UUID id) {
-        return this.workerService.getById(id);
+    public ExtendedWorker getById(@PathVariable("id") String id) {
+        return this.workerService.getExtendedById(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/extended/all")
     public List<ExtendedWorker> findAll() {
         return this.workerService.findAllExtended();
     }
@@ -42,7 +41,7 @@ public class WorkerController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") UUID id) {
+    public void delete(@PathVariable("id") String id) {
         this.workerService.delete(id);
     }
 }

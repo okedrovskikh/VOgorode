@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.garden;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import ru.tinkoff.academy.site.Site;
 import ru.tinkoff.academy.site.SiteMapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,25 +26,34 @@ public class GardenService {
 
     @Transactional
     public Garden save(GardenCreateDto gardenCreateDto) {
-        Garden garden = this.gardenMapper.dtoToGarden(gardenCreateDto);
-        garden = this.gardenRepository.save(garden);
-        webHelper.webClient().post()
-                .uri(String.format("/sites/%s", garden.getId()))
+        Site site = webHelper.webClient().post()
+                .uri("/sites")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(this.siteMapper.gardenDtoToSiteCreateDto(gardenCreateDto))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
+                .onStatus(status -> HttpStatus.CONFLICT == status, response -> {
+                    throw new IllegalStateException("Invalid request");
+                })
+                .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
+                    throw new IllegalStateException("Service unavailable");
+                })
                 .bodyToMono(Site.class).block();
-        return garden;
+        Garden garden = this.gardenMapper.dtoToGarden(gardenCreateDto);
+        garden.setSiteId(site.getId());
+        return this.gardenRepository.save(garden);
     }
 
-    public ExtendedGarden getById(UUID id) {
-        Garden garden = this.findById(id)
+    public ExtendedGarden getExtendedById(String id) {
+        return this.mapToExtended(this.getById(id));
+    }
+
+    public Garden getById(String id) {
+        return this.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(String.format("Garden wasn't find by id: %s", id)));
-        return this.mapToExtended(garden);
     }
 
-    public Optional<Garden> findById(UUID id) {
+    public Optional<Garden> findById(String id) {
         return this.gardenRepository.findById(id);
     }
 
@@ -66,20 +77,28 @@ public class GardenService {
     @Transactional
     public Garden update(GardenUpdateDto gardenUpdateDto) {
         Garden garden = this.gardenMapper.dtoToGarden(gardenUpdateDto);
-        if (this.gardenRepository.updateById(UUID.fromString(garden.getId()), garden) == 1) {
+        Garden oldGarden = this.getById(garden.getId());
+        garden.setSiteId(oldGarden.getSiteId());
+        if (this.gardenRepository.updateById(garden.getId(), garden) == 1) {
             webHelper.webClient().put()
                     .uri("/sites")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .bodyValue(this.siteMapper.gardenDtoToSiteUpdateDto(gardenUpdateDto))
+                    .bodyValue(this.siteMapper.gardenDtoToSiteUpdateDto(gardenUpdateDto, garden.getSiteId()))
                     .accept(MediaType.APPLICATION_JSON)
                     .retrieve()
+                    .onStatus(status -> HttpStatus.CONFLICT == status, response -> {
+                        throw new IllegalStateException("Invalid request");
+                    })
+                    .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
+                        throw new IllegalStateException("Service unavailable");
+                    })
                     .bodyToMono(Site.class).block();
             return garden;
         }
         throw new IllegalArgumentException("No entity was update");
     }
 
-    public void delete(UUID id) {
+    public void delete(String id) {
         this.gardenRepository.deleteById(id);
     }
 }

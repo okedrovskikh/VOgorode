@@ -27,11 +27,11 @@ public class GardenController {
     }
 
     @GetMapping("/{id}")
-    public ExtendedGarden getById(@PathVariable("id") UUID id) {
-        return this.gardenService.getById(id);
+    public ExtendedGarden getById(@PathVariable("id") String id) {
+        return this.gardenService.getExtendedById(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/extended/all")
     public List<ExtendedGarden> findAllExtended() {
         return this.gardenService.findAllExtended();
     }
@@ -42,7 +42,7 @@ public class GardenController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") UUID id) {
+    public void delete(@PathVariable("id") String id) {
         this.gardenService.delete(id);
     }
 }

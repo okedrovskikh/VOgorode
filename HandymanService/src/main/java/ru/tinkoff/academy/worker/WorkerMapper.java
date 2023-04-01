@@ -9,8 +9,10 @@ import ru.tinkoff.academy.user.User;
 @Mapper(componentModel = "spring")
 public interface WorkerMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     Worker dtoToWorker(WorkerCreateDto workerCreateDto);
 
+    @Mapping(target = "userId", ignore = true)
     Worker dtoToWorker(WorkerUpdateDto workerCreateDto);
 
     @Mapping(target = "id", source = "worker.id")

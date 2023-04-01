@@ -4,11 +4,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Data
 @Builder
 public class User {
-    private String id;
+    private UUID id;
     private String type;
     private String login;
     private String email;

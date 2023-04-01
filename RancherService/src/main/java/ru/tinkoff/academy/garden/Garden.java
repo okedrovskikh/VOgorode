@@ -15,6 +15,7 @@ public class Garden {
     @Id
     private String id;
     private UUID ownerId;
+    private UUID siteId;
     private Double x1;
     private Double y1;
     private Double x2;

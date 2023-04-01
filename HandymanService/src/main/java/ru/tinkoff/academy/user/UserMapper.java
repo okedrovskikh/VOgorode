@@ -7,11 +7,14 @@ import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 
+import java.util.UUID;
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
-    @Mapping(target = "type", expression = "java(\"HANDYMAN\")")
+    @Mapping(target = "type", expression = "java(\"handyman\")")
     UserCreateDto workerCreateDtoToUserCreateDto(WorkerCreateDto workerCreateDto);
 
-    @Mapping(target = "type", expression = "java(\"HANDYMAN\")")
-    UserUpdateDto workerUpdateDtoToUserUpdateDto(WorkerUpdateDto workerUpdateDto);
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "type", expression = "java(\"handyman\")")
+    UserUpdateDto workerUpdateDtoToUserUpdateDto(WorkerUpdateDto workerUpdateDto, UUID id);
 }

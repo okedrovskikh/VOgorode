@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Data
 public class GardenUpdateDto {
-    private UUID id;
+    private String id;
     private UUID ownerId;
     private Double x1;
     private Double y1;
