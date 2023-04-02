@@ -63,7 +63,7 @@ public class GardenService {
 
     private ExtendedGarden mapToExtended(Garden garden) {
         Site site = webHelper.webClient().get()
-                .uri(String.format("/sites/%s", garden.getId()))
+                .uri(String.format("/sites/%s", garden.getSiteId()))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(Site.class).block();
