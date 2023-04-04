@@ -24,31 +24,37 @@ public class SiteController {
 
     @PostMapping("")
     public Site save(@RequestBody SiteCreateDto siteCreateDto) {
-        return this.siteService.save(siteCreateDto);
+        return siteService.save(siteCreateDto);
     }
 
     @GetMapping("/{id}")
     public Site getById(@PathVariable("id") UUID id) {
-        return this.siteService.getById(id);
+        return siteService.getById(id);
     }
 
     @GetMapping("/all")
     public List<Site> findAll() {
-        return this.siteService.findAll();
+        return siteService.findAll();
     }
 
     @GetMapping("")
     public List<Site> findAllById(@RequestParam("ids") List<UUID> ids) {
-        return this.siteService.findAllById(ids);
+        return siteService.findAllById(ids);
     }
 
     @PutMapping
     public Site update(@RequestBody SiteUpdateDto siteUpdateDto) {
-        return this.siteService.update(siteUpdateDto);
+        return siteService.update(siteUpdateDto);
+    }
+
+    @PutMapping("/{id}")
+    public Site updateLatitudeAndLongitude(@PathVariable("id") UUID id, @RequestParam(name = "lat") String latitude,
+                                           @RequestParam(name = "lon") String longitude) {
+        return siteService.updateLatitudeAndLongitude(id, latitude, longitude);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") UUID id) {
-        this.siteService.delete(id);
+        siteService.delete(id);
     }
 }

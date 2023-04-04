@@ -16,8 +16,6 @@ public interface WorkerMapper {
     Worker dtoToWorker(WorkerUpdateDto workerCreateDto);
 
     @Mapping(target = "id", source = "worker.id")
-    @Mapping(target = "email", source = "user.email")
-    @Mapping(target = "login", source = "user.login")
-    @Mapping(target = "telephone", source = "user.telephone")
-    ExtendedWorker toExtendedWorker(Worker worker, User user);
+    @Mapping(target = "user", source = "user")
+    ExtendedByUserWorker toExtendedWorker(Worker worker, User user);
 }

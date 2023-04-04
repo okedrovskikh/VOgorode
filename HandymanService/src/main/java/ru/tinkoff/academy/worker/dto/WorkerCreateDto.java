@@ -10,7 +10,7 @@ public class WorkerCreateDto {
     private String login;
     private String email;
     private String telephone;
-    private List<WorkEnum> works;
+    private List<WorkEnum> services;
     private Double latitude;
     private Double longitude;
 }

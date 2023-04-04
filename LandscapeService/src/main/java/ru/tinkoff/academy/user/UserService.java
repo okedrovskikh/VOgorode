@@ -18,8 +18,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User save(UserCreateDto userCreateDto) {
-        User user = this.userMapper.dtoToUser(userCreateDto);
-        return this.userRepository.save(user);
+        User user = userMapper.dtoToUser(userCreateDto);
+        return userRepository.save(user);
     }
 
     public User getById(UUID id) {
@@ -28,25 +28,32 @@ public class UserService {
     }
 
     public Optional<User> findById(UUID id) {
-        return this.userRepository.findById(id);
+        return userRepository.findById(id);
     }
 
     public List<User> findAll() {
-        return this.userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public List<User> findAllById(Iterable<UUID> ids) {
-        return this.userRepository.findAllById(ids);
+        return userRepository.findAllById(ids);
     }
 
     @Transactional
     public User update(UserUpdateDto userUpdateDto) {
-        User user = this.userRepository.getReferenceById(userUpdateDto.getId());
-        user = this.userMapper.updateUser(userUpdateDto, user);
-        return this.userRepository.save(user);
+        User user = userRepository.getReferenceById(userUpdateDto.getId());
+        user = userMapper.updateUser(userUpdateDto, user);
+        return userRepository.save(user);
+    }
+
+    public User updateLatitudeAndLongitude(UUID id, String latitude, String longitude) {
+        User user = userRepository.getReferenceById(id);
+        user.setLatitude(Double.valueOf(latitude));
+        user.setLongitude(Double.valueOf(longitude));
+        return userRepository.save(user);
     }
 
     public void delete(UUID id) {
-        this.userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 }

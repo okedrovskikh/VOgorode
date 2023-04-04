@@ -24,27 +24,33 @@ public class UserController {
 
     @PostMapping("")
     public User save(@RequestBody UserCreateDto userCreateDto) {
-        return this.userService.save(userCreateDto);
+        return userService.save(userCreateDto);
     }
 
     @GetMapping("/{id}")
     public User getById(@PathVariable("id") UUID id) {
-        return this.userService.getById(id);
+        return userService.getById(id);
     }
 
     @GetMapping("/all")
     public List<User> findAll() {
-        return this.userService.findAll();
+        return userService.findAll();
     }
 
     @GetMapping("")
     public List<User> findAllById(@RequestParam("ids") List<UUID> ids) {
-        return this.userService.findAllById(ids);
+        return userService.findAllById(ids);
     }
 
     @PutMapping("")
     public User update(@RequestBody UserUpdateDto userUpdateDto) {
-        return this.userService.update(userUpdateDto);
+        return userService.update(userUpdateDto);
+    }
+
+    @PutMapping("/{id}")
+    public User setLatitudeAndLongitude(@PathVariable("id") UUID id, @RequestParam(name = "lat") String latitude,
+                                        @RequestParam("lon") String longitude) {
+        return userService.updateLatitudeAndLongitude(id, latitude, longitude);
     }
 
     @DeleteMapping("/{id}")

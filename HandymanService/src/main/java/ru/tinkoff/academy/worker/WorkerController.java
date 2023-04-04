@@ -22,26 +22,26 @@ public class WorkerController {
 
     @PostMapping("")
     public Worker save(@RequestBody WorkerCreateDto workerCreateDto) {
-        return this.workerService.save(workerCreateDto);
+        return workerService.save(workerCreateDto);
     }
 
     @GetMapping("/{id}")
-    public ExtendedWorker getById(@PathVariable("id") String id) {
-        return this.workerService.getExtendedById(id);
+    public ExtendedByUserWorker getById(@PathVariable("id") String id) {
+        return workerService.getExtendedById(id);
     }
 
     @GetMapping("/extended/all")
-    public List<ExtendedWorker> findAll() {
-        return this.workerService.findAllExtended();
+    public List<ExtendedByUserWorker> findAll() {
+        return workerService.findAllExtended();
     }
 
     @PutMapping("")
     public Worker update(@RequestBody WorkerUpdateDto workerUpdateDto) {
-        return this.workerService.update(workerUpdateDto);
+        return workerService.update(workerUpdateDto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id) {
-        this.workerService.delete(id);
+        workerService.delete(id);
     }
 }

@@ -11,7 +11,7 @@ public class WorkerUpdateDto {
     private String email;
     private String telephone;
     private String id;
-    private List<WorkEnum> works;
+    private List<WorkEnum> services;
     private Double latitude;
     private Double longitude;
 }
