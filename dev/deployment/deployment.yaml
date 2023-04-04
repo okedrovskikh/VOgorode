@@ -1,0 +1,204 @@
+# Postgres persistent volume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+# Postgres container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      volumes:
+        - name: postgres-volume
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+      containers:
+        - image: postgres:15-alpine
+          name: postgres
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_DB
+              value: vogorode
+            - name: POSTGRES_PASSWORD
+              value: '123'
+          ports:
+            - name: postgres-server
+              containerPort: 5432
+          volumeMounts:
+            - name: postgres-volume
+              mountPath: /postgres_data
+---
+# Postgres service
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: postgres-server
+---
+# HandymanService container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: handyman-service
+spec:
+  selector:
+    matchLabels:
+      app: handyman-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: handyman-service
+    spec:
+      containers:
+        - image: handyman-service:latest
+          name: handyman-service
+          imagePullPolicy: Never
+          env:
+            - name: POSTGRES_DB_URL
+              value: jdbc:postgresql://postgres:5432/vogorode
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: '123'
+          ports:
+            - name: server
+              containerPort: 8080
+            - name: grpc-server
+              containerPort: 9090
+---
+# HandymanService service
+apiVersion: v1
+kind: Service
+metadata:
+  name: handyman-service
+spec:
+  selector:
+    app: handyman-service
+  ports:
+    - name: server
+      port: 8080
+      targetPort: server
+    - name: grpc-server
+      port: 9090
+      targetPort: grpc-server
+  type: LoadBalancer
+---
+# RancherService container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rancher-service
+spec:
+  selector:
+    matchLabels:
+      app: rancher-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: rancher-service
+    spec:
+      containers:
+        - image: rancher-service:latest
+          name: rancher-service
+          imagePullPolicy: Never
+          env:
+            - name: POSTGRES_DB_URL
+              value: jdbc:postgresql://postgres:5432/vogorode
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: '123'
+          ports:
+            - name: server
+              containerPort: 8081
+            - name: grpc-server
+              containerPort: 9091
+---
+# RancherService service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rancher-service
+spec:
+  selector:
+    app: rancher-service
+  ports:
+    - name: server
+      port: 8081
+      targetPort: server
+    - name: grpc-server
+      port: 9091
+      targetPort: grpc-server
+  type: LoadBalancer
+---
+# LandscapeService container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landscape-service
+spec:
+  selector:
+    matchLabels:
+      app: landscape-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: landscape-service
+    spec:
+      containers:
+        - image: landscape-service:latest
+          name: landscape-service
+          imagePullPolicy: Never
+          env:
+            - name: HANDYMAN_GRPC_SERVER_ADDRESS
+              value: 'handyman-service:9090'
+            - name: RANCHER_GRPC_SERVER_ADDRESS
+              value: 'rancher-service:9091'
+            - name: POSTGRES_DB_URL
+              value: jdbc:postgresql://postgres:5432/vogorode
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: '123'
+          ports:
+            - name: server
+              containerPort: 8082
+---
+# LandscapeService service
+apiVersion: v1
+kind: Service
+metadata:
+  name: landscape-service
+spec:
+  selector:
+    app: landscape-service
+  ports:
+    - port: 8082
+      targetPort: server
+  type: LoadBalancer

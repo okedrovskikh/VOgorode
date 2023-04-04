@@ -1,0 +1,92 @@
+version: '3.8'
+
+networks:
+  vogorode-network:
+    driver: bridge
+
+services:
+  handyman-service:
+    build: ../../HandymanService
+    container_name: handyman-service
+    restart: always
+    environment:
+      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/vogorode
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - 8080:8080
+      - 9090:9090
+    networks:
+      - vogorode-network
+    depends_on:
+      - postgres
+  rancher-service:
+    build: ../../RancherService
+    container_name: rancher-service
+    restart: always
+    environment:
+      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/vogorode
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - 8081:8081
+      - 9091:9091
+    networks:
+      - vogorode-network
+    depends_on:
+      - postgres
+  landscape-service:
+    build: ../../LandscapeService
+    container_name: landscape-service
+    restart: always
+    environment:
+      HANDYMAN_GRPC_SERVER_ADDRESS: handyman-service:9090
+      RANCHER_GRPC_SERVER_ADDRESS: rancher-service:9091
+      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/vogorode
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - 8082:8082
+    networks:
+      - vogorode-network
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:15-alpine
+    container_name: vogorode-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: vogorode
+      POSTGRES_PASSWORD: 123
+    volumes:
+      - ../postgres_data:/var/lib/postgresql/data
+    expose: 
+      - 5432
+    ports:
+      - 5432:5432
+    networks:
+      - vogorode-network
+  prometheus:
+    image: prom/prometheus
+    container_name: vogorode-prometheus
+    restart: always
+    command: --web.listen-address=:10000 --config.file=/etc/prometheus/prometheus.yml
+    expose: 
+      - 10000
+    ports:
+      - 10000:10000
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - vogorode-network
+  grafana:
+    image: grafana/grafana:8.2.6
+    container_name: vogorode-grafana
+    restart: always
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    networks:
+      - vogorode-network

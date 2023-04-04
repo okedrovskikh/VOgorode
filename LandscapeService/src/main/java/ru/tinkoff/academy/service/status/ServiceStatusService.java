@@ -2,11 +2,11 @@ package ru.tinkoff.academy.service.status;
 
 import com.google.protobuf.Empty;
 import io.grpc.ConnectivityState;
-import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.channelfactory.GrpcChannelFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
+import ru.tinkoff.academy.proto.ReadinessResponse;
 import ru.tinkoff.academy.proto.ServiceStatusGrpc;
 import ru.tinkoff.academy.proto.VersionResponse;
 
@@ -21,6 +21,7 @@ public class ServiceStatusService {
     private ServiceStatusGrpc.ServiceStatusBlockingStub handymanBlockingStub;
     @GrpcClient("RancherService")
     private ServiceStatusGrpc.ServiceStatusBlockingStub rancherBlockingStub;
+    
     private final GrpcChannelFactory grpcChannelFactory;
 
     /**
@@ -56,11 +57,10 @@ public class ServiceStatusService {
                         grpcChannelFactory.getConnectivityState().get(serviceName).name());
             }
         }
-
         return buildNotConnectedServiceStatus(serviceStatusBlockingStub.getChannel().authority(),
                 grpcChannelFactory.getConnectivityState().get(serviceName).name());
     }
-
+    
     private boolean isConnectionOk(ConnectivityState connectivityState) {
         return !connectivityState.equals(ConnectivityState.SHUTDOWN) && !connectivityState.equals(ConnectivityState.TRANSIENT_FAILURE);
     }

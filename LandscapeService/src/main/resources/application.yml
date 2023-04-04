@@ -19,3 +19,8 @@ grpc:
     RancherService:
       address: ${RANCHER_GRPC_SERVER_ADDRESS:localhost:9091}
       negotiation-type: PLAINTEXT
+spring:
+  datasource:
+    url: ${POSTGRES_DB_URL:jdbc:postgresql://localhost:5432/vogorode}
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:123}
