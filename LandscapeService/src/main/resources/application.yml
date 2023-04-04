@@ -11,3 +11,11 @@ management:
     export:
       prometheus:
         enabled: true
+grpc:
+  client:
+    HandymanService:
+      address: "localhost:9090"
+      negotiation-type: PLAINTEXT
+    RancherService:
+      address: "localhost:9091"
+      negotiation-type: PLAINTEXT

@@ -11,3 +11,6 @@ management:
     export:
       prometheus:
         enabled: true
+grpc:
+  server:
+    port: 9091
