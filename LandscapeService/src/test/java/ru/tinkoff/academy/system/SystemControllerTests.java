@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.system;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import ru.tinkoff.academy.system.status.SystemStatus;
 
 import java.util.Map;
 
@@ -31,14 +33,32 @@ public class SystemControllerTests {
     }
 
     @Test
-    public void testGetReadiness() throws Exception {
-        Map<String, String> expectedReadiness = Map.of(buildProperties.getName(), "OK");
+    public void testGetOkReadiness() throws Exception {
+        Map<String, SystemStatus> expectedReadiness = Map.of(buildProperties.getName(), SystemStatus.OK);
 
         MvcResult responseReadiness = mockMvc.perform(MockMvcRequestBuilders.get("/system/readiness"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn();
 
-        Map<String, String> actualReadiness = objectMapper.readValue(responseReadiness.getResponse().getContentAsString(), new TypeReference<Map<String, String>>() {});
+        Map<String, SystemStatus> actualReadiness = objectMapper.readValue(responseReadiness.getResponse().getContentAsString(), new TypeReference<Map<String, SystemStatus>>() {});
         Assertions.assertEquals(expectedReadiness, actualReadiness);
+    }
+
+    @Test
+    public void testForceMalfunction() throws Exception {
+        Map<String, SystemStatus> expectedReadiness = Map.of(buildProperties.getName(), SystemStatus.MALFUNCTION);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/system/forceMalfunction"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+        MvcResult responseReadiness = mockMvc.perform(MockMvcRequestBuilders.get("/system/readiness"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        Map<String, SystemStatus> actualReadiness = objectMapper.readValue(responseReadiness.getResponse().getContentAsString(), new TypeReference<Map<String, SystemStatus>>() {});
+        Assertions.assertEquals(expectedReadiness, actualReadiness);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/system/forceMalfunction?isChangeTo=false"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

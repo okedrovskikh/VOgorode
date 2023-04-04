@@ -1,0 +1,6 @@
+scrape_configs:
+  - job_name: 'vogorode-spring'
+    scrape_interval: 15s
+    metrics_path: '/actuator/metrics'
+    static_configs:
+      - targets: ['handyman-service:8080', 'rancher-service:8081', 'landscape-service:8082']

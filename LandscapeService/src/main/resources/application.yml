@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: ${PORT:8082}
 management:
   endpoints:
     web:
@@ -14,8 +14,8 @@ management:
 grpc:
   client:
     HandymanService:
-      address: "localhost:9090"
+      address: ${HANDYMAN_GRPC-SERVER_ADDRESS:localhost:9090}
       negotiation-type: PLAINTEXT
     RancherService:
-      address: "localhost:9091"
+      address: ${RANCHER_GRPC_SERVER_ADDRESS:localhost:9091}
       negotiation-type: PLAINTEXT

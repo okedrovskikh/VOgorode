@@ -1,10 +1,11 @@
 package ru.tinkoff.academy.system;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.info.BuildProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.tinkoff.academy.system.status.SystemStatus;
 
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 @RequestMapping("/system")
 @RequiredArgsConstructor
 public class SystemController {
-    private final BuildProperties buildProperties;
+    private final SystemService systemService;
 
     /**
      * Check service liveness
@@ -25,10 +26,21 @@ public class SystemController {
     /**
      * Check service readiness
      *
-     * @return {@link Map} with service name as key and readiness status as value
+     * @return {@link Map} with service name as key and {@link SystemStatus} as value
      */
     @GetMapping("/readiness")
-    public Map<String, String> getReadiness() {
-        return Map.of(buildProperties.getName(), "OK");
+    public Map<String, SystemStatus> getReadiness() {
+        return systemService.getReadiness();
+    }
+
+    /**
+     * Change service status to Malfunction defined on value of {@code isChangeTo}
+     *
+     * @param isChangeTo if {@code true} change status to {@link SystemStatus#MALFUNCTION},
+     *                   if {@code false} change status to {@link SystemStatus#OK}
+     */
+    @GetMapping("/forceMalfunction")
+    public void forceMalfunction(@RequestParam(name = "isChangeTo", required = false, defaultValue = "true") boolean isChangeTo) {
+        systemService.forceMalfunction(isChangeTo);
     }
 }
