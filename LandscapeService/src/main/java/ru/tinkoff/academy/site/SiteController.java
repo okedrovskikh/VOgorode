@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.site;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RestController()
 @RequestMapping("/sites")
 @RequiredArgsConstructor
+@Timed
 public class SiteController {
     private final SiteService siteService;
 
