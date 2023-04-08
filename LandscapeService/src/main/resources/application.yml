@@ -8,9 +8,9 @@ management:
         include: "info,prometheus"
       path-mapping:
         prometheus: "/metrics"
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 grpc:

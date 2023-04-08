@@ -36,7 +36,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("net.devh:grpc-client-spring-boot-starter:2.14.0.RELEASE")
     implementation("org.liquibase:liquibase-core")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.10.3")
+    implementation("io.micrometer:micrometer-registry-prometheus")
     compileOnly("org.projectlombok:lombok")
     compileOnly("org.mapstruct:mapstruct:1.5.3.Final")
     compileOnly("jakarta.annotation:jakarta.annotation-api:1.3.5")

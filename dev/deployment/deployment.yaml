@@ -1,3 +1,113 @@
+# Prometheus persistent volume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+# Prometheus pods
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: prometheus
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      volumes:
+        - name: prometheus-volume
+          persistentVolumeClaim:
+            claimName: prometheus-pvc
+      containers:
+        - image: prom/prometheus
+          name: prometheus
+          command:
+            - --web.listen-address=:10000
+            - --storage.tsdb.path=/prometheus
+            - --config.file=/etc/prometheus/prometheus.yml #todo local file load
+          ports:
+            - name: prometheus-server
+              containerPort: 10000
+          volumeMounts:
+            - name: prometheus-volume
+              mountPath: /prometheus
+---
+# Prometheus service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-service
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - port: 10000
+      targetPort: prometheus-server
+---
+# Grafana persistent volume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+# Grafana pods
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      app: grafana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      volumes:
+        - name: grafana-volume
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+      containers:
+        - image: grafana/grafana:8.2.6
+          name: grafana
+          ports:
+            - name: grafana-server
+              containerPort: 3000
+          volumeMounts:
+            - name: grafana-volumes
+              mountPath: /var/lib/grafana #todo local files load
+---
+# Grafana service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+spec:
+  selector:
+    app: grafana
+  ports:
+    - port: 3000
+      targetPort: grafana-service
+---
 # Postgres persistent volume
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -10,7 +120,7 @@ spec:
     requests:
       storage: 256Mi
 ---
-# Postgres container
+# Postgres pods
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -70,7 +180,7 @@ spec:
     requests:
       storage: 256Mi
 ---
-# Mongo container
+# Mongo pods
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -118,7 +228,7 @@ spec:
     - port: 27017
       name: mongo-port
 ---
-# HandymanService container
+# HandymanService pods
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -181,7 +291,7 @@ spec:
       targetPort: grpc-server
   type: LoadBalancer
 ---
-# RancherService container
+# RancherService pods
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -244,7 +354,7 @@ spec:
       targetPort: grpc-server
   type: LoadBalancer
 ---
-# LandscapeService container
+# LandscapeService pods
 apiVersion: apps/v1
 kind: Deployment
 metadata:

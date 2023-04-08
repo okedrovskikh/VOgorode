@@ -17,10 +17,15 @@ import ru.tinkoff.academy.site.dto.SiteUpdateDto;
 import java.util.List;
 import java.util.UUID;
 
-@RestController()
+@RestController
 @RequestMapping("/sites")
 @RequiredArgsConstructor
-@Timed
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"service", "landscape-service", "process", "site"},
+        description = "Duration Landscape service Site process handling",
+        histogram = true
+)
 public class SiteController {
     private final SiteService siteService;
 

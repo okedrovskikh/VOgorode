@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8081}
+  port: ${SERVER_PORT:8083}
 
 management:
   endpoints:
@@ -8,9 +8,9 @@ management:
         include: "info,prometheus"
       path-mapping:
         prometheus: "/metrics"
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 grpc:

@@ -1,13 +1,13 @@
 version: '3.8'
 
 networks:
-  vogorode-network:
+  infrastructure-network:
     driver: bridge
 
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: vogorode-postgres
+    container_name: infrastructure-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -21,7 +21,7 @@ services:
       - 5432:5432
   mongo:
     image: mongo
-    container_name: vogorode-mongo
+    container_name: infrastructure-mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -34,10 +34,10 @@ services:
     ports:
       - 27017:27017
     networks:
-      - vogorode-network
+      - infrastructure-network
   mongo-express:
     image: mongo-express
-    container_name: vogorode-mongo-express
+    container_name: infrastructure-mongo-express
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -48,6 +48,42 @@ services:
     ports:
       - 5433:8081
     networks:
-      - vogorode-network
+      - infrastructure-network
     depends_on:
       - mongo
+  prometheus:
+    image: prom/prometheus
+    container_name: infrastructure-prometheus
+    restart: always
+    command:
+      - --web.listen-address=:10000
+      - --storage.tsdb.path=/prometheus
+      - --config.file=/etc/prometheus/prometheus.yml
+    expose:
+      - 10000
+    ports:
+      - 10000:10000
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/prometheus
+    networks:
+      - infrastructure-network
+  grafana:
+    image: grafana/grafana:8.2.6
+    container_name: infrastructure-grafana
+    restart: always
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: false
+    expose:
+      - 3000
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana_data:/var/lib/grafana
+      - ../../monitoring:/etc/grafana/provisioning
+    networks:
+      - infrastructure-network
+    depends_on:
+      - prometheus

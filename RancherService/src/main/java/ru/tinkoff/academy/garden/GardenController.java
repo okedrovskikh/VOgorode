@@ -14,12 +14,16 @@ import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController()
 @RequestMapping("/gardens")
 @RequiredArgsConstructor
-@Timed
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"service", "rancher-service", "process", "garden"},
+        description = "Duration of Rancher service Garden process handling",
+        histogram = true
+)
 public class GardenController {
     private final GardenService gardenService;
 

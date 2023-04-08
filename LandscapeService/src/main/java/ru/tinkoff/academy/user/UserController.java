@@ -20,7 +20,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@Timed
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"service", "landscape", "process", "user"},
+        description = "Duration Landscape service User process handling",
+        histogram = true
+)
 public class UserController {
     private final UserService userService;
 

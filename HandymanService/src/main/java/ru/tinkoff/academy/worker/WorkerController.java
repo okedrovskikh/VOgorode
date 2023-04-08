@@ -18,7 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/workers")
 @RequiredArgsConstructor
-@Timed
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"service", "handyman-service", "process", "worker"},
+        description = "Duration of Handyman service Worker process handling",
+        histogram = true
+)
 public class WorkerController {
     private final WorkerService workerService;
 

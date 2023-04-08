@@ -2,11 +2,11 @@ package ru.tinkoff.academy.service.status;
 
 import com.google.protobuf.Empty;
 import io.grpc.ConnectivityState;
+import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.channelfactory.GrpcChannelFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.academy.proto.ReadinessResponse;
 import ru.tinkoff.academy.proto.ServiceStatusGrpc;
 import ru.tinkoff.academy.proto.VersionResponse;
 

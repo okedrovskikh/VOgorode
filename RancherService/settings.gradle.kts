@@ -1,2 +1,2 @@
-rootProject.name = 'RancherService'
+rootProject.name = "RancherService"
 
