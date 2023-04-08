@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Timed(
         value = "business.request.duration",
-        extraTags = {"service", "rancher-service", "process", "garden"},
+        extraTags = {"process", "garden"},
         description = "Duration of Rancher service Garden process handling",
         histogram = true
 )

@@ -8,6 +8,9 @@ management:
         include: "info,prometheus"
       path-mapping:
         prometheus: "/metrics"
+  metrics:
+    tags:
+        service: landscape-service
   prometheus:
     metrics:
       export:

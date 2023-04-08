@@ -1,6 +1,18 @@
 scrape_configs:
-  - job_name: 'vogorode-spring'
+  - job_name: 'vogorode-handyman-spring'
     scrape_interval: 15s
     metrics_path: '/actuator/metrics'
     static_configs:
-      - targets: ['host.docker.internal:8080', 'host.docker.internal:8083', 'host.docker.internal:8082']
+      - targets: [ 'host.docker.internal:8080' ]
+
+  - job_name: 'vogorode-rancher-spring'
+    scrape_interval: 15s
+    metrics_path: '/actuator/metrics'
+    static_configs:
+      - targets: [ 'host.docker.internal:8081' ]
+
+  - job_name: 'vogorode-landscape-spring'
+    scrape_interval: 15s
+    metrics_path: '/actuator/metrics'
+    static_configs:
+      - targets: [ 'host.docker.internal:8082' ]

@@ -12,7 +12,7 @@
   "panels": [
     {
       "datasource": "Prometheus",
-      "description": "Handyman CPU usage in percents",
+      "description": "Landscape CPU usage in percents",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -87,7 +87,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "process_cpu_usage{job=\"vogorode-handyman-spring\"}",
+          "expr": "process_cpu_usage{job=\"vogorode-landscape-spring\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -98,7 +98,7 @@
     },
     {
       "datasource": "Prometheus",
-      "description": "Handyman memory usage",
+      "description": "Landscape memory usage",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -158,7 +158,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "jvm_memory_used_bytes{job=\"vogorode-handyman-spring\"}",
+          "expr": "jvm_memory_used_bytes{job=\"vogorode-landscape-spring\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -171,7 +171,7 @@
     },
     {
       "datasource": "Prometheus",
-      "description": "Handyman workers request handling duration",
+      "description": "Landscape business request handling duration",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -243,13 +243,96 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"worker\"}[10m])))",
+          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"landscape-service\", process=\"user\"}[10m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Workers requests",
+      "title": "Users requests",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "Prometheus",
+      "description": "Landscape sites request handling duration",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "Request duration",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 10
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"landscape-service\", process=\"site\"}[10m])))",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Sites requests",
       "type": "timeseries"
     }
   ],
@@ -261,7 +344,7 @@
     "memory",
     "jvm",
     "business-request-duration",
-    "handyman-service"
+    "landscape-service"
   ],
   "templating": {
     "list": []
@@ -272,6 +355,6 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Handyman Service",
+  "title": "Landscape Service",
   "version": 1
 }

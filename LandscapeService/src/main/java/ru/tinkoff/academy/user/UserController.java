@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Timed(
         value = "business.request.duration",
-        extraTags = {"service", "landscape", "process", "user"},
+        extraTags = {"process", "user"},
         description = "Duration Landscape service User process handling",
         histogram = true
 )
