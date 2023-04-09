@@ -16,3 +16,8 @@ scrape_configs:
     metrics_path: '/actuator/metrics'
     static_configs:
       - targets: [ 'host.docker.internal:8082' ]
+
+  - job_name: 'vogorode-postgresql'
+    scrape_interval: 15s
+    static_configs:
+      - targets: [ 'postgres-exporter:9187' ]

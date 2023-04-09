@@ -29,19 +29,24 @@ spec:
         - name: prometheus-volume
           persistentVolumeClaim:
             claimName: prometheus-pvc
+        - name: prometheus-scrape-config-volume
+          hostPath:
+            path: host/prometheus/prometheus.yml # todo check mounting
       containers:
         - image: prom/prometheus
           name: prometheus
           command:
             - --web.listen-address=:10000
             - --storage.tsdb.path=/prometheus
-            - --config.file=/etc/prometheus/prometheus.yml #todo local file load
+            - --config.file=/etc/prometheus/prometheus.yml
           ports:
             - name: prometheus-server
               containerPort: 10000
           volumeMounts:
             - name: prometheus-volume
               mountPath: /prometheus
+            - name: prometheus-scrape-config-volume # todo check mounting
+              mountPath: /etc/prometheus/prometheus.yml
 ---
 # Prometheus service
 apiVersion: v1
@@ -86,6 +91,9 @@ spec:
         - name: grafana-volume
           persistentVolumeClaim:
             claimName: grafana-pvc
+        - name: grafana-dashboards-volume
+          hostPath:
+            path: /host/grafana/monitoring # todo check mounting
       containers:
         - image: grafana/grafana:8.2.6
           name: grafana
@@ -94,7 +102,9 @@ spec:
               containerPort: 3000
           volumeMounts:
             - name: grafana-volumes
-              mountPath: /var/lib/grafana #todo local files load
+              mountPath: /var/lib/grafana
+            - name: grafana-dashboards-volume # todo check mounting
+              mountPath: /etc/grafana/provisioning
 ---
 # Grafana service
 apiVersion: v1
