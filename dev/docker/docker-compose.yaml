@@ -132,21 +132,6 @@ services:
       - ./prometheus_data:/prometheus
     networks:
       - vogorode-network
-  postgres_exporter:
-    image: prometheuscommunity/postgres-exporter
-    container_name: vogorode-postgres-exporter
-    restart: always
-    environment:
-      DATA_SOURCE_NAME: postgresql://postgres:123@postgres:5432/vogorode?sslmode=disable
-    expose:
-      - 9187
-    ports:
-      - 9187:9187
-    networks:
-      - vogorode-network
-    depends_on:
-      - prometheus
-      - postgres
   grafana:
     image: grafana/grafana:8.2.6
     container_name: vogorode-grafana

@@ -3,16 +3,16 @@ scrape_configs:
     scrape_interval: 15s
     metrics_path: '/actuator/metrics'
     static_configs:
-      - targets: [ 'handyman-service:8080' ]
+      - targets: [ 'handyman-service-service:8080' ]
 
   - job_name: 'vogorode-rancher-spring'
     scrape_interval: 15s
     metrics_path: '/actuator/metrics'
     static_configs:
-      - targets: [ 'rancher-service:8081' ]
+      - targets: [ 'rancher-service-service:8081' ]
 
   - job_name: 'vogorode-landscape-spring'
     scrape_interval: 15s
     metrics_path: '/actuator/metrics'
     static_configs:
-      - targets: [ 'landscape-service:8082' ]
+      - targets: [ 'landscape-service-service:8082' ]
