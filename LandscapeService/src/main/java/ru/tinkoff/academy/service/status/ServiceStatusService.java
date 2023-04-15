@@ -21,6 +21,7 @@ public class ServiceStatusService {
     private ServiceStatusGrpc.ServiceStatusBlockingStub handymanBlockingStub;
     @GrpcClient("RancherService")
     private ServiceStatusGrpc.ServiceStatusBlockingStub rancherBlockingStub;
+
     private final GrpcChannelFactory grpcChannelFactory;
 
     /**
@@ -56,11 +57,10 @@ public class ServiceStatusService {
                         grpcChannelFactory.getConnectivityState().get(serviceName).name());
             }
         }
-
         return buildNotConnectedServiceStatus(serviceStatusBlockingStub.getChannel().authority(),
                 grpcChannelFactory.getConnectivityState().get(serviceName).name());
     }
-
+    
     private boolean isConnectionOk(ConnectivityState connectivityState) {
         return !connectivityState.equals(ConnectivityState.SHUTDOWN) && !connectivityState.equals(ConnectivityState.TRANSIENT_FAILURE);
     }
