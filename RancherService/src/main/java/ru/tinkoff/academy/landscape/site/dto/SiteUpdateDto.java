@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.site.dto;
+package ru.tinkoff.academy.landscape.site.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -2,9 +2,9 @@ package ru.tinkoff.academy.worker;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.tinkoff.academy.landscape.user.LandscapeUser;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
-import ru.tinkoff.academy.user.User;
 
 @Mapper(componentModel = "spring")
 public interface WorkerMapper {
@@ -16,8 +16,8 @@ public interface WorkerMapper {
     Worker dtoToWorker(WorkerUpdateDto workerCreateDto);
 
     @Mapping(target = "id", source = "worker.id")
-    @Mapping(target = "user", source = "user")
+    @Mapping(target = "landscapeUser", source = "landscapeUser")
     @Mapping(target = "latitude", source = "worker.latitude")
     @Mapping(target = "longitude", source = "worker.longitude")
-    ExtendedByUserWorker toExtendedWorker(Worker worker, User user);
+    ExtendedByUserWorker toExtendedWorker(Worker worker, LandscapeUser landscapeUser);
 }

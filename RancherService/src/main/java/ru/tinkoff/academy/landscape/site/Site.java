@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.site;
+package ru.tinkoff.academy.landscape.site;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.tinkoff.academy.user.User;
-import ru.tinkoff.academy.user.dto.UserCreateDto;
+import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.landscape.user.dto.LandscapeUserCreateDto;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ public class UserWebClientHelper {
         return landscapeWebClient;
     }
 
-    public Mono<User> saveUser(UserCreateDto userCreateDto) {
+    public Mono<LandscapeUser> saveUser(LandscapeUserCreateDto userCreateDto) {
         return landscapeWebClient.post()
                 .uri("/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -33,14 +33,14 @@ public class UserWebClientHelper {
                 .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
                     throw new IllegalStateException("Service unavailable");
                 })
-                .bodyToMono(User.class);
+                .bodyToMono(LandscapeUser.class);
     }
 
-    public Mono<User> getUser(UUID userID) {
+    public Mono<LandscapeUser> getUser(UUID userID) {
         return landscapeWebClient.get()
                 .uri(String.format("/users/%s", userID))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(User.class);
+                .bodyToMono(LandscapeUser.class);
     }
 }

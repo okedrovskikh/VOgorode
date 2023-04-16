@@ -2,7 +2,7 @@ package ru.tinkoff.academy.worker;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.tinkoff.academy.user.User;
+import ru.tinkoff.academy.landscape.user.LandscapeUser;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,5 +16,5 @@ public class ExtendedByUserWorker {
     private Double latitude;
     private Double longitude;
 
-    private User user;
+    private LandscapeUser landscapeUser;
 }

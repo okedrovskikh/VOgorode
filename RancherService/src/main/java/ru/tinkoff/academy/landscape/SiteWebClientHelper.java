@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.tinkoff.academy.site.Site;
-import ru.tinkoff.academy.site.dto.SiteCreateDto;
+import ru.tinkoff.academy.landscape.site.Site;
+import ru.tinkoff.academy.landscape.site.dto.SiteCreateDto;
 
 import java.util.UUID;
 

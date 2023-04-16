@@ -1,11 +1,11 @@
 databaseChangeLog:
   - changeSet:
       id: add_field_table
-      author: .
+      author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v7/add_field_table.sql
+        path: classpath:db/changelog/v8/add_field_table.sql
   - changeSet:
       id: add_gardener_table
-      author: .
+      author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v7/add_gardener_table.sql
+        path: classpath:db/changelog/v8/add_gardener_table.sql

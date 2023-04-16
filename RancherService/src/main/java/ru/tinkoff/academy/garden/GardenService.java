@@ -1,15 +1,13 @@
 package ru.tinkoff.academy.garden;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 import ru.tinkoff.academy.landscape.SiteWebClientHelper;
-import ru.tinkoff.academy.site.Site;
-import ru.tinkoff.academy.site.SiteMapper;
+import ru.tinkoff.academy.landscape.site.Site;
+import ru.tinkoff.academy.landscape.site.SiteMapper;
 
 import java.util.List;
 import java.util.Optional;

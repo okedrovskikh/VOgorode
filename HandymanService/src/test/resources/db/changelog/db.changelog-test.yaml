@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      context: test
+      file: classpath:db/changelog/db.changelog-master.yaml
