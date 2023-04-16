@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.garden.dto;
 
 import lombok.Data;
-import ru.tinkoff.academy.garden.GardenWorks;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,5 +14,5 @@ public class GardenUpdateDto {
     private Double y1;
     private Double x2;
     private Double y2;
-    private List<GardenWorks> works;
+    private List<WorkEnum> works;
 }

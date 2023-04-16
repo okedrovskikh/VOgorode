@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.worker.dto;
 
 import lombok.Data;
-import ru.tinkoff.academy.worker.WorkEnum;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 

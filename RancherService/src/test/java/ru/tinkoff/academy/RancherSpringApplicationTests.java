@@ -6,7 +6,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest
 @DirtiesContext
-public class RancherSpringApplicationTests {
+public class RancherSpringApplicationTests extends AbstractIntegrationTest {
     @Test
     public void contextLoad() {
 

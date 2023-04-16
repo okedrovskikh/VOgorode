@@ -26,7 +26,7 @@ public class WorkerService {
                 landscapeUserMapper.workerCreateDtoToUserCreateDto(workerCreateDto)
         ).block();
         Worker worker = workerMapper.dtoToWorker(workerCreateDto);
-        worker.setUserId(landscapeUser.getId());
+        worker.setLandscapeUserId(landscapeUser.getId());
         return workerRepository.save(worker);
     }
 
@@ -48,7 +48,7 @@ public class WorkerService {
     }
 
     private ExtendedByUserWorker mapToExtended(Worker worker) {
-        LandscapeUser landscapeUser = this.webHelper.getUser(worker.getUserId()).block();
+        LandscapeUser landscapeUser = this.webHelper.getUser(worker.getLandscapeUserId()).block();
         return this.workerMapper.toExtendedWorker(worker, landscapeUser);
     }
 
@@ -60,7 +60,7 @@ public class WorkerService {
     public Worker update(WorkerUpdateDto workerUpdateDto) {
         Worker worker = this.workerMapper.dtoToWorker(workerUpdateDto);
         Worker oldWorker = this.getById(worker.getId());
-        worker.setUserId(oldWorker.getUserId());
+        worker.setLandscapeUserId(oldWorker.getLandscapeUserId());
         return workerRepository.save(worker);
     }
 

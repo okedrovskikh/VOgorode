@@ -2,6 +2,7 @@ package ru.tinkoff.academy.garden;
 
 import lombok.Builder;
 import lombok.Data;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,5 +20,5 @@ public class ExtendedGarden {
     private Double square;
     private Double latitude;
     private Double longitude;
-    private List<GardenWorks> works;
+    private List<WorkEnum> works;
 }

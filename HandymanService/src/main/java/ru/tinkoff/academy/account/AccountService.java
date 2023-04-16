@@ -33,6 +33,10 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
+    public List<Account> findAllByIds(Iterable<Long> ids) {
+        return accountRepository.findAllById(ids);
+    }
+
     public Account update(AccountUpdateDto updateDto) {
         Account account = accountRepository.getReferenceById(updateDto.getId());
         account = accountMapper.updateAccount(account, updateDto);

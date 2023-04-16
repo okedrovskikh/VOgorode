@@ -5,7 +5,7 @@ databaseChangeLog:
       sqlFile:
         path: classpath:db/changelog/v8/add_field_table.sql
   - changeSet:
-      id: add_gardener_table
+      id: add_fielder_table
       author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v8/add_gardener_table.sql
+        path: classpath:db/changelog/v8/add_fielder_table.sql
