@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.gardener;
+package ru.tinkoff.academy.field;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,39 +9,39 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tinkoff.academy.gardener.dto.GardenerCreateDto;
-import ru.tinkoff.academy.gardener.dto.GardenerUpdateDto;
+import ru.tinkoff.academy.field.dto.FieldCreateDto;
+import ru.tinkoff.academy.field.dto.FieldUpdateDto;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/gardeners")
+@RequestMapping("/fields")
 @RequiredArgsConstructor
-public class GardenerController {
-    private final GardenerService gardenerService;
+public class FieldController {
+    private final FieldService fieldService;
 
     @PostMapping("")
-    public Gardener save(@RequestBody GardenerCreateDto createDto) {
-        return gardenerService.save(createDto);
+    public Field save(@RequestBody FieldCreateDto createDto) {
+        return fieldService.save(createDto);
     }
 
     @GetMapping("/{id}")
-    public Gardener getById(@PathVariable("id") Long id) {
-        return gardenerService.getById(id);
+    public Field getById(@PathVariable("id") Long id) {
+        return fieldService.getById(id);
     }
 
     @GetMapping("")
-    public List<Gardener> findAll() {
-        return gardenerService.findAll();
+    public List<Field> findAll() {
+        return fieldService.findAll();
     }
 
     @PutMapping("")
-    public Gardener update(GardenerUpdateDto updateDto) {
-        return gardenerService.update(updateDto);
+    public Field update(@RequestBody FieldUpdateDto updateDto) {
+        return fieldService.update(updateDto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
-        gardenerService.delete(id);
+        fieldService.delete(id);
     }
 }
