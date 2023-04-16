@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.field;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +14,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.geo.Point;
 import ru.tinkoff.academy.fielder.Fielder;
+
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -33,8 +37,23 @@ public class Field {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
     @Column(name = "area", nullable = false)
-    private Object area;
+    private Point area;
     @ManyToOne
     @JoinColumn(name = "fielder_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnoreProperties({"fields"})
     private Fielder fielder;
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Field field)) {
+            return false;
+        }
+
+        return Objects.equals(id, field.id);
+    }
 }

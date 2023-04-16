@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.fielder;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/gardeners")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "fielder"},
+        description = "Duration Rancher service Fielder process handling",
+        histogram = true
+)
 public class FielderController {
     private final FielderService fielderService;
 

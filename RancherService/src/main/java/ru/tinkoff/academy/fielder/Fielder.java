@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.fielder;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,6 +36,7 @@ public class Fielder {
     @Column(name = "email", nullable = false)
     private String email;
     @OneToMany(mappedBy = "fielder")
+    @JsonIgnoreProperties({"fielder"})
     private List<Field> fields;
     @Column(name = "telephone")
     private String telephone;
