@@ -1,0 +1,62 @@
+# RancherService pods
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rancher-service
+spec:
+  selector:
+    matchLabels:
+      app: rancher-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: rancher-service
+    spec:
+      containers:
+        - image: rancher-service:latest
+          name: rancher-service
+          imagePullPolicy: Never
+          env:
+            - name: POSTGRES_DB_URL
+              value: jdbc:postgresql://postgres-service:5432/vogorode
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: '123'
+            - name: LANDSCAPE_URL
+              value: http://landscape-service-service:8082
+            - name: MONGO_DB_AUTH_DB
+              value: admin
+            - name: MONGO_DB_USERNAME
+              value: root
+            - name: MONGO_DB_PASSWORD
+              value: example
+            - name: MONGO_DB_DB
+              value: vogorode
+            - name: MONGO_DB_HOST
+              value: mongo-service
+            - name: MONGO_DB_PORT
+              value: '27017'
+          ports:
+            - name: server
+              containerPort: 8081
+            - name: grpc-server
+              containerPort: 9091
+---
+# RancherService service
+apiVersion: v1
+kind: Service
+metadata:
+  name: rancher-service-service
+spec:
+  selector:
+    app: rancher-service
+  ports:
+    - name: server
+      port: 8081
+      targetPort: server
+    - name: grpc-server
+      port: 9091
+      targetPort: grpc-server
+  type: LoadBalancer
