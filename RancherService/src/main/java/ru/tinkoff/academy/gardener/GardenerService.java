@@ -42,5 +42,4 @@ public class GardenerService {
     public void delete(Long id) {
         gardenerRepository.deleteById(id);
     }
-
-    }}
+}
