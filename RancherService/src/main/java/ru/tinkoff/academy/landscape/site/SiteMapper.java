@@ -1,11 +1,11 @@
-package ru.tinkoff.academy.site;
+package ru.tinkoff.academy.landscape.site;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
-import ru.tinkoff.academy.site.dto.SiteCreateDto;
-import ru.tinkoff.academy.site.dto.SiteUpdateDto;
+import ru.tinkoff.academy.landscape.site.dto.SiteCreateDto;
+import ru.tinkoff.academy.landscape.site.dto.SiteUpdateDto;
 
 import java.util.UUID;
 

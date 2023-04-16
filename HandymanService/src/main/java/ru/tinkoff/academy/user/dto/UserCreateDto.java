@@ -1,15 +1,16 @@
 package ru.tinkoff.academy.user.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-@Builder
 public class UserCreateDto {
-    private String type;
-    private String login;
+    private String name;
+    private String surname;
+    private String[] skills;
     private String email;
     private String telephone;
-    private String latitude;
-    private String longitude;
+    private List<Long> accountsId;
+    private Byte[] photo;
 }

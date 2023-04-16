@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.configuration.landscape.UserWebClientHelper;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
-import ru.tinkoff.academy.user.User;
-import ru.tinkoff.academy.user.UserMapper;
+import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.landscape.user.LandscapeUserMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,17 +16,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WorkerService {
     private final WorkerMapper workerMapper;
-    private final UserMapper userMapper;
+    private final LandscapeUserMapper landscapeUserMapper;
     private final WorkerRepository workerRepository;
     private final UserWebClientHelper webHelper;
 
     @Transactional
     public Worker save(WorkerCreateDto workerCreateDto) {
-        User user = webHelper.saveUser(
-                userMapper.workerCreateDtoToUserCreateDto(workerCreateDto)
+        LandscapeUser landscapeUser = webHelper.saveUser(
+                landscapeUserMapper.workerCreateDtoToUserCreateDto(workerCreateDto)
         ).block();
         Worker worker = workerMapper.dtoToWorker(workerCreateDto);
-        worker.setUserId(user.getId());
+        worker.setUserId(landscapeUser.getId());
         return workerRepository.save(worker);
     }
 
@@ -48,8 +48,8 @@ public class WorkerService {
     }
 
     private ExtendedByUserWorker mapToExtended(Worker worker) {
-        User user = this.webHelper.getUser(worker.getUserId()).block();
-        return this.workerMapper.toExtendedWorker(worker, user);
+        LandscapeUser landscapeUser = this.webHelper.getUser(worker.getUserId()).block();
+        return this.workerMapper.toExtendedWorker(worker, landscapeUser);
     }
 
     public List<Worker> findAll() {
