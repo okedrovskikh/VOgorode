@@ -3,4 +3,4 @@ create table if not exist gardener(
     name text not null,
     surname text not null,
     telephone text
-)
+);

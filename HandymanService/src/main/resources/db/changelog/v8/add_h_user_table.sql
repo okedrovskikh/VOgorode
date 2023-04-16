@@ -6,4 +6,4 @@ create table if not exists h_user(
     email text not null,
     telephone text not null,
     photo bytea not null
-)
+);

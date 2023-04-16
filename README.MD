@@ -18,3 +18,5 @@
 [HW6](/docs/HW6/HW6.md)
 
 [HW7](/docs/HW7/HW7.md)
+
+[HW8](/docs/HW8/HW8.md)

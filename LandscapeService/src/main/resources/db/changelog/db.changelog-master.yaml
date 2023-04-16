@@ -24,3 +24,8 @@ databaseChangeLog:
       author: o.kedrovskikh
       sqlFile:
         path: classpath:db/changelog/v6/ADD_latitude_longitude_v_user.sql
+  - changeSet:
+      id: add_order_table
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v8/add_order_table.sql
