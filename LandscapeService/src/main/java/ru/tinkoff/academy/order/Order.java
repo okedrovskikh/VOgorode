@@ -16,17 +16,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import ru.tinkoff.academy.work.WorkEnum;
-import ru.tinkoff.academy.work.WorkEnumType;
+import ru.tinkoff.academy.work.WorkEnumArrayType;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "order")
+@Entity(name = "l_order")
 @Table(schema = "public", catalog = "vogorode")
 public class Order {
     @Id
@@ -37,8 +38,7 @@ public class Order {
     @Column(name = "user_id", nullable = false)
     private Long userId;
     @Column(name = "works", nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Type(value = WorkEnumType.class)
+    @Type(value = WorkEnumArrayType.class)
     private WorkEnum[] works;
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
@@ -48,7 +48,22 @@ public class Order {
     private Timestamp createdAt;
 
     @PrePersist
-    public void setCreatedAt() {
+    public void prePersist() {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
+        status = OrderStatus.created;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Order order)) {
+            return false;
+        }
+
+        return Objects.equals(id, order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
     }
 }

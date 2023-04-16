@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.order;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +20,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "order"},
+        description = "Duration Landscape service Order process handling",
+        histogram = true
+)
 public class OrderController {
     private final OrderService orderService;
 

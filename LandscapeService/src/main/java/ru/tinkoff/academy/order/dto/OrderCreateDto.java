@@ -9,5 +9,4 @@ public class OrderCreateDto {
     private Long gardenId;
     private Long userId;
     private WorkEnum[] works;
-    private OrderStatus status;
 }
