@@ -16,7 +16,7 @@ public class FielderService {
     private final FielderMapper fielderMapper;
 
     public Fielder save(FielderCreateDto createDto) {
-        Fielder fielder = fielderMapper.dtoToGardener(createDto);
+        Fielder fielder = fielderMapper.dtoToFielder(createDto);
         return fielderRepository.save(fielder);
     }
 
@@ -35,7 +35,7 @@ public class FielderService {
 
     public Fielder update(FielderUpdateDto updateDto) {
         Fielder fielder = fielderRepository.getReferenceById(updateDto.getId());
-        fielder = fielderMapper.updateGardener(fielder, updateDto);
+        fielder = fielderMapper.updateFielder(fielder, updateDto);
         return fielderRepository.save(fielder);
     }
 

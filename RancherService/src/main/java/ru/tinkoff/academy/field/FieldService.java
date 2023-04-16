@@ -33,6 +33,10 @@ public class FieldService {
         return fieldRepository.findAll();
     }
 
+    public List<Field> findAllByIds(Iterable<Long> ids) {
+        return fieldRepository.findAllById(ids);
+    }
+
     public Field update(FieldUpdateDto updateDto) {
         Field field = fieldRepository.getReferenceById(updateDto.getId());
         field = fieldMapper.updateField(field, updateDto);

@@ -40,6 +40,7 @@ dependencies {
     implementation("net.devh:grpc-spring-boot-starter:2.14.0.RELEASE")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.mongodb:mongodb-driver-sync")
+    implementation("org.hibernate:hibernate-spatial:6.1.7.Final")
     compileOnly("org.projectlombok:lombok")
     compileOnly("org.mapstruct:mapstruct:1.5.3.Final")
     compileOnly("jakarta.annotation:jakarta.annotation-api:1.3.5")
