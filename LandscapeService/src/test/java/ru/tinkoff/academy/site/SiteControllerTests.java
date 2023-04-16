@@ -170,26 +170,26 @@ public class SiteControllerTests extends AbstractIntegrationTest {
     public void testDeleteByExistId() throws Exception {
         UUID id = UUID.fromString("4e76f3f6-9f6e-49fd-8e0f-b07c2166152d");
 
-        Assertions.assertTrue(this.siteRepository.existsById(id));
+        Assertions.assertTrue(siteRepository.existsById(id));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format(this.sitesById, id))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format(sitesById, id))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        Assertions.assertFalse(this.siteRepository.existsById(id));
+        Assertions.assertFalse(siteRepository.existsById(id));
     }
 
     @Test
     public void testDeleteByNotExistId() throws Exception {
         UUID id = UUID.randomUUID();
 
-        Assertions.assertFalse(this.siteRepository.existsById(id));
+        Assertions.assertFalse(siteRepository.existsById(id));
 
-        this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format(this.sitesById, id))
+        this.mockMvc.perform(MockMvcRequestBuilders.delete(String.format(sitesById, id))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
 
-        Assertions.assertFalse(this.siteRepository.existsById(id));
+        Assertions.assertFalse(siteRepository.existsById(id));
     }
 
     private JavaType listSiteType() {

@@ -8,6 +8,8 @@ import ru.tinkoff.academy.order.dto.OrderUpdateDto;
 @Mapper(componentModel = "spring")
 public abstract class OrderMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "status", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     public abstract Order dtoToOrder(OrderCreateDto createDto);
 
     public Order updateOrder(Order order, OrderUpdateDto updateDto) {

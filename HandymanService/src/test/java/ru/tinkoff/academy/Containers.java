@@ -3,6 +3,7 @@ package ru.tinkoff.academy;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.LoggerFactory;
+import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
@@ -25,6 +26,13 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
             .withExposedPorts(5432)
             .withStartupTimeout(Duration.ofMinutes(3))
             .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(PostgreSQLContainer.class)));
+
+    public static final MongoDBContainer mongo = new MongoDBContainer("mongo")
+            .withNetwork(network)
+            .withNetworkAliases("mongo")
+            .withExposedPorts(27017)
+            .withStartupTimeout(Duration.ofMinutes(3))
+            .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(MongoDBContainer.class)));
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
