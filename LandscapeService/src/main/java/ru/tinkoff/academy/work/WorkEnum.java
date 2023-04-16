@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.worker;
+package ru.tinkoff.academy.work;
 
 public enum WorkEnum {
     shovel, plant, water, sow

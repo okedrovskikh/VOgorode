@@ -4,4 +4,4 @@ create table if not exist field(
     latitude float16 not null,
     longitude float16 not null,
     area geometry not null
-)
+);
