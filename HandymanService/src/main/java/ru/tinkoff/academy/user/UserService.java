@@ -2,6 +2,7 @@ package ru.tinkoff.academy.user;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
@@ -29,8 +30,16 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public List<User> findAll() {
+    public List<User> findAll(boolean sortedBySurname) {
+        return sortedBySurname ? findAllSortedBySurname() : findAllUnsorted();
+    }
+
+    public List<User> findAllUnsorted() {
         return userRepository.findAll();
+    }
+
+    public List<User> findAllSortedBySurname() {
+        return userRepository.findAll(Sort.by("surname"));
     }
 
     public User update(UserUpdateDto updateDto) {

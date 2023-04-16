@@ -2,6 +2,8 @@ package ru.tinkoff.academy.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -12,7 +14,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import ru.tinkoff.academy.account.Account;
+import ru.tinkoff.academy.work.WorkEnum;
+import ru.tinkoff.academy.work.WorkEnumType;
 
 import java.util.List;
 
@@ -32,13 +37,15 @@ public class User {
     @Column(name = "surname", nullable = false)
     private String surname;
     @Column(name = "skills", nullable = false)
-    private String[] skills;
+    @Enumerated(EnumType.STRING)
+    @Type(value = WorkEnumType.class)
+    private WorkEnum[] skills;
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "telephone", nullable = false)
     private String telephone;
     @OneToMany(mappedBy = "user")
-    private List<Account> accountList;
+    private List<Account> accounts;
     @Column(name = "photo", nullable = false)
     private Byte[] photo;
 }

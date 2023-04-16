@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.gardener;
+package ru.tinkoff.academy.fielder;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,39 +9,39 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tinkoff.academy.gardener.dto.GardenerCreateDto;
-import ru.tinkoff.academy.gardener.dto.GardenerUpdateDto;
+import ru.tinkoff.academy.fielder.dto.FielderCreateDto;
+import ru.tinkoff.academy.fielder.dto.FielderUpdateDto;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/gardeners")
 @RequiredArgsConstructor
-public class GardenerController {
-    private final GardenerService gardenerService;
+public class FielderController {
+    private final FielderService fielderService;
 
     @PostMapping("")
-    public Gardener save(@RequestBody GardenerCreateDto createDto) {
-        return gardenerService.save(createDto);
+    public Fielder save(@RequestBody FielderCreateDto createDto) {
+        return fielderService.save(createDto);
     }
 
     @GetMapping("/{id}")
-    public Gardener getById(@PathVariable("id") Long id) {
-        return gardenerService.getById(id);
+    public Fielder getById(@PathVariable("id") Long id) {
+        return fielderService.getById(id);
     }
 
     @GetMapping("")
-    public List<Gardener> findAll() {
-        return gardenerService.findAll();
+    public List<Fielder> findAll() {
+        return fielderService.findAll();
     }
 
     @PutMapping("")
-    public Gardener update(GardenerUpdateDto updateDto) {
-        return gardenerService.update(updateDto);
+    public Fielder update(FielderUpdateDto updateDto) {
+        return fielderService.update(updateDto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
-        gardenerService.delete(id);
+        fielderService.delete(id);
     }
 }

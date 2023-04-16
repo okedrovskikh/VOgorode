@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,7 @@ import java.util.UUID;
 public class Worker {
     @Id
     private String id;
-    private UUID userId;
+    private UUID landscapeUserId;
     private List<WorkEnum> services;
     private Double latitude;
     private Double longitude;

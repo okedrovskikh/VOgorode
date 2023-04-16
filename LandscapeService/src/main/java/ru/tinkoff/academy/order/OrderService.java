@@ -2,6 +2,9 @@ package ru.tinkoff.academy.order;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.order.dto.OrderCreateDto;
 import ru.tinkoff.academy.order.dto.OrderUpdateDto;
@@ -31,6 +34,10 @@ public class OrderService {
 
     public List<Order> findAll() {
         return orderRepository.findAll();
+    }
+
+    public Page<Order> searchPage(int pageNumber, int pageSize) {
+        return orderRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
     public Order update(OrderUpdateDto updateDto) {

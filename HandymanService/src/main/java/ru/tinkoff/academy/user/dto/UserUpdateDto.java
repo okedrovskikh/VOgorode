@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.user.dto;
 
 import lombok.Data;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public class UserUpdateDto {
     private Long id;
     private String name;
     private String surname;
-    private String[] skills;
+    private WorkEnum[] skills;
     private String email;
     private String telephone;
     private List<Long> accountsId;

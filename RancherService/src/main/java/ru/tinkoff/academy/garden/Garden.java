@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,5 +22,5 @@ public class Garden {
     private Double x2;
     private Double y2;
     private Double square;
-    private List<GardenWorks> works;
+    private List<WorkEnum> works;
 }

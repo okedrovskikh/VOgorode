@@ -1,4 +1,4 @@
-create table if not exist gardener(
+create table if not exists fielder(
     id bigserial primary key,
     name text not null,
     surname text not null,
