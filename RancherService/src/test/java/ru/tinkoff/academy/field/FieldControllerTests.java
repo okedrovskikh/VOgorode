@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.geo.Point;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -14,7 +13,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
+import ru.tinkoff.academy.field.dto.FieldDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
+import ru.tinkoff.academy.field.point.Point;
 import ru.tinkoff.academy.fielder.Fielder;
 
 import java.util.ArrayList;
@@ -39,12 +40,12 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testSaveCorrectField() throws Exception {
-        Field expectedField = Field.builder()
+        FieldDto expectedField = FieldDto.builder()
                 .id(4L)
                 .address("addr4")
                 .longitude(500D)
                 .latitude(490.2)
-                .area(new Point(1, 1))
+                .area(new Point(1D, 1D))
                 .fielder(testFielder)
                 .build();
 
@@ -53,7 +54,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         request.setLongitude(500.0);
         request.setLatitude(490.2);
         request.setFielderId(1L);
-        request.setArea(new Point(1, 1));
+        request.setArea(new ru.tinkoff.academy.field.point.Point(1D, 1D));
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(fields)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +62,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
-        Field actualField = objectMapper.readValue(response.getResponse().getContentAsString(), Field.class);
+        FieldDto actualField = objectMapper.readValue(response.getResponse().getContentAsString(), FieldDto.class);
         Assertions.assertEquals(expectedField, actualField);
     }
 
@@ -72,7 +73,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.post(fields)
                 .contentType(MediaType.APPLICATION_JSON)
-                .contentType(objectMapper.writeValueAsString(request))
+                .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isConflict());
     }
@@ -80,12 +81,12 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     @Test
     public void testGetByExistId() throws Exception {
         Long id = 2L;
-        Field expectedField = Field.builder()
+        FieldDto expectedField = FieldDto.builder()
                 .id(id)
-                .address("addr2")
+                .address("addr3")
                 .latitude(800D)
                 .longitude(800D)
-                .area(new Point(1, 1))
+                .area(new Point(1.0, 1.0))
                 .fielder(testFielder)
                 .build();
 
@@ -93,27 +94,27 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
-        Field actualField = objectMapper.readValue(response.getResponse().getContentAsString(), Field.class);
+        FieldDto actualField = objectMapper.readValue(response.getResponse().getContentAsString(), FieldDto.class);
         Assertions.assertEquals(expectedField, actualField);
     }
 
     @Test
     public void testFindAll() throws Exception {
-        List<Field> expectedFields = List.of(
-                Field.builder()
+        List<FieldDto> expectedFields = List.of(
+                FieldDto.builder()
                         .id(1L)
                         .address("addr1")
                         .latitude(800D)
                         .longitude(800D)
-                        .area(new Point(1, 1))
+                        .area(new Point(1.0, 1.0))
                         .fielder(testFielder)
                         .build(),
-                Field.builder()
+                FieldDto.builder()
                         .id(2L)
-                        .address("addr2")
+                        .address("addr3")
                         .latitude(800D)
                         .longitude(800D)
-                        .area(new Point(1, 1))
+                        .area(new Point(1.0, 1.0))
                         .fielder(testFielder)
                         .build()
         );
@@ -122,7 +123,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
-        List<Field> actualFields = objectMapper.readValue(response.getResponse().getContentAsString(), listFieldType());
+        List<FieldDto> actualFields = objectMapper.readValue(response.getResponse().getContentAsString(), listFieldType());
         Assertions.assertTrue(actualFields.containsAll(expectedFields));
     }
 
@@ -132,18 +133,18 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get(String.format(fieldsById, id))
                 .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isConflict());
+        ).andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
     public void testUpdateCorrectField() throws Exception {
         Long id = 3L;
-        Field expectedField = Field.builder()
+        FieldDto expectedField = FieldDto.builder()
                 .id(id)
                 .address("addr33")
                 .latitude(800D)
                 .longitude(800D)
-                .area(new Point(1, 1))
+                .area(new Point(1.0, 1.0))
                 .fielder(testFielder)
                 .build();
 
@@ -152,7 +153,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         request.setId(id);
         request.setLatitude(800D);
         request.setLongitude(800D);
-        request.setArea(new Point(1, 1));
+        request.setArea(new ru.tinkoff.academy.field.point.Point(1D, 1D));
         request.setFielderId(1L);
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put(fields)
@@ -161,7 +162,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
-        Field actualField = objectMapper.readValue(response.getResponse().getContentAsString(), Field.class);
+        FieldDto actualField = objectMapper.readValue(response.getResponse().getContentAsString(), FieldDto.class);
         Assertions.assertEquals(expectedField, actualField);
     }
 
@@ -199,13 +200,13 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
         mockMvc.perform(MockMvcRequestBuilders.delete(String.format(fieldsById, id))
                 .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isConflict());
+        ).andExpect(MockMvcResultMatchers.status().isOk());
 
         Assertions.assertFalse(fieldRepository.existsById(id));
     }
 
     private JavaType listFieldType() {
         return objectMapper.getTypeFactory()
-                .constructCollectionType(ArrayList.class, Field.class);
+                .constructCollectionType(ArrayList.class, FieldDto.class);
     }
 }

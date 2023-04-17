@@ -68,7 +68,7 @@ services:
     depends_on:
       - postgres
   postgres:
-    image: postgres:15-alpine
+    image: postgis/postgis:15-3.3-alpine
     container_name: vogorode-postgres
     restart: always
     environment:

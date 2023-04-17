@@ -7,17 +7,21 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
+import java.util.Map;
 
 public class Containers implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
+    public static final DockerImageName POSTGIS = DockerImageName.parse("postgis/postgis:15-3.3-alpine")
+            .asCompatibleSubstituteFor("postgres");
     public static final String POSTGRES_USER = "postgres";
     public static final String POSTGRES_PASSWORD = "123";
     public static final String POSTGRES_DATABASE = "vogorode";
 
     public static final Network network = Network.newNetwork();
 
-    public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+    public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGIS)
             .withNetwork(network)
             .withNetworkAliases("postgres")
             .withDatabaseName(POSTGRES_DATABASE)

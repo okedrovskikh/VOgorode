@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.fielder.dto.FielderCreateDto;
+import ru.tinkoff.academy.fielder.dto.FielderDto;
 import ru.tinkoff.academy.fielder.dto.FielderUpdateDto;
 
 import java.util.List;
@@ -26,25 +27,26 @@ import java.util.List;
 )
 public class FielderController {
     private final FielderService fielderService;
+    private final FielderMapper fielderMapper;
 
     @PostMapping("")
-    public Fielder save(@RequestBody FielderCreateDto createDto) {
-        return fielderService.save(createDto);
+    public FielderDto save(@RequestBody FielderCreateDto createDto) {
+        return fielderMapper.toDto(fielderService.save(createDto));
     }
 
     @GetMapping("/{id}")
-    public Fielder getById(@PathVariable("id") Long id) {
-        return fielderService.getById(id);
+    public FielderDto getById(@PathVariable("id") Long id) {
+        return fielderMapper.toDto(fielderService.getById(id));
     }
 
-    @GetMapping("")
-    public List<Fielder> findAll() {
-        return fielderService.findAll();
+    @GetMapping("/all")
+    public List<FielderDto> findAll() {
+        return fielderService.findAll().stream().map(fielderMapper::toDto).toList();
     }
 
     @PutMapping("")
-    public Fielder update(FielderUpdateDto updateDto) {
-        return fielderService.update(updateDto);
+    public FielderDto update(FielderUpdateDto updateDto) {
+        return fielderMapper.toDto(fielderService.update(updateDto));
     }
 
     @DeleteMapping("/{id}")

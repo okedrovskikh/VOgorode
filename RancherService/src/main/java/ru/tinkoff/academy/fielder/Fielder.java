@@ -17,6 +17,7 @@ import lombok.Setter;
 import ru.tinkoff.academy.field.Field;
 
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -40,4 +41,18 @@ public class Fielder {
     private List<Field> fields;
     @Column(name = "telephone")
     private String telephone;
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Fielder fielder)) {
+            return false;
+        }
+
+        return Objects.equals(id, fielder.id);
+    }
 }
