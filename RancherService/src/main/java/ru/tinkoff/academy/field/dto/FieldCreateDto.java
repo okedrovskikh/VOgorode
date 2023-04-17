@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.field.dto;
 
 import lombok.Data;
-import org.springframework.data.geo.Point;
+import ru.tinkoff.academy.field.point.Point;
 
 @Data
 public class FieldCreateDto {

@@ -5,10 +5,12 @@ databaseChangeLog:
   - changeSet:
       id: add_fielder_test_data
       author: o.kedrovskikh
+      context: test
       sqlFile:
         path: classpath:db/changelog/v8/fielder_test_data.sql
   - changeSet:
       id: add_field_test_data
       author: o.kedrovskikh
+      context: test
       sqlFile:
         path: classpath:db/changelog/v8/field_test_data.sql

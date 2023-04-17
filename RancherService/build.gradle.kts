@@ -39,6 +39,7 @@ dependencies {
     implementation("org.springframework:spring-aspects")
     implementation("net.devh:grpc-spring-boot-starter:2.14.0.RELEASE")
     implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.liquibase:liquibase-core")
     implementation("org.mongodb:mongodb-driver-sync")
     implementation("org.hibernate:hibernate-spatial:6.1.7.Final")
     compileOnly("org.projectlombok:lombok")

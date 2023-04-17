@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
+import ru.tinkoff.academy.field.dto.FieldDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
 
 import java.util.List;
@@ -26,25 +27,26 @@ import java.util.List;
 )
 public class FieldController {
     private final FieldService fieldService;
+    private final FieldMapper fieldMapper;
 
     @PostMapping("")
-    public Field save(@RequestBody FieldCreateDto createDto) {
-        return fieldService.save(createDto);
+    public FieldDto save(@RequestBody FieldCreateDto createDto) {
+        return fieldMapper.toDto(fieldService.save(createDto));
     }
 
     @GetMapping("/{id}")
-    public Field getById(@PathVariable("id") Long id) {
-        return fieldService.getById(id);
+    public FieldDto getById(@PathVariable("id") Long id) {
+        return fieldMapper.toDto(fieldService.getById(id));
     }
 
-    @GetMapping("")
-    public List<Field> findAll() {
-        return fieldService.findAll();
+    @GetMapping("/all")
+    public List<FieldDto> findAll() {
+        return fieldService.findAll().stream().map(fieldMapper::toDto).toList();
     }
 
     @PutMapping("")
-    public Field update(@RequestBody FieldUpdateDto updateDto) {
-        return fieldService.update(updateDto);
+    public FieldDto update(@RequestBody FieldUpdateDto updateDto) {
+        return fieldMapper.toDto(fieldService.update(updateDto));
     }
 
     @DeleteMapping("/{id}")

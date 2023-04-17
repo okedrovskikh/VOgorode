@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
+import ru.tinkoff.academy.fielder.FielderService;
 
 import java.util.Optional;
 import java.util.List;
