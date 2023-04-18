@@ -28,6 +28,8 @@ inet_provider = EmailProvider(fake)
 phone_provider = PhoneProvider(fake)
 person_provider = PersonProvider(fake)
 
+skills = ['plant', 'water', 'sow', 'shovel']
+
 banks = []
 payment_systems = ['mastercard', 'visa', 'mir', 'unionpay']
 
@@ -36,6 +38,15 @@ with open(file='default-photo.png', mode='r') as file:
     for e in file.readlines():
         default_photo += e
     default_photo = default_photo.encode('base64')
+
+
+def get_skills():
+    res = []
+    rand_skills = skills.copy()
+    for i in range(random.randint(1, 4)):
+        res.append(rand_skills[i])
+        rand_skills.remove(rand_skills[i])
+    return res
 
 
 class Account:
@@ -64,8 +75,8 @@ class User:
     @staticmethod
     def generate(responses):
         accounts = [e['id'] for e in responses]
-        return User(person_provider.first_name(), person_provider.last_name(), [], inet_provider.email(),
-                    phone_provider.phone_number(), accounts, '')
+        return User(person_provider.first_name(), person_provider.last_name(), get_skills(), inet_provider.email(),
+                    phone_provider.phone_number(), accounts, default_photo)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
@@ -80,7 +91,10 @@ class Field:
 
     @staticmethod
     def generate():
-        return Field(address_faker.address(), geo_provider.latitude(), geo_provider.longitude(), None)
+        latitude = float(geo_provider.latitude())
+        longitude = float(geo_provider.longitude())
+        point = Point(float(geo_provider.coordinate(latitude)), float(geo_provider.coordinate(longitude)))
+        return Field(address_faker.address(), latitude, longitude, point)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
