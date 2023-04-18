@@ -1,56 +1,134 @@
-import datetime
+import json
 import random
-import argparse
+from argparse import ArgumentParser
 from faker import Faker
+from faker.providers.address import Provider as AddressProvide
+from faker.providers.geo import Provider as GeoProvide
+from faker.providers.credit_card import Provider as BankProvide
 from faker.providers.internet import Provider as EmailProvider
 from faker.providers.phone_number import Provider as PhoneProvider
+from faker.providers.person import Provider as PersonProvider
+import requests
 
-des = 'Generate 3.14M users for db table: https://padlet.com/p4bp94qnf6/java-u2whzedsnhf7uv48/wish/2512566608'
-parser = argparse.ArgumentParser(
-    prog='Users Generator',
-    description=des
+parser = ArgumentParser(
+    prog='VOgorode data generator',
+    description='desc'
 )
-parser.add_argument('--type', default='u_type', help='Value is a name of column with landscapeUser type')
-parser.add_argument('--login', default='u_login', help='Value is a name of login column')
-parser.add_argument('--email', default='email', help='Value is a email column name')
-parser.add_argument('--telephone', default='telephone', help='value is a phone number column name')
-parser.add_argument('--creation-date', default='creation_date', help='Value is a creation date column name')
-parser.add_argument('--update-date', default='update_date', help='Value is a update date column name')
+parser.add_argument('-h', default='http://localhost:8080', help='HandymanService address')
+parser.add_argument('-l', default='http://localhost:8081', help='LandscapeService address')
+parser.add_argument('-r', default='http://localhost:8083', help='RancherService address')
 
 args = parser.parse_args().__dict__
 
-creation_date = datetime.datetime.utcnow()
-format_str = '(\'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\')'
-type_counter = 0
-user_types = ['handyman', 'landscape', 'rancher']
 fake = Faker()
-email_fake = EmailProvider(fake)
-phone_fake = PhoneProvider(fake)
+address_faker = AddressProvide(fake)
+geo_provider = GeoProvide(fake)
+bank_provide = BankProvide(fake)
+inet_provider = EmailProvider(fake)
+phone_provider = PhoneProvider(fake)
+person_provider = PersonProvider(fake)
+
+banks = []
+payment_systems = ['mastercard', 'visa', 'mir', 'unionpay']
+
+default_photo = ''
+with open(file='default-photo.png', mode='r') as file:
+    for e in file.readlines():
+        default_photo += e
+    default_photo = default_photo.encode('base64')
 
 
-def create_type():
-    global type_counter
-    rand = random.Random().randint(a=0, b=1)
-    if rand == 0:
-        if type_counter == 3:
-            type_counter = 0
-            return user_types[2]
-        else:
-            type_counter += 1
-            return user_types[0]
-    else:
-        return user_types[1]
+class Account:
+    def __init__(self, card_id, payment_system):
+        self.card_id = card_id
+        self.payment_system = payment_system
+
+    @staticmethod
+    def generate():
+        return Account(bank_provide.credit_card_number(), random.choice(payment_systems))
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
 
 
-def generate_data():
-    return format_str.format(create_type(), email_fake.user_name(), email_fake.email(),
-                             phone_fake.phone_number(), creation_date, creation_date)
+class User:
+    def __init__(self, name, surname, skills, email, telephone, accounts, photo):
+        self.name = name
+        self.surname = surname
+        self.skills = skills
+        self.email = email
+        self.telephone = telephone
+        self.accounts = accounts
+        self.photo = photo
+
+    @staticmethod
+    def generate(responses):
+        accounts = [e['id'] for e in responses]
+        return User(person_provider.first_name(), person_provider.last_name(), [], inet_provider.email(),
+                    phone_provider.phone_number(), accounts, '')
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
 
 
-sql_str = 'insert into users ({}, {}, {}, {}, {}, {}) values'.format(args['type'], args['login'], args['email'],
-                                                                     args['telephone'], args['creation_date'],
-                                                                     args['update_date']) + ' {};\n'
+class Field:
+    def __init__(self, address, latitude, longitude, area):
+        self.address = address
+        self.latitude = latitude
+        self.longitude = longitude
+        self.area = area
 
-with open(file='users_data.sql', mode='w') as file:
-    for _ in range(3_140_000):
-        file.write(sql_str.format(str(generate_data())))
+    @staticmethod
+    def generate():
+        return Field(address_faker.address(), geo_provider.latitude(), geo_provider.longitude(), None)
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
+
+
+class Point:
+    def __init__(self, x1, y1):
+        self.x1 = x1
+        self.y1 = y1
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
+
+
+class Fielder:
+    def __init__(self, name, surname, email, telephone, fields_id):
+        self.name = name
+        self.surname = surname
+        self.email = email
+        self.telephone = telephone
+        self.fields_id = fields_id
+
+    @staticmethod
+    def generate(responses):
+        fields_id = [e['id'] for e in responses]
+        return Fielder(person_provider.first_name(), person_provider.last_name(), inet_provider.email(),
+                       phone_provider.phone_number(), fields_id)
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
+
+
+with open(file='users_data.sql', mode='r') as file:
+    while True:
+        line = file.readline()
+        if line is None:
+            break
+        if 'handyman' in line:
+            accounts = [Account.generate() for _ in range(random.randint(1, 4))]
+            responses = []
+            for e in accounts:
+                responses.append(requests.request('post', args['h'] + '/accounts', json=e.to_json()))
+            user = User.generate(responses)
+            requests.request('post', args['h'] + '/users', json=user.to_json())
+        if 'rancher' in line:
+            fields = [Field.generate() for _ in range(random.randint(0, 3))]
+            responses = []
+            for e in fields:
+                responses.append(requests.request('post', args['r'] + '/fields', json=e.to_json()))
+            fielder = Fielder.generate(responses)
+            requests.request('post', args['r'] + '/fielders', json=fielder.to_json())
