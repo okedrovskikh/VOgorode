@@ -17,7 +17,7 @@ import ru.tinkoff.academy.fielder.dto.FielderUpdateDto;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gardeners")
+@RequestMapping("/fielders")
 @RequiredArgsConstructor
 @Timed(
         value = "business.request.duration",
@@ -45,7 +45,7 @@ public class FielderController {
     }
 
     @PutMapping("")
-    public FielderDto update(FielderUpdateDto updateDto) {
+    public FielderDto update(@RequestBody FielderUpdateDto updateDto) {
         return fielderMapper.toDto(fielderService.update(updateDto));
     }
 
