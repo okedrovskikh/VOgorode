@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.order.dto;
 
 import lombok.Data;
-import ru.tinkoff.academy.order.OrderStatus;
+import ru.tinkoff.academy.order.status.OrderStatus;
 import ru.tinkoff.academy.work.WorkEnum;
 
 @Data

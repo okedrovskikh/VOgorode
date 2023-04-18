@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.work;
+package ru.tinkoff.academy.account.payment.system;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
@@ -9,9 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
-public class WorkEnumType extends EnumType<WorkEnum> {
+public class PaymentSystemEnumType extends EnumType<PaymentSystem> {
     @Override
-    public void nullSafeSet(PreparedStatement st, WorkEnum value, int index, SharedSessionContractImplementor session)
+    public void nullSafeSet(PreparedStatement st, PaymentSystem value, int index, SharedSessionContractImplementor session)
             throws HibernateException, SQLException {
         if(value == null) {
             st.setNull(index, Types.OTHER);
@@ -21,12 +21,12 @@ public class WorkEnumType extends EnumType<WorkEnum> {
     }
 
     @Override
-    public WorkEnum nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
+    public PaymentSystem nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
             throws SQLException {
         if (rs.wasNull()) {
             return null;
         }
         String label = rs.getString(position);
-        return WorkEnum.valueOf(label);
+        return PaymentSystem.valueOf(label);
     }
 }

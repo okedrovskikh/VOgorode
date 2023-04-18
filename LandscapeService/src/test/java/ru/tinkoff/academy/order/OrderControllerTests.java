@@ -21,6 +21,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.order.dto.OrderCreateDto;
 import ru.tinkoff.academy.order.dto.OrderUpdateDto;
+import ru.tinkoff.academy.order.status.OrderStatus;
 import ru.tinkoff.academy.work.WorkEnum;
 
 import java.sql.Timestamp;

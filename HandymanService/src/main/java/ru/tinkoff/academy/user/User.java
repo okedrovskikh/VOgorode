@@ -1,9 +1,8 @@
 package ru.tinkoff.academy.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,9 +16,10 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 import ru.tinkoff.academy.account.Account;
 import ru.tinkoff.academy.work.WorkEnum;
-import ru.tinkoff.academy.work.WorkEnumType;
+import ru.tinkoff.academy.work.WorkEnumArrayType;
 
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -37,15 +37,29 @@ public class User {
     @Column(name = "surname", nullable = false)
     private String surname;
     @Column(name = "skills", nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Type(value = WorkEnumType.class)
+    @Type(value = WorkEnumArrayType.class)
     private WorkEnum[] skills;
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "telephone", nullable = false)
     private String telephone;
     @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user"})
     private List<Account> accounts;
     @Column(name = "photo", nullable = false)
     private Byte[] photo;
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof User user)) {
+            return false;
+        }
+
+        return Objects.equals(id, user.id);
+    }
 }

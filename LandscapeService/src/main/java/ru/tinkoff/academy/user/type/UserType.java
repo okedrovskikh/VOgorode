@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.user;
+package ru.tinkoff.academy.user.type;
 
 public enum UserType {
     rancher, landscape, handyman

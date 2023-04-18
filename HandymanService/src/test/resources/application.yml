@@ -1,5 +1,11 @@
 spring:
+  jpa:
+    show-sql: true
   liquibase:
     enabled: true
     contexts: test
     change-log: classpath:db/changelog/db.changelog-test.yaml
+
+rest:
+  landscape:
+    url: ${LANDSCAPE_URL:http://localhost:8082}

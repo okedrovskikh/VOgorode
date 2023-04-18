@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.user;
+package ru.tinkoff.academy.user.type;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Locale;
 
 public class UserEnumType extends EnumType<UserType> {
     @Override

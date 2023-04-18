@@ -12,7 +12,7 @@ import java.util.UUID;
 @Builder
 public class ExtendedByUserWorker {
     private String id;
-    private UUID userId;
+    private UUID landscapeUserId;
     private List<WorkEnum> services;
     private Double latitude;
     private Double longitude;

@@ -1,8 +1,9 @@
-package ru.tinkoff.academy.order;
+package ru.tinkoff.academy.order.status;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.type.EnumType;
+import ru.tinkoff.academy.order.status.OrderStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
