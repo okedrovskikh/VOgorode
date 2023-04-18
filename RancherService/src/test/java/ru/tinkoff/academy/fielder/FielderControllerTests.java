@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
 import ru.tinkoff.academy.AbstractIntegrationTest;
+import ru.tinkoff.academy.field.dto.FieldDto;
+import ru.tinkoff.academy.field.point.Point;
 import ru.tinkoff.academy.fielder.dto.FielderCreateDto;
 import ru.tinkoff.academy.fielder.dto.FielderDto;
 import ru.tinkoff.academy.fielder.dto.FielderUpdateDto;
@@ -37,7 +39,15 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                 .name("name6")
                 .surname("surname6")
                 .email("email6@email.com")
-                .fields(List.of())
+                .fields(List.of(
+                        FieldDto.builder()
+                                .id(1L)
+                                .address("addr1")
+                                .latitude(800.0)
+                                .longitude(800.0)
+                                .area(new Point(1.0, 1.0))
+                                .build()
+                ))
                 .telephone("telephone")
                 .build();
 
@@ -45,7 +55,7 @@ public class FielderControllerTests extends AbstractIntegrationTest {
         request.setName("name6");
         request.setSurname("surname6");
         request.setEmail("email6@email.com");
-        request.setFieldsId(List.of());
+        request.setFieldsId(List.of(1L));
         request.setTelephone("telephone");
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(fielders)

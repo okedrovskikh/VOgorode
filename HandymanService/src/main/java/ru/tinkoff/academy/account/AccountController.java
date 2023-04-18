@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.account;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/accounts")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "account"},
+        description = "Duration Rancher service Account process handling",
+        histogram = true
+)
 public class AccountController {
     private final AccountService accountService;
 
@@ -30,7 +37,7 @@ public class AccountController {
         return accountService.getById(id);
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Account> findAll() {
         return accountService.findAll();
     }

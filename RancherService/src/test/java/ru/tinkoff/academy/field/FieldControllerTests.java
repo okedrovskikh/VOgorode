@@ -41,7 +41,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     @Test
     public void testSaveCorrectField() throws Exception {
         FieldDto expectedField = FieldDto.builder()
-                .id(4L)
+                .id(5L)
                 .address("addr4")
                 .longitude(500D)
                 .latitude(490.2)
@@ -181,7 +181,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteByExistId() throws Exception {
-        Long id = 3L;
+        Long id = 4L;
 
         Assertions.assertTrue(fieldRepository.existsById(id));
 

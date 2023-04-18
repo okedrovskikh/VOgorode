@@ -1,4 +1,10 @@
-create type work as enum ('shovel', 'plant', 'water', 'sow');
+do '
+begin
+    create type work as enum (''shovel'', ''plant'', ''water'', ''sow'');
+exception
+    when duplicate_object THEN null;
+end;
+';
 
 create table if not exists l_order
 (

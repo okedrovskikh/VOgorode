@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import ru.tinkoff.academy.order.status.OrderStatus;
+import ru.tinkoff.academy.order.status.OrderStatusEnumType;
 import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.work.WorkEnumArrayType;
 
