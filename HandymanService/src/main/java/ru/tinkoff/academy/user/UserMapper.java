@@ -1,15 +1,15 @@
 package ru.tinkoff.academy.user;
 
-import lombok.Setter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.tinkoff.academy.account.AccountService;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
-    @Setter
+    @Autowired
     protected AccountService accountService;
 
     @Mapping(target = "id", ignore = true)

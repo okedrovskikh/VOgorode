@@ -1,8 +1,8 @@
 do '
 begin
-    create type work as enum (''shovel'', ''plant'', ''water'', ''sow'');
+create type work as enum (''shovel'', ''plant'', ''water'', ''sow'');
 exception
-    when duplicate_object THEN null;
+when duplicate_object THEN null;
 end;
 ';
 

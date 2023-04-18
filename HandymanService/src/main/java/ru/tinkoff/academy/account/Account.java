@@ -35,7 +35,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"accounts"})
     private User user;
     @Column(name = "card_id", nullable = false)

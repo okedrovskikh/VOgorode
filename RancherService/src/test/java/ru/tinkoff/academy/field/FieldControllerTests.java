@@ -46,14 +46,12 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .longitude(500D)
                 .latitude(490.2)
                 .area(new Point(1D, 1D))
-                .fielder(testFielder)
                 .build();
 
         FieldCreateDto request = new FieldCreateDto();
         request.setAddress("addr4");
         request.setLongitude(500.0);
         request.setLatitude(490.2);
-        request.setFielderId(1L);
         request.setArea(new ru.tinkoff.academy.field.point.Point(1D, 1D));
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(fields)
@@ -69,7 +67,6 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     @Test
     public void testSaveIncorrectField() throws Exception {
         FieldCreateDto request = new FieldCreateDto();
-        request.setFielderId(1L);
 
         mockMvc.perform(MockMvcRequestBuilders.post(fields)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -154,7 +151,6 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         request.setLatitude(800D);
         request.setLongitude(800D);
         request.setArea(new ru.tinkoff.academy.field.point.Point(1D, 1D));
-        request.setFielderId(1L);
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put(fields)
                 .contentType(MediaType.APPLICATION_JSON)

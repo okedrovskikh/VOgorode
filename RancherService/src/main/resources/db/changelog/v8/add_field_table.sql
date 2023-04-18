@@ -7,6 +7,6 @@ create table if not exists field
     latitude   double precision not null,
     longitude  double precision not null,
     area       geometry         not null,
-    fielder_id bigint           not null,
+    fielder_id bigint,
     constraint fielder_fkey foreign key (fielder_id) references fielder (id)
 );

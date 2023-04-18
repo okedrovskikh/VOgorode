@@ -38,7 +38,7 @@ public class Field {
     @Column(name = "area", nullable = false)
     private Point area;
     @ManyToOne
-    @JoinColumn(name = "fielder_id", nullable = false)
+    @JoinColumn(name = "fielder_id")
     private Fielder fielder;
 
     @Override

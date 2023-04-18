@@ -21,7 +21,7 @@ import java.util.List;
 @Timed(
         value = "business.request.duration",
         extraTags = {"process", "account"},
-        description = "Duration Rancher service Account process handling",
+        description = "Duration Handyman service Account process handling",
         histogram = true
 )
 public class AccountController {
