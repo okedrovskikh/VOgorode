@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.tinkoff.academy.field.Field;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +42,13 @@ public class Fielder {
     private List<Field> fields;
     @Column(name = "telephone")
     private String telephone;
+
+    public List<Field> getFields() {
+        if (fields == null) {
+            return new ArrayList<>();
+        }
+        return fields;
+    }
 
     @Override
     public int hashCode() {

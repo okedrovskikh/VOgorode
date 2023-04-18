@@ -9,5 +9,4 @@ public class FieldCreateDto {
     private Double latitude;
     private Double longitude;
     private Point area;
-    private Long fielderId;
 }

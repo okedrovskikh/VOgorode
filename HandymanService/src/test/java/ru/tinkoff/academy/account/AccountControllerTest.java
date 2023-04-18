@@ -47,13 +47,11 @@ public class AccountControllerTest extends AbstractIntegrationTest {
                 .id(5L)
                 .cardId("0000000000000005")
                 .paymentSystem(PaymentSystem.unionpay)
-                .user(testUser)
                 .build();
 
         AccountCreateDto request = new AccountCreateDto();
         request.setCardId("0000000000000005");
         request.setPaymentSystem(PaymentSystem.unionpay);
-        request.setUserId(1L);
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(accounts)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -144,7 +142,6 @@ public class AccountControllerTest extends AbstractIntegrationTest {
         AccountUpdateDto request = new AccountUpdateDto();
         request.setId(3L);
         request.setCardId("0000000000000003");
-        request.setUserId(1L);
         request.setPaymentSystem(PaymentSystem.visa);
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put(accounts)
@@ -162,7 +159,6 @@ public class AccountControllerTest extends AbstractIntegrationTest {
     public void testUpdateIncorrectAccount() throws Exception {
         AccountUpdateDto request = new AccountUpdateDto();
         request.setId(3L);
-        request.setUserId(1L);
         request.setCardId("0000000000000003");
 
         mockMvc.perform(MockMvcRequestBuilders.put(accounts)
