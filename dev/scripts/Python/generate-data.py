@@ -1,5 +1,6 @@
 import json
 import random
+import re
 from argparse import ArgumentParser
 from faker import Faker
 from faker.providers.address import Provider as AddressProvide
@@ -127,18 +128,22 @@ class Fielder:
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
 
 
+regex = re.compile(r'')
+
 with open(file='users_data.sql', mode='r') as file:
     while True:
         line = file.readline()
         if line is None:
             break
         if 'handyman' in line:
+            email = ''
+            telephone = ''
             accounts = [Account.generate() for _ in range(random.randint(1, 4))]
             responses = []
             for e in accounts:
                 responses.append(requests.request('post', args['h'] + '/accounts', json=e.to_json()))
-            user = User.generate(responses)
-            requests.request('post', args['h'] + '/users', json=user.to_json())
+            account = User.generate(responses)
+            requests.request('post', args['h'] + '/accounts', json=account.to_json())
         if 'rancher' in line:
             fields = [Field.generate() for _ in range(random.randint(0, 3))]
             responses = []

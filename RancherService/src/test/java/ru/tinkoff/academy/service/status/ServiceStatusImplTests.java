@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
+import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.proto.ReadinessResponse;
 import ru.tinkoff.academy.proto.ServiceStatusGrpc;
 import ru.tinkoff.academy.proto.VersionResponse;
@@ -18,8 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
         "grpc.server.port=-1",
         "grpc.client.inProcess.address=in-process:test"
 })
+@Import(GrpcTestConfiguration.class)
 @DirtiesContext
-public class ServiceStatusImplTests {
+public class ServiceStatusImplTests extends AbstractIntegrationTest {
     @GrpcClient("inProcess")
     private ServiceStatusGrpc.ServiceStatusBlockingStub serviceStatusBlockingStub;
     @Autowired

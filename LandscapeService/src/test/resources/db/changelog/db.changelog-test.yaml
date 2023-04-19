@@ -3,11 +3,11 @@ databaseChangeLog:
       context: test
       file: classpath:db/changelog/db.changelog-master.yaml
   - changeSet:
-      id: add_users_test_data
+      id: add_accounts_test_data
       author: o.kedrovskikh
       context: test
       sqlFile:
-        path: classpath:db/changelog/v6/users_test_data.sql
+        path: classpath:db/changelog/v6/accounts_test_data.sql
   - changeSet:
       id: add_sites_test_data
       author: o.kedrovskikh

@@ -1,9 +1,9 @@
-create or replace procedure all_rows_update_u_type(new_u_type user_types, portion bigint, timestep integer)
+create or replace procedure all_rows_update_u_type(new_u_type account_types, portion bigint, timestep integer)
     language plpgsql as
 '
     declare
         f_start   bigint := 1;
-        size      bigint := nextval(pg_get_serial_sequence(''users'', ''id''));
+        size      bigint := nextval(pg_get_serial_sequence(''account'', ''id''));
         loop_size bigint;
     begin
         for j in 1..ceil(size::float8 / portion)
@@ -11,7 +11,7 @@ create or replace procedure all_rows_update_u_type(new_u_type user_types, portio
                 loop_size = least(size - f_start, portion);
                 for i in 0..loop_size
                     loop
-                        update v_user
+                        update account
                         set u_type = new_u_type
                         where id = i + f_start;
                     end loop;

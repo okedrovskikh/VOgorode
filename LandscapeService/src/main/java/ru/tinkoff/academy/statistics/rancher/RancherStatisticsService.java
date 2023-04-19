@@ -2,8 +2,8 @@ package ru.tinkoff.academy.statistics.rancher;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.academy.user.User;
-import ru.tinkoff.academy.user.UserService;
+import ru.tinkoff.academy.account.Account;
+import ru.tinkoff.academy.account.AccountService;
 
 import java.util.List;
 import java.util.Map;
@@ -11,10 +11,10 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class RancherStatisticsService {
-    private final UserService userService;
+    private final AccountService accountService;
 
     public Map<String, Double> getUsersMaxArea(Double spliter) {
-        List<User> user = userService.findAll();
+        List<Account> account = accountService.findAll();
         // todo go to rancher and find by email + telephone fielder and get it
         // todo get max area field
         return Map.of();

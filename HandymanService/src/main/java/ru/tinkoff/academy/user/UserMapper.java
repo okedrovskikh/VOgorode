@@ -3,17 +3,17 @@ package ru.tinkoff.academy.user;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.tinkoff.academy.account.AccountService;
+import ru.tinkoff.academy.bank.account.BankAccountService;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
     @Autowired
-    protected AccountService accountService;
+    protected BankAccountService bankAccountService;
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "accounts", expression = "java(createDto.getAccountsId() != null ? accountService.findAllByIds(createDto.getAccountsId()) : null)")
+    @Mapping(target = "accounts", expression = "java(createDto.getAccountsId() != null ? bankAccountService.findAllByIds(createDto.getAccountsId()) : null)")
     public abstract User dtoToUser(UserCreateDto createDto);
 
     public User updateUser(User user, UserUpdateDto updateDto) {
@@ -23,7 +23,7 @@ public abstract class UserMapper {
         user.setEmail(updateDto.getEmail());
         user.setTelephone(updateDto.getTelephone());
         if (updateDto.getAccountsId() != null) {
-            user.setAccounts(accountService.findAllByIds(updateDto.getAccountsId()));
+            user.setAccounts(bankAccountService.findAllByIds(updateDto.getAccountsId()));
         } else {
             user.setAccounts(null);
         }

@@ -9,8 +9,8 @@ databaseChangeLog:
       sqlFile:
         path: classpath:db/changelog/v8/user_test_data.sql
   - changeSet:
-       id: add_account_test_data
+       id: add_bank_account_test_data
        author: o.kedrovskikh
        context: test
        sqlFile:
-         path: classpath:db/changelog/v8/account_test_data.sql
+         path: classpath:db/changelog/v8/bank_account_test_data.sql

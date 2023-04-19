@@ -5,7 +5,7 @@ databaseChangeLog:
       sqlFile:
         path: classpath:db/changelog/v8/add_h_user_table.sql
   - changeSet:
-      id: add_account_table
+      id: add_bank_account_table
       author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v8/add_account_table.sql
+        path: classpath:db/changelog/v8/add_bank_account_table.sql

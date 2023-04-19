@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import ru.tinkoff.academy.account.Account;
+import ru.tinkoff.academy.bank.account.BankAccount;
 import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.work.WorkEnumArrayType;
 
@@ -45,7 +45,7 @@ public class User {
     private String telephone;
     @OneToMany(mappedBy = "user")
     @JsonIgnoreProperties({"user"})
-    private List<Account> accounts;
+    private List<BankAccount> accounts;
     @Column(name = "photo", nullable = false)
     private Byte[] photo;
 

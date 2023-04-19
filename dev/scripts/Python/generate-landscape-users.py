@@ -5,7 +5,7 @@ from faker import Faker
 from faker.providers.internet import Provider as EmailProvider
 from faker.providers.phone_number import Provider as PhoneProvider
 
-des = 'Generate 3.14M users for db table: https://padlet.com/p4bp94qnf6/java-u2whzedsnhf7uv48/wish/2512566608'
+des = 'Generate 3.14M accounts for db table: https://padlet.com/p4bp94qnf6/java-u2whzedsnhf7uv48/wish/2512566608'
 parser = argparse.ArgumentParser(
     prog='Users Generator',
     description=des
@@ -47,7 +47,7 @@ def generate_data():
                              phone_fake.phone_number(), creation_date, creation_date)
 
 
-sql_str = 'insert into users ({}, {}, {}, {}, {}, {}) values'.format(args['type'], args['login'], args['email'],
+sql_str = 'insert into account ({}, {}, {}, {}, {}, {}) values'.format(args['type'], args['login'], args['email'],
                                                                      args['telephone'], args['creation_date'],
                                                                      args['update_date']) + ' ({});\n'
 
