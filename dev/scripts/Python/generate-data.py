@@ -16,7 +16,7 @@ parser = ArgumentParser(
 )
 parser.add_argument('-h', default='http://localhost:8080', help='HandymanService address')
 parser.add_argument('-l', default='http://localhost:8081', help='LandscapeService address')
-parser.add_argument('-r', default='http://localhost:8083', help='RancherService address')
+parser.add_argument('-r', default='http://localhost:8082', help='RancherService address')
 
 args = parser.parse_args().__dict__
 

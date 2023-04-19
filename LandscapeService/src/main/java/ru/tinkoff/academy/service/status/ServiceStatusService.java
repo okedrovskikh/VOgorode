@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.channelfactory.GrpcChannelFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.academy.proto.ServiceStatusGrpc;
-import ru.tinkoff.academy.proto.VersionResponse;
+import ru.tinkoff.academy.proto.service.status.ServiceStatusGrpc;
+import ru.tinkoff.academy.proto.service.status.VersionResponse;
 
 import java.util.List;
 import java.util.Map;
