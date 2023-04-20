@@ -12,7 +12,7 @@ import java.util.Map;
 @RequestMapping("/services/status")
 @RequiredArgsConstructor
 public class ServiceStatusController {
-    private final ServiceStatusService serviceStatusService;
+    private final ServiceStatusGrpcService serviceStatusGrpcService;
 
     /**
      * Get connected services {@link ServiceStatus}
@@ -21,6 +21,6 @@ public class ServiceStatusController {
      */
     @GetMapping("")
     public Map<String, List<ServiceStatus>> getServicesStatus() {
-        return this.serviceStatusService.getServicesStatuses();
+        return this.serviceStatusGrpcService.getServicesStatuses();
     }
 }

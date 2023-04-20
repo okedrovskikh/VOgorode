@@ -18,14 +18,4 @@ public class HandymanStatisticsController {
     public List<String> findAllBanks() {
         return handymanService.findAllBanks();
     }
-
-    @GetMapping("/date/creation/earliest")
-    public LocalDateTime getEarliestCreationDate() {
-        return handymanService.getEarliestCreationDate();
-    }
-
-    @GetMapping("/date/creation/latest")
-    public LocalDateTime getLatestCreationDate() {
-        return handymanService.getLatestCreationDate();
-    }
 }

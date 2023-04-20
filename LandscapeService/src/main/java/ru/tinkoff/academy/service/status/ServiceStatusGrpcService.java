@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceStatusService {
+public class ServiceStatusGrpcService {
     @GrpcClient("HandymanService")
     private ServiceStatusGrpc.ServiceStatusBlockingStub handymanBlockingStub;
     @GrpcClient("RancherService")

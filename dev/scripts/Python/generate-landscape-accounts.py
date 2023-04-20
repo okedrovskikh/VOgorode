@@ -42,14 +42,23 @@ def create_type():
         return user_types[1]
 
 
+def escape_str(s, escape_sym='\''):
+    return escape_sym + s + escape_sym
+
+
 def generate_data():
-    return format_str.format(create_type(), email_fake.user_name(), email_fake.email(),
-                             phone_fake.phone_number(), creation_date, creation_date)
+    return format_str.format(escape_str(create_type()), escape_str(email_fake.user_name()),
+                             escape_str(email_fake.email()), escape_str(phone_fake.phone_number()),
+                             escape_str(creation_date), escape_str(creation_date))
 
 
-sql_str = 'insert into account ({}, {}, {}, {}, {}, {}) values'.format(args['type'], args['login'], args['email'],
-                                                                     args['telephone'], args['creation_date'],
-                                                                     args['update_date']) + ' ({});\n'
+sql_str = 'insert into account ({}, {}, {}, {}, {}, {}) values'.format(escape_str(args['type'], '"'),
+                                                                       escape_str(args['login'], '"'),
+                                                                       escape_str(args['email'], '"'),
+                                                                       escape_str(args['telephone'], '"'),
+                                                                       escape_str(args['creation_date'], '"'),
+                                                                       escape_str(args['update_date'], '"') +
+                                                                       ' ({});\n')
 
 with open(file='users_data.sql', mode='w') as file:
     for _ in range(3_140_000):

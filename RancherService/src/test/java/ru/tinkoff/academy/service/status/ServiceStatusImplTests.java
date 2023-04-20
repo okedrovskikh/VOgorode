@@ -9,9 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
-import ru.tinkoff.academy.proto.ReadinessResponse;
-import ru.tinkoff.academy.proto.ServiceStatusGrpc;
-import ru.tinkoff.academy.proto.VersionResponse;
+import ru.tinkoff.academy.proto.service.status.ReadinessResponse;
+import ru.tinkoff.academy.proto.service.status.ServiceStatusGrpc;
+import ru.tinkoff.academy.proto.service.status.VersionResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

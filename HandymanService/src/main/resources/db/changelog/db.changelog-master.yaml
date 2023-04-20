@@ -9,3 +9,8 @@ databaseChangeLog:
       author: o.kedrovskikh
       sqlFile:
         path: classpath:db/changelog/v8/add_bank_account_table.sql
+  - changeSet:
+      id: add_bank_account_bank_field
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v9/add_bank_account_bank_field.sql

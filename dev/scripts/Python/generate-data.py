@@ -6,8 +6,6 @@ from faker import Faker
 from faker.providers.address import Provider as AddressProvide
 from faker.providers.geo import Provider as GeoProvide
 from faker.providers.credit_card import Provider as BankProvide
-from faker.providers.internet import Provider as EmailProvider
-from faker.providers.phone_number import Provider as PhoneProvider
 from faker.providers.person import Provider as PersonProvider
 import requests
 
@@ -25,8 +23,6 @@ fake = Faker()
 address_faker = AddressProvide(fake)
 geo_provider = GeoProvide(fake)
 bank_provide = BankProvide(fake)
-inet_provider = EmailProvider(fake)
-phone_provider = PhoneProvider(fake)
 person_provider = PersonProvider(fake)
 
 skills = ['plant', 'water', 'sow', 'shovel']
@@ -40,6 +36,8 @@ with open(file='default-photo.png', mode='r') as file:
         default_photo += e
     default_photo = default_photo.encode('base64')
 
+regex = re.compile(r'(\(.\))')
+
 
 def get_skills():
     res = []
@@ -48,6 +46,15 @@ def get_skills():
         res.append(rand_skills[i])
         rand_skills.remove(rand_skills[i])
     return res
+
+
+def unescape_str(s):
+    return s.replace('\'', '')
+
+
+def get_email_and_telephone(line):
+    split_line = regex.findall(line)[1].split(' ')
+    return unescape_str(split_line[2]), unescape_str(split_line[3])
 
 
 class Account:
@@ -74,10 +81,11 @@ class User:
         self.photo = photo
 
     @staticmethod
-    def generate(responses):
+    def generate(line, responses):
+        email, telephone = get_email_and_telephone(line)
         accounts = [e['id'] for e in responses]
-        return User(person_provider.first_name(), person_provider.last_name(), get_skills(), inet_provider.email(),
-                    phone_provider.phone_number(), accounts, default_photo)
+        return User(person_provider.first_name(), person_provider.last_name(), get_skills(),
+                    email, telephone, accounts, default_photo)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
@@ -119,16 +127,15 @@ class Fielder:
         self.fields_id = fields_id
 
     @staticmethod
-    def generate(responses):
+    def generate(line, responses):
+        email, telephone = get_email_and_telephone(line)
         fields_id = [e['id'] for e in responses]
-        return Fielder(person_provider.first_name(), person_provider.last_name(), inet_provider.email(),
-                       phone_provider.phone_number(), fields_id)
+        return Fielder(person_provider.first_name(), person_provider.last_name(),
+                       email, telephone, fields_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
 
-
-regex = re.compile(r'')
 
 with open(file='users_data.sql', mode='r') as file:
     while True:
@@ -136,18 +143,16 @@ with open(file='users_data.sql', mode='r') as file:
         if line is None:
             break
         if 'handyman' in line:
-            email = ''
-            telephone = ''
             accounts = [Account.generate() for _ in range(random.randint(1, 4))]
             responses = []
             for e in accounts:
                 responses.append(requests.request('post', args['h'] + '/accounts', json=e.to_json()))
-            account = User.generate(responses)
+            account = User.generate(line, responses)
             requests.request('post', args['h'] + '/accounts', json=account.to_json())
         if 'rancher' in line:
             fields = [Field.generate() for _ in range(random.randint(0, 3))]
             responses = []
             for e in fields:
                 responses.append(requests.request('post', args['r'] + '/fields', json=e.to_json()))
-            fielder = Fielder.generate(responses)
+            fielder = Fielder.generate(line, responses)
             requests.request('post', args['r'] + '/fielders', json=fielder.to_json())

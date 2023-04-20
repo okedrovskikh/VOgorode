@@ -30,6 +30,15 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public User getByEmailOrTelephone(String email, String telephone) {
+        return findByEmailAndTelephone(email, telephone)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by email=%S or telephone%S", email, telephone)));
+    }
+
+    public Optional<User> findByEmailAndTelephone(String email, String telephone) {
+        return userRepository.findByEmailOrTelephone(email, telephone);
+    }
+
     public List<User> findAll(boolean sortedBySurname) {
         return sortedBySurname ? findAllSortedBySurname() : findAllUnsorted();
     }

@@ -7,4 +7,5 @@ import ru.tinkoff.academy.bank.account.payment.system.PaymentSystem;
 public class BankAccountCreateDto {
     private String cardId;
     private PaymentSystem paymentSystem;
+    private String bank;
 }

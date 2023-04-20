@@ -5,14 +5,14 @@ import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.boot.info.BuildProperties;
-import ru.tinkoff.academy.proto.ReadinessResponse;
-import ru.tinkoff.academy.proto.ServiceStatusGrpc;
-import ru.tinkoff.academy.proto.VersionResponse;
+import ru.tinkoff.academy.proto.service.status.ReadinessResponse;
+import ru.tinkoff.academy.proto.service.status.ServiceStatusGrpc;
+import ru.tinkoff.academy.proto.service.status.VersionResponse;
 import ru.tinkoff.academy.system.status.SystemStatusService;
 
 @GrpcService
 @RequiredArgsConstructor
-public class ServiceStatusImpl extends ServiceStatusGrpc.ServiceStatusImplBase {
+public class ServiceStatusGrpcServiceImpl extends ServiceStatusGrpc.ServiceStatusImplBase {
     private final BuildProperties buildProperties;
     private final SystemStatusService systemStatusService;
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.account.dto.AccountCreateDto;
 import ru.tinkoff.academy.account.dto.AccountUpdateDto;
+import ru.tinkoff.academy.account.type.AccountType;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +19,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     public Account save(AccountCreateDto accountCreateDto) {
-        Account account = accountMapper.dtoToUser(accountCreateDto);
+        Account account = accountMapper.dtoToAccount(accountCreateDto);
         return accountRepository.save(account);
     }
 
@@ -39,10 +40,14 @@ public class AccountService {
         return accountRepository.findAllById(ids);
     }
 
+    public List<Account> findAllByType(AccountType type) {
+        return accountRepository.findAllByType(type);
+    }
+
     @Transactional
     public Account update(AccountUpdateDto accountUpdateDto) {
         Account account = accountRepository.getReferenceById(accountUpdateDto.getId());
-        account = accountMapper.updateUser(accountUpdateDto, account);
+        account = accountMapper.updateAccount(accountUpdateDto, account);
         return accountRepository.save(account);
     }
 

@@ -3,7 +3,7 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 package ru.tinkoff.academy;
 
-option java_package = "ru.tinkoff.academy.proto";
+option java_package = "ru.tinkoff.academy.proto.service.status";
 option java_multiple_files = true;
 
 service ServiceStatus {

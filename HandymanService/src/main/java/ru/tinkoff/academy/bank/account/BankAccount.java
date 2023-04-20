@@ -44,6 +44,8 @@ public class BankAccount {
     @Enumerated(EnumType.STRING)
     @Type(value = PaymentSystemEnumType.class)
     private PaymentSystem paymentSystem;
+    @Column(name = "bank")
+    private String bank;
 
     @Override
     public int hashCode() {

@@ -10,9 +10,9 @@ public abstract class AccountMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "updateDate", ignore = true)
-    public abstract Account dtoToUser(AccountCreateDto accountCreateDto);
+    public abstract Account dtoToAccount(AccountCreateDto accountCreateDto);
 
-    public Account updateUser(AccountUpdateDto accountUpdateDto, Account account) {
+    public Account updateAccount(AccountUpdateDto accountUpdateDto, Account account) {
         if (accountUpdateDto.getType() != null) {
             account.setType(accountUpdateDto.getType());
         }

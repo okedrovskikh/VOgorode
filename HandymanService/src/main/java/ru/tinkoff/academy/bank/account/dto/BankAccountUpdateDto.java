@@ -8,4 +8,5 @@ public class BankAccountUpdateDto {
     private Long id;
     private String cardId;
     private PaymentSystem paymentSystem;
+    private String bank;
 }
