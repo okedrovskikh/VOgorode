@@ -22,25 +22,18 @@ public class HandymanStatisticsService {
 
     public List<String> findAllBanks() {
         List<Account> accounts = accountService.findAllByType(AccountType.handyman);
-        List<UserResponse> response = userGrpcService.findAllByEmailOrTelephone(createRequest(accounts));
+        List<UserRequest> requests = accounts.stream().map(this::createRequest).toList();
+        List<UserResponse> response = userGrpcService.findAllByEmailAndTelephone(requests);
         return response.stream().map(UserResponse::getAccountsList)
                 .flatMap(Collection::stream)
                 .map(BankAccountResponse::getBank)
                 .collect(Collectors.toSet()).stream().toList();
     }
 
-    private UserRequest createRequest(List<Account> accounts) {
+    private UserRequest createRequest(Account account) {
         return UserRequest.newBuilder()
-                .addAllSearchRequest(mapAccountsToSearchRequests(accounts))
+                .setEmail(account.getEmail())
+                .setTelephone(account.getTelephone())
                 .build();
-    }
-
-    private Iterable<UserRequest.SearchRequest> mapAccountsToSearchRequests(List<Account> accounts) {
-        return accounts.stream().map(this::mapAccountToSearchRequest).toList();
-    }
-
-    private UserRequest.SearchRequest mapAccountToSearchRequest(Account account) {
-        return UserRequest.SearchRequest.newBuilder().setEmail(account.getEmail())
-                .setTelephone(account.getTelephone()).build();
     }
 }

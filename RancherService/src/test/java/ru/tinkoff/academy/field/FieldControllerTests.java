@@ -26,11 +26,17 @@ import java.util.List;
 public class FieldControllerTests extends AbstractIntegrationTest {
     private final String fields = "/fields";
     private final String fieldsById = "/fields/%s";
-    private final Fielder testFielder = Fielder.builder()
+    private final Fielder testFielder1 = Fielder.builder()
             .id(1L)
             .name("name1")
             .surname("surname1")
             .email("email1@email.com")
+            .build();
+    private final Fielder testFielder2 = Fielder.builder()
+            .id(2L)
+            .name("name2")
+            .surname("surname2")
+            .email("email2@email.com")
             .build();
 
     @Autowired
@@ -41,12 +47,12 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     @Test
     public void testSaveCorrectField() throws Exception {
         FieldDto expectedField = FieldDto.builder()
-                .id(5L)
+                .id(6L)
                 .address("addr4")
                 .longitude(500D)
                 .latitude(490.2)
-                .area(new Point(1D, 1D))
-                .build();
+                .area(new Point(1D, 1D)
+                ).build();
 
         FieldCreateDto request = new FieldCreateDto();
         request.setAddress("addr4");
@@ -84,7 +90,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .latitude(800D)
                 .longitude(800D)
                 .area(new Point(1.0, 1.0))
-                .fielder(testFielder)
+                .fielder(testFielder1)
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(fieldsById, id))
@@ -104,7 +110,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                         .latitude(800D)
                         .longitude(800D)
                         .area(new Point(1.0, 1.0))
-                        .fielder(testFielder)
+                        .fielder(testFielder2)
                         .build(),
                 FieldDto.builder()
                         .id(2L)
@@ -112,7 +118,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                         .latitude(800D)
                         .longitude(800D)
                         .area(new Point(1.0, 1.0))
-                        .fielder(testFielder)
+                        .fielder(testFielder1)
                         .build()
         );
 
@@ -142,7 +148,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .latitude(800D)
                 .longitude(800D)
                 .area(new Point(1.0, 1.0))
-                .fielder(testFielder)
+                .fielder(testFielder1)
                 .build();
 
         FieldUpdateDto request = new FieldUpdateDto();

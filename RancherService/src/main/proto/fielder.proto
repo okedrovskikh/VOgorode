@@ -1,13 +1,14 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 package ru.tinkoff.academy;
 
 option java_package = "ru.tinkoff.academy.proto.rancher.fielder";
 option java_multiple_files = true;
 
 service FielderService {
-  rpc getByEmailOrTelephone(FielderRequest) returns (FielderResponse);
+  rpc getByEmailAndTelephone(FielderRequest) returns (FielderResponse);
 }
 
 message FielderResponse {
@@ -16,7 +17,7 @@ message FielderResponse {
   string surname = 3;
   string email = 4;
   repeated FieldResponse fields = 5;
-  string telephone = 6;
+  google.protobuf.StringValue telephone = 6;
 }
 
 message FieldResponse {
@@ -33,5 +34,5 @@ message FieldResponse {
 
 message FielderRequest {
   string email = 1;
-  string telephone = 2;
+  google.protobuf.StringValue telephone = 2;
 }

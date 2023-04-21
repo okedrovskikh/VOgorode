@@ -35,10 +35,10 @@ public class FielderControllerTests extends AbstractIntegrationTest {
     @Test
     public void testSaveCorrectFielder() throws Exception {
         FielderDto expectedFielder = FielderDto.builder()
-                .id(6L)
-                .name("name6")
-                .surname("surname6")
-                .email("email6@email.com")
+                .id(7L)
+                .name("name7")
+                .surname("surname7")
+                .email("email7@email.com")
                 .fields(List.of(
                         FieldDto.builder()
                                 .id(1L)
@@ -52,9 +52,9 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                 .build();
 
         FielderCreateDto request = new FielderCreateDto();
-        request.setName("name6");
-        request.setSurname("surname6");
-        request.setEmail("email6@email.com");
+        request.setName("name7");
+        request.setSurname("surname7");
+        request.setEmail("email7@email.com");
         request.setFieldsId(List.of(1L));
         request.setTelephone("telephone");
 
@@ -93,7 +93,15 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                 .name("name2")
                 .surname("surname2")
                 .email("email2@email.com")
-                .fields(List.of())
+                .fields(List.of(
+                        FieldDto.builder()
+                                .id(1L)
+                                .address("addr1")
+                                .latitude(800D)
+                                .longitude(800D)
+                                .area(new Point(1.0, 1.0))
+                                .build()
+                ))
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(fieldersById, id))
@@ -122,13 +130,29 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                         .name("name2")
                         .surname("surname2")
                         .email("email2@email.com")
-                        .fields(List.of())
+                        .fields(List.of(
+                                FieldDto.builder()
+                                        .id(1L)
+                                        .address("addr1")
+                                        .latitude(800D)
+                                        .longitude(800D)
+                                        .area(new Point(1.0, 1.0))
+                                        .build()
+                        ))
                         .build(),
                 FielderDto.builder()
                         .id(3L)
                         .name("name3")
                         .surname("surname3")
                         .email("email3@email.com")
+                        .fields(List.of())
+                        .build(),
+                FielderDto.builder()
+                        .id(6L)
+                        .name("name6")
+                        .surname("surname6")
+                        .email("email6@email.com")
+                        .telephone("890-900-678")
                         .fields(List.of())
                         .build()
         );

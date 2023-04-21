@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.fielder;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.fielder.dto.FielderCreateDto;
@@ -29,21 +30,22 @@ public class FielderService {
         return fielderRepository.findById(id);
     }
 
-    public Fielder getByEmailOrTelephone(String email, String telephone) {
-        return findByEmailOrTelephone(email, telephone)
+    public Fielder getByEmailAndTelephone(String email, String telephone) {
+        return findByEmailAndTelephone(email, telephone)
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format("Fielder wasn't find by email=%s or telephone=%s", email, telephone))
                 );
     }
 
-    public Optional<Fielder> findByEmailOrTelephone(String email, String telephone) {
-        return fielderRepository.findByEmailOrTelephone(email, telephone);
+    public Optional<Fielder> findByEmailAndTelephone(String email, String telephone) {
+        return fielderRepository.findByEmailAndTelephone(email, telephone);
     }
 
     public List<Fielder> findAll() {
         return fielderRepository.findAll();
     }
 
+    @Transactional
     public Fielder update(FielderUpdateDto updateDto) {
         Fielder fielder = fielderRepository.getReferenceById(updateDto.getId());
         fielder = fielderMapper.updateFielder(fielder, updateDto);

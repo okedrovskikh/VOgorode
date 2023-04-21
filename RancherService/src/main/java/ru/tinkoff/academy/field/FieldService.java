@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.field;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
@@ -38,6 +39,7 @@ public class FieldService {
         return fieldRepository.findAllById(ids);
     }
 
+    @Transactional
     public Field update(FieldUpdateDto updateDto) {
         Field field = fieldRepository.getReferenceById(updateDto.getId());
         field = fieldMapper.updateField(field, updateDto);

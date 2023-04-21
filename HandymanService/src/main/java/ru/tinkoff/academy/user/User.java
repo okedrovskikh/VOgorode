@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,6 +30,8 @@ import java.util.Objects;
 @Builder
 @Entity(name = "h_user")
 @Table(schema = "public", catalog = "vogorode")
+@NamedEntityGraph(name = "User.bankAccounts",
+        attributeNodes = @NamedAttributeNode(value = "accounts"))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

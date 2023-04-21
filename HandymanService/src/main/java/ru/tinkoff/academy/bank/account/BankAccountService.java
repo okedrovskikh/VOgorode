@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.bank.account;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.bank.account.dto.BankAccountCreateDto;
@@ -37,6 +38,7 @@ public class BankAccountService {
         return bankAccountRepository.findAllById(ids);
     }
 
+    @Transactional
     public BankAccount update(BankAccountUpdateDto updateDto) {
         BankAccount bankAccount = bankAccountRepository.getReferenceById(updateDto.getId());
         bankAccount = bankAccountMapper.updateAccount(bankAccount, updateDto);

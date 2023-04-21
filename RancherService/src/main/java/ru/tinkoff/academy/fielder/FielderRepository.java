@@ -1,11 +1,22 @@
 package ru.tinkoff.academy.fielder;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface FielderRepository extends JpaRepository<Fielder, Long> {
-    Optional<Fielder> findByEmailOrTelephone(String email, String telephone);
+    @Override
+    @EntityGraph(value = "Fielder.fields")
+    Optional<Fielder> findById(Long id);
+
+    @Override
+    @EntityGraph(value = "Fielder.fields")
+    List<Fielder> findAll();
+
+    @EntityGraph(value = "Fielder.fields")
+    Optional<Fielder> findByEmailAndTelephone(String email, String telephone);
 }

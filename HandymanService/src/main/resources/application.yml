@@ -21,6 +21,8 @@ grpc:
     port: ${GRPC_SERVER_PORT:9090}
 
 spring:
+  jpa:
+    open-in-view: false
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.yaml

@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.statistics.rancher;
 
+import com.google.protobuf.StringValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.account.Account;
@@ -14,7 +15,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class RancherStatisticsService {
         List<Account> accounts = accountService.findAllByType(AccountType.rancher);
         for (Account account : accounts) {
             FielderRequest request = mapAccountToFielderRequest(account);
-            FielderResponse response = fielderGrpcService.getByEmailOrTelephone(request);
+            FielderResponse response = fielderGrpcService.getByEmailAndTelephone(request);
             userMaxArea.put(account.getLogin(), getMaxArea(response.getFieldsList()));
         }
         return userMaxArea;
@@ -44,7 +44,7 @@ public class RancherStatisticsService {
     private FielderRequest mapAccountToFielderRequest(Account account) {
         return FielderRequest.newBuilder()
                 .setEmail(account.getEmail())
-                .setTelephone(account.getTelephone())
+                .setTelephone(StringValue.of(account.getTelephone()))
                 .build();
     }
 
@@ -59,7 +59,7 @@ public class RancherStatisticsService {
         List<Account> accounts = accountService.findAllByType(AccountType.rancher);
         for (Account account : accounts) {
             FielderRequest request = mapAccountToFielderRequest(account);
-            FielderResponse response = fielderGrpcService.getByEmailOrTelephone(request);
+            FielderResponse response = fielderGrpcService.getByEmailAndTelephone(request);
             userMinArea.put(account.getLogin(), getMinArea(response.getFieldsList()));
         }
         return userMinArea;
@@ -76,7 +76,7 @@ public class RancherStatisticsService {
         List<Account> accounts = accountService.findAllByType(AccountType.rancher);
         for (Account account : accounts) {
             FielderRequest request = mapAccountToFielderRequest(account);
-            FielderResponse response = fielderGrpcService.getByEmailOrTelephone(request);
+            FielderResponse response = fielderGrpcService.getByEmailAndTelephone(request);
             userAverageArea.put(account.getLogin(), getAverageArea(response.getFieldsList()));
         }
         return userAverageArea;

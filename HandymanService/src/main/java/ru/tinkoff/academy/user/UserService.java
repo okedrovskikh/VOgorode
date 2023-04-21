@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.user;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,13 +31,13 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User getByEmailOrTelephone(String email, String telephone) {
+    public User getByEmailAndTelephone(String email, String telephone) {
         return findByEmailAndTelephone(email, telephone)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by email=%S or telephone%S", email, telephone)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by email=%S or telephone=%S", email, telephone)));
     }
 
     public Optional<User> findByEmailAndTelephone(String email, String telephone) {
-        return userRepository.findByEmailOrTelephone(email, telephone);
+        return userRepository.findByEmailAndTelephone(email, telephone);
     }
 
     public List<User> findAll(boolean sortedBySurname) {
@@ -51,6 +52,7 @@ public class UserService {
         return userRepository.findAll(Sort.by("surname"));
     }
 
+    @Transactional
     public User update(UserUpdateDto updateDto) {
         User user = userRepository.getReferenceById(updateDto.getId());
         user = userMapper.updateUser(user, updateDto);

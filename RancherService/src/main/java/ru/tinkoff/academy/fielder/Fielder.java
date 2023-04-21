@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,8 @@ import java.util.Objects;
 @Builder
 @Entity(name = "fielder")
 @Table(schema = "public", catalog = "vogorode")
+@NamedEntityGraph(name = "Fielder.fields",
+        attributeNodes = @NamedAttributeNode(value = "fields"))
 public class Fielder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,6 +1,9 @@
 package ru.tinkoff.academy.fielder;
 
+import com.google.protobuf.StringValue;
+import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.locationtech.jts.geom.Point;
@@ -18,21 +21,32 @@ public class FielderGrpcServiceImpl extends FielderServiceGrpc.FielderServiceImp
     private final FielderService fielderService;
 
     @Override
-    public void getByEmailOrTelephone(FielderRequest request, StreamObserver<FielderResponse> responseObserver) {
-        Fielder fielder = fielderService.getByEmailOrTelephone(request.getEmail(), request.getTelephone());
-        responseObserver.onNext(mapFielderToResponse(fielder));
-        responseObserver.onCompleted();
+    public void getByEmailAndTelephone(FielderRequest request, StreamObserver<FielderResponse> responseObserver) {
+        try {
+            String telephone = request.hasTelephone() ? request.getTelephone().getValue() : null;
+            Fielder fielder = fielderService.getByEmailAndTelephone(request.getEmail(), telephone);
+            responseObserver.onNext(mapFielderToResponse(fielder));
+            responseObserver.onCompleted();
+        } catch (EntityNotFoundException e) {
+            responseObserver.onError(Status.NOT_FOUND.withDescription(e.getMessage()).asException());
+        } catch (Throwable t) {
+            responseObserver.onError(Status.INTERNAL.withDescription(t.getMessage()).asRuntimeException());
+        }
     }
 
     private FielderResponse mapFielderToResponse(Fielder fielder) {
-        return FielderResponse.newBuilder()
+        FielderResponse.Builder responseBuilder = FielderResponse.newBuilder()
                 .setId(fielder.getId())
                 .setName(fielder.getName())
                 .setSurname(fielder.getSurname())
                 .setEmail(fielder.getEmail())
-                .setTelephone(fielder.getTelephone())
-                .addAllFields(mapFieldsToResponse(fielder.getFields()))
-                .build();
+                .addAllFields(mapFieldsToResponse(fielder.getFields()));
+
+        if (fielder.getTelephone() != null) {
+            responseBuilder.setTelephone(StringValue.of(fielder.getTelephone()));
+        }
+
+        return responseBuilder.build();
     }
 
     private List<FieldResponse> mapFieldsToResponse(List<Field> fields) {

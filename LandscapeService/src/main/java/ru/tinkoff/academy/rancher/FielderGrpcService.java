@@ -11,7 +11,7 @@ public class FielderGrpcService {
     @GrpcClient("RancherService")
     private FielderServiceGrpc.FielderServiceBlockingStub fielderServiceBlockingStub;
 
-    public FielderResponse getByEmailOrTelephone(FielderRequest request) {
-        return fielderServiceBlockingStub.getByEmailOrTelephone(request);
+    public FielderResponse getByEmailAndTelephone(FielderRequest request) {
+        return fielderServiceBlockingStub.getByEmailAndTelephone(request);
     }
 }
