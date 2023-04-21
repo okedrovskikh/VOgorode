@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ControllerAdvice {
-    @ExceptionHandler({DataIntegrityViolationException.class, NumberFormatException.class, NullPointerException.class})
+    @ExceptionHandler({DataIntegrityViolationException.class, NumberFormatException.class,
+            NullPointerException.class, IllegalAccessException.class})
     public ResponseEntity<?> handleIllegalArgsException(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
     }
