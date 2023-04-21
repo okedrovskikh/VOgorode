@@ -8,7 +8,7 @@ option java_multiple_files = true;
 
 service UserService {
   rpc findAll(google.protobuf.Empty) returns (stream UserResponse);
-  rpc findAllEmailAndTelephone(UserRequest) returns (stream UserResponse);
+  rpc findAllByEmailOrTelephone(UserRequest) returns (stream UserResponse);
 }
 
 message UserResponse {

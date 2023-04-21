@@ -8,3 +8,7 @@ insert into fielder ("name", "surname", "email")
 values ('name4', 'surname4', 'email4@email.com');
 insert into fielder ("name", "surname", "email")
 values ('name5', 'surname5', 'email5@email.com');
+insert into fielder ("name", "surname", "email", "telephone")
+values ('name6', 'surname6', 'email6@email.com', '890-900-678');
+insert into fielder ("name", "surname", "email")
+values ('name7', 'surname7', 'email7@email.com');

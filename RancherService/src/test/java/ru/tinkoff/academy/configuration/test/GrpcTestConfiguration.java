@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.service.status;
+package ru.tinkoff.academy.configuration.test;
 
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.context.TestConfiguration;

@@ -29,7 +29,7 @@ public class UserGrpcServiceImpl extends UserServiceGrpc.UserServiceImplBase {
     }
 
     @Override
-    public void findAllEmailAndTelephone(UserRequest request, StreamObserver<UserResponse> responseObserver) {
+    public void findAllByEmailOrTelephone(UserRequest request, StreamObserver<UserResponse> responseObserver) {
         List<User> users = request.getSearchRequestList().stream()
                 .map(req -> userService.getByEmailOrTelephone(req.getEmail(), req.getTelephone()))
                 .toList();

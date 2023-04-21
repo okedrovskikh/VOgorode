@@ -8,7 +8,7 @@ import ru.tinkoff.academy.account.type.AccountType;
 import ru.tinkoff.academy.proto.handyman.user.BankAccountResponse;
 import ru.tinkoff.academy.proto.handyman.user.UserRequest;
 import ru.tinkoff.academy.proto.handyman.user.UserResponse;
-import ru.tinkoff.academy.rancher.UserGrpcService;
+import ru.tinkoff.academy.handyman.UserGrpcService;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +22,7 @@ public class HandymanStatisticsService {
 
     public List<String> findAllBanks() {
         List<Account> accounts = accountService.findAllByType(AccountType.handyman);
-        List<UserResponse> response = userGrpcService.findAllEmailAndTelephone(createRequest(accounts));
+        List<UserResponse> response = userGrpcService.findAllByEmailOrTelephone(createRequest(accounts));
         return response.stream().map(UserResponse::getAccountsList)
                 .flatMap(Collection::stream)
                 .map(BankAccountResponse::getBank)

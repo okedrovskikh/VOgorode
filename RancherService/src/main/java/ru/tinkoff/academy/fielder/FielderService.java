@@ -29,6 +29,17 @@ public class FielderService {
         return fielderRepository.findById(id);
     }
 
+    public Fielder getByEmailOrTelephone(String email, String telephone) {
+        return findByEmailOrTelephone(email, telephone)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format("Fielder wasn't find by email=%s or telephone=%s", email, telephone))
+                );
+    }
+
+    public Optional<Fielder> findByEmailOrTelephone(String email, String telephone) {
+        return fielderRepository.findByEmailOrTelephone(email, telephone);
+    }
+
     public List<Fielder> findAll() {
         return fielderRepository.findAll();
     }

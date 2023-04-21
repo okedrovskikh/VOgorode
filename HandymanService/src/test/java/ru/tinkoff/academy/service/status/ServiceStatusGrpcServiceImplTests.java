@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
+import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
 import ru.tinkoff.academy.proto.service.status.ReadinessResponse;
 import ru.tinkoff.academy.proto.service.status.ServiceStatusGrpc;
 import ru.tinkoff.academy.proto.service.status.VersionResponse;
