@@ -8,28 +8,13 @@ option java_package = "ru.tinkoff.academy.proto.rancher.fielder";
 option java_multiple_files = true;
 
 service FielderService {
-  rpc getByEmailAndTelephone(FielderRequest) returns (FielderResponse);
+  rpc getAreasStatByEmail(FielderRequest) returns (FielderResponse);
 }
 
 message FielderResponse {
-  int64 id = 1;
-  string name = 2;
-  string surname = 3;
-  string email = 4;
-  repeated FieldResponse fields = 5;
-  google.protobuf.StringValue telephone = 6;
-}
-
-message FieldResponse {
-  int64 id = 1;
-  string address = 2;
-  double latitude = 3;
-  double longitude = 4;
-  Point area = 5;
-  message Point {
-    double x = 1;
-    double y = 2;
-  }
+  double max = 1;
+  double average = 2;
+  double min = 3;
 }
 
 message FielderRequest {

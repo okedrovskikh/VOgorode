@@ -10,13 +10,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
-import ru.tinkoff.academy.proto.rancher.fielder.FieldResponse;
-import ru.tinkoff.academy.proto.rancher.fielder.FieldResponse.Point;
 import ru.tinkoff.academy.proto.rancher.fielder.FielderRequest;
 import ru.tinkoff.academy.proto.rancher.fielder.FielderResponse;
 import ru.tinkoff.academy.proto.rancher.fielder.FielderServiceGrpc;
-
-import java.util.List;
 
 @SpringBootTest(properties = {
         "grpc.server.in-process-name=test",
@@ -30,69 +26,49 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
     private FielderServiceGrpc.FielderServiceBlockingStub fielderServiceBlockingStub;
 
     @Test
-    public void testGetWithCorrectRequest() {
+    public void testGetByEmailExist() {
         FielderResponse expectedResponse = FielderResponse.newBuilder()
-                .setId(2L)
-                .setName("name2")
-                .setSurname("surname2")
-                .setEmail("email2@email.com")
-                .addAllFields(List.of(
-                        FieldResponse.newBuilder()
-                                .setId(1)
-                                .setAddress("addr1")
-                                .setLatitude(800)
-                                .setLongitude(800)
-                                .setArea(Point.newBuilder().setX(1).setY(1).build())
-                                .build()
-                ))
+                .setMax(25)
+                .setAverage(25)
+                .setMin(25)
                 .build();
 
         FielderRequest request = FielderRequest.newBuilder()
                 .setEmail("email2@email.com")
                 .build();
 
-        FielderResponse actualResponse = fielderServiceBlockingStub.getByEmailAndTelephone(request);
+        FielderResponse actualResponse = fielderServiceBlockingStub.getAreasStatByEmail(request);
         Assertions.assertEquals(expectedResponse, actualResponse);
     }
 
     @Test
     public void testGetByEmailAndTelephoneExist() {
         FielderResponse expectedResponse = FielderResponse.newBuilder()
-                .setId(6L)
-                .setName("name6")
-                .setSurname("surname6")
-                .setEmail("email6@email.com")
-                .setTelephone(StringValue.of("890-900-678"))
-                .addAllFields(List.of())
+                .setMax(25)
+                .setAverage(25)
+                .setMin(25)
                 .build();
 
         FielderRequest request = FielderRequest.newBuilder()
-                .setEmail("email6@email.com")
-                .setTelephone(StringValue.of("890-900-678"))
+                .setEmail("email3@email.com")
+                .setTelephone(StringValue.of("800-800-800"))
                 .build();
 
-        FielderResponse actualResponse = fielderServiceBlockingStub.getByEmailAndTelephone(request);
-
+        FielderResponse actualResponse = fielderServiceBlockingStub.getAreasStatByEmail(request);
         Assertions.assertEquals(expectedResponse, actualResponse);
     }
 
     @Test
-    public void testGetByEmailExist() {
-        FielderResponse expectedResponse = FielderResponse.newBuilder()
-                .setId(3L)
-                .setName("name3")
-                .setSurname("surname3")
-                .setEmail("email3@email.com")
-                .addAllFields(List.of())
-                .build();
-
+    public void testGetByEmailAndTelephoneExistWithoutFields() {
         FielderRequest request = FielderRequest.newBuilder()
-                .setEmail("email3@email.com")
+                .setEmail("email6@email.com")
+                .setTelephone(StringValue.of("890-900-678"))
                 .build();
 
-        FielderResponse actualResponse = fielderServiceBlockingStub.getByEmailAndTelephone(request);
-
-        Assertions.assertEquals(expectedResponse, actualResponse);
+        Assertions.assertThrows(StatusRuntimeException.class,
+                () -> fielderServiceBlockingStub.getAreasStatByEmail(request),
+                "Fielder by email=email6@email.com, telephone=890-900-678 doesn't have fields"
+        );
     }
 
     @Test
@@ -103,8 +79,20 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
                 .build();
 
         Assertions.assertThrows(StatusRuntimeException.class,
-                () -> fielderServiceBlockingStub.getByEmailAndTelephone(request),
-                "Fielder wasn't find by email=notexistemail@email.com or telephone=7897878709-989"
+                () -> fielderServiceBlockingStub.getAreasStatByEmail(request),
+                "Fielder by email=notexistemail@email.com, telephone=7897878709-989 doesn't have fields"
+        );
+    }
+
+    @Test
+    public void testGetByEmailNotExists() {
+        FielderRequest request = FielderRequest.newBuilder()
+                .setEmail("notexistemail@email.com")
+                .build();
+
+        Assertions.assertThrows(StatusRuntimeException.class,
+                () -> fielderServiceBlockingStub.getAreasStatByEmail(request),
+                "Fielder by email=notexistemail@email.com, telephone=null doesn't have fields"
         );
     }
 }

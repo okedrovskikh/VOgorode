@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
+import ru.tinkoff.academy.fielder.Fielder;
 import ru.tinkoff.academy.fielder.FielderService;
 
 import java.util.Optional;
@@ -44,6 +45,11 @@ public class FieldService {
         Field field = fieldRepository.getReferenceById(updateDto.getId());
         field = fieldMapper.updateField(field, updateDto);
         return fieldRepository.save(field);
+    }
+
+    public List<Field> setFieldsFielder(List<Long> fieldsId, Fielder fielder) {
+        List<Field> fields = findAllByIds(fieldsId).stream().peek((field) -> field.setFielder(fielder)).toList();
+        return fieldRepository.saveAll(fields);
     }
 
     public void delete(Long id) {

@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 import ru.tinkoff.academy.fielder.Fielder;
 
 import java.util.Objects;
@@ -36,7 +37,7 @@ public class Field {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
     @Column(name = "area", nullable = false)
-    private Point area;
+    private Polygon area;
     @ManyToOne
     @JoinColumn(name = "fielder_id")
     private Fielder fielder;

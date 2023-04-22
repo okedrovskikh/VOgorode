@@ -17,7 +17,7 @@ public abstract class FielderMapper {
     protected FieldMapper fieldMapper;
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "fields", expression = "java(createDto.getFieldsId() != null ? fieldService.findAllByIds(createDto.getFieldsId()) : null)")
+    @Mapping(target = "fields", expression = "java(createDto.getFieldsId() == null ? null : fieldService.findAllByIds(createDto.getFieldsId()))")
     public abstract Fielder dtoToFielder(FielderCreateDto createDto);
 
     public Fielder updateFielder(Fielder fielder, FielderUpdateDto updateDto) {

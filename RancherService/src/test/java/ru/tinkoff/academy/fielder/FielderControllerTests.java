@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.field.dto.FieldDto;
-import ru.tinkoff.academy.field.point.Point;
 import ru.tinkoff.academy.fielder.dto.FielderCreateDto;
 import ru.tinkoff.academy.fielder.dto.FielderDto;
 import ru.tinkoff.academy.fielder.dto.FielderUpdateDto;
@@ -45,7 +44,7 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                                 .address("addr1")
                                 .latitude(800.0)
                                 .longitude(800.0)
-                                .area(new Point(1.0, 1.0))
+                                .area(25.0)
                                 .build()
                 ))
                 .telephone("telephone")
@@ -99,7 +98,7 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                                 .address("addr1")
                                 .latitude(800D)
                                 .longitude(800D)
-                                .area(new Point(1.0, 1.0))
+                                .area(25.0)
                                 .build()
                 ))
                 .build();
@@ -136,7 +135,7 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                                         .address("addr1")
                                         .latitude(800D)
                                         .longitude(800D)
-                                        .area(new Point(1.0, 1.0))
+                                        .area(25.0)
                                         .build()
                         ))
                         .build(),
@@ -145,7 +144,16 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                         .name("name3")
                         .surname("surname3")
                         .email("email3@email.com")
-                        .fields(List.of())
+                        .telephone("800-800-800")
+                        .fields(List.of(
+                                FieldDto.builder()
+                                        .id(2L)
+                                        .address("addr3")
+                                        .latitude(800D)
+                                        .longitude(800D)
+                                        .area(25.0)
+                                        .build()
+                        ))
                         .build(),
                 FielderDto.builder()
                         .id(6L)

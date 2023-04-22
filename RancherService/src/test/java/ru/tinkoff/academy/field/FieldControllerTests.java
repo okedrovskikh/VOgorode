@@ -15,7 +15,6 @@ import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
-import ru.tinkoff.academy.field.point.Point;
 import ru.tinkoff.academy.fielder.Fielder;
 
 import java.util.ArrayList;
@@ -38,6 +37,13 @@ public class FieldControllerTests extends AbstractIntegrationTest {
             .surname("surname2")
             .email("email2@email.com")
             .build();
+    private final Fielder testFielder3 = Fielder.builder()
+            .id(3L)
+            .name("name3")
+            .surname("surname3")
+            .email("email3@email.com")
+            .telephone("800-800-800")
+            .build();
 
     @Autowired
     private MockMvc mockMvc;
@@ -51,14 +57,14 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .address("addr4")
                 .longitude(500D)
                 .latitude(490.2)
-                .area(new Point(1D, 1D)
-                ).build();
+                .area(25.0)
+                .build();
 
         FieldCreateDto request = new FieldCreateDto();
         request.setAddress("addr4");
         request.setLongitude(500.0);
         request.setLatitude(490.2);
-        request.setArea(new ru.tinkoff.academy.field.point.Point(1D, 1D));
+        request.setArea("POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))");
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(fields)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -89,8 +95,8 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .address("addr3")
                 .latitude(800D)
                 .longitude(800D)
-                .area(new Point(1.0, 1.0))
-                .fielder(testFielder1)
+                .area(25.0)
+                .fielder(testFielder3)
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(fieldsById, id))
@@ -109,7 +115,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                         .address("addr1")
                         .latitude(800D)
                         .longitude(800D)
-                        .area(new Point(1.0, 1.0))
+                        .area(25.0)
                         .fielder(testFielder2)
                         .build(),
                 FieldDto.builder()
@@ -117,8 +123,8 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                         .address("addr3")
                         .latitude(800D)
                         .longitude(800D)
-                        .area(new Point(1.0, 1.0))
-                        .fielder(testFielder1)
+                        .area(25.0)
+                        .fielder(testFielder3)
                         .build()
         );
 
@@ -147,7 +153,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
                 .address("addr33")
                 .latitude(800D)
                 .longitude(800D)
-                .area(new Point(1.0, 1.0))
+                .area(25.0)
                 .fielder(testFielder1)
                 .build();
 
@@ -156,7 +162,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         request.setId(id);
         request.setLatitude(800D);
         request.setLongitude(800D);
-        request.setArea(new ru.tinkoff.academy.field.point.Point(1D, 1D));
+        request.setArea("POLYGON ((3 0, 3 5, 8 5, 8 0, 3 0))");
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put(fields)
                 .contentType(MediaType.APPLICATION_JSON)

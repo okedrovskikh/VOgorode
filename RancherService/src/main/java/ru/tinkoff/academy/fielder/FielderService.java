@@ -16,6 +16,7 @@ public class FielderService {
     private final FielderRepository fielderRepository;
     private final FielderMapper fielderMapper;
 
+    @Transactional
     public Fielder save(FielderCreateDto createDto) {
         Fielder fielder = fielderMapper.dtoToFielder(createDto);
         return fielderRepository.save(fielder);
@@ -23,22 +24,29 @@ public class FielderService {
 
     public Fielder getById(Long id) {
         return findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Gardener wasn't find by id: %s", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Fielder wasn't find by id: %s", id)));
     }
 
     public Optional<Fielder> findById(Long id) {
         return fielderRepository.findById(id);
     }
 
-    public Fielder getByEmailAndTelephone(String email, String telephone) {
-        return findByEmailAndTelephone(email, telephone)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        String.format("Fielder wasn't find by email=%s or telephone=%s", email, telephone))
-                );
+    public Double[] getAreasStatByEmail(String email) {
+        return findAreasStatByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Fielder by email=%s, telephone=%s doesn't have fields", email, null)));
     }
 
-    public Optional<Fielder> findByEmailAndTelephone(String email, String telephone) {
-        return fielderRepository.findByEmailAndTelephone(email, telephone);
+    public Optional<Double[]> findAreasStatByEmail(String email) {
+        return fielderRepository.findAreasStatByEmail(email);
+    }
+
+    public Double[] getAreasStatByEmailAndTelephone(String email, String telephone) {
+        return findAreasStatByEmailAndTelephone(email, telephone)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Fielder by email=%s, telephone=%s doesn't have fields", email, telephone)));
+    }
+
+    public Optional<Double[]> findAreasStatByEmailAndTelephone(String email, String telephone) {
+        return fielderRepository.findAreasStatByEmailAndTelephone(email, telephone);
     }
 
     public List<Fielder> findAll() {

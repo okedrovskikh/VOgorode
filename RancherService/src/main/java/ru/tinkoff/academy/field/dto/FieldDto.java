@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ru.tinkoff.academy.field.point.Point;
 import ru.tinkoff.academy.fielder.Fielder;
 
 @Getter
@@ -23,7 +22,7 @@ public class FieldDto {
     private String address;
     private Double latitude;
     private Double longitude;
-    private Point area;
+    private double area;
     @JsonIgnoreProperties({"fields"})
     private Fielder fielder;
 }
