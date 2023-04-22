@@ -1,4 +1,4 @@
 alter table fielder
-    add constraint email_and_telephone_constraint unique (email, telephone);
+    add constraint fielder_email_and_telephone_constraint unique (email, telephone);
 alter table fielder
-    add constraint email_constraint unique (email);
+    add constraint fielder_email_constraint unique (email);

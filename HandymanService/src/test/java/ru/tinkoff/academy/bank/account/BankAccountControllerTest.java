@@ -84,6 +84,7 @@ public class BankAccountControllerTest extends AbstractIntegrationTest {
                 .cardId("0000000000000001")
                 .paymentSystem(PaymentSystem.mastercard)
                 .user(testUser)
+                .bank("bank1")
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(accountById, id))
@@ -112,12 +113,14 @@ public class BankAccountControllerTest extends AbstractIntegrationTest {
                         .cardId("0000000000000001")
                         .paymentSystem(PaymentSystem.mastercard)
                         .user(testUser)
+                        .bank("bank1")
                         .build(),
                 BankAccount.builder()
                         .id(2L)
                         .cardId("0000000000000002")
                         .paymentSystem(PaymentSystem.mir)
                         .user(testUser)
+                        .bank("bank1")
                         .build()
         );
 

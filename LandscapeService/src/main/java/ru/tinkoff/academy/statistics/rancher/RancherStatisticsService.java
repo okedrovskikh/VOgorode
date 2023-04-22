@@ -6,157 +6,61 @@ import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.account.Account;
 import ru.tinkoff.academy.account.AccountService;
 import ru.tinkoff.academy.account.type.AccountType;
-import ru.tinkoff.academy.proto.rancher.fielder.FieldResponse;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderRequest;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderResponse;
-import ru.tinkoff.academy.rancher.FielderGrpcService;
+import ru.tinkoff.academy.proto.field.SplitValueRequest;
+import ru.tinkoff.academy.proto.field.SplitValueResponse;
+import ru.tinkoff.academy.proto.field.SplitValueResponseQuote;
+import ru.tinkoff.academy.proto.fielder.FielderRequest;
+import ru.tinkoff.academy.proto.fielder.FielderResponse;
+import ru.tinkoff.academy.rancher.field.FieldGrpcService;
+import ru.tinkoff.academy.rancher.fielder.FielderGrpcService;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class RancherStatisticsService {
-    private static final String splitString = "%s - %s";
-
     private final AccountService accountService;
+    private final AreaStatisticsMapper areaStatisticsMapper;
     private final FielderGrpcService fielderGrpcService;
+    private final FieldGrpcService fieldServiceGrpc;
 
-    public Map<String, Double> getUsersMaxArea(Double splitValue) {
-        return doActionBasedOnSplitValue(splitValue,
-                (acc, v) -> getUsersAreaSplitByStep(acc, v, this::splitMaxAreaFieldsByStep),
-                (acc) -> getSplitByLogin(acc, this::getMaxArea)
-        );
+    public Map<String, AreaStatisticsResponse> getAreasStatSplit(Double splitValue) {
+        return doActionBasedOnSplitValue(splitValue);
     }
 
-    private Map<String, Double> splitMaxAreaFieldsByStep(List<FieldResponse> responses, Double splitValue) {
-        Map<String, Double> maxAreasSplitByStep = new HashMap<>();
+    private Map<String, AreaStatisticsResponse> doActionBasedOnSplitValue(Double splitValue) {
+        int compareResult = Double.compare(splitValue, 0);
 
-        for (FieldResponse response : responses) {
-            long bucket = (long) Math.floor(response.getArea() / splitValue);
-            maxAreasSplitByStep.compute(
-                    Long.toString(bucket), (k, v) -> v == null ? response.getArea() : Math.max(v, response.getArea())
-            );
+        if (compareResult > 0) {
+            return getAreasStatSplitBySplitValue(splitValue);
+        } else if (compareResult == 0) {
+            List<Account> accounts = accountService.findAllByType(AccountType.rancher);
+            return getAreasStatSplitByLogin(accounts);
         }
 
-        return maxAreasSplitByStep;
+        throw new IllegalStateException("Split value cannot be negative");
     }
 
-    private Double getMaxArea(List<FieldResponse> responses) {
-        return responses.stream()
-                .mapToDouble(FieldResponse::getArea)
-                .max().orElse(0.0);
+    private Map<String, AreaStatisticsResponse> getAreasStatSplitBySplitValue(Double splitValue) {
+        List<SplitValueResponse> response = fieldServiceGrpc.getAreasStatBySplitValue(SplitValueRequest.newBuilder()
+                .setSplitValue(splitValue).build()).stream().filter(SplitValueResponseQuote::hasResponse)
+                .map(SplitValueResponseQuote::getResponse)
+                .toList();
+        return response.stream().collect(Collectors.toMap(SplitValueResponse::getSplitValueRange, areaStatisticsMapper::mapToAreaStatisticsResponse));
     }
 
-    public Map<String, Double> getUserAverageArea(Double splitValue) {
-        return doActionBasedOnSplitValue(splitValue,
-                (acc, v) -> getUsersAreaSplitByStep(acc, v, this::splitAverageAreaFieldsByStep),
-                (acc) -> getSplitByLogin(acc, this::getAverageArea)
-        );
-    }
+    private Map<String, AreaStatisticsResponse> getAreasStatSplitByLogin(List<Account> accounts) {
+        Map<String, AreaStatisticsResponse> areaStatSplitByLogin = new IdentityHashMap<>();
 
-    private Map<String, Double> splitAverageAreaFieldsByStep(List<FieldResponse> responses, Double splitValue) {
-        Map<String, Pair> averageAreasSplitByStep = new HashMap<>();
-
-        for (FieldResponse response : responses) {
-            long bucket = (long) Math.floor(response.getArea() / splitValue);
-            averageAreasSplitByStep.compute(
-                    String.format(splitString, bucket, bucket + 1),
-                    (k, v) -> v == null ? new Pair() : v.increment(response.getArea())
-            );
-        }
-
-        return averageAreasSplitByStep.entrySet().stream()
-                .collect(Collectors.toMap(Entry::getKey, v -> v.getValue().getAverage()));
-    }
-
-    private static class Pair {
-        private double total = 0;
-        private long counter = 0;
-
-        public Pair increment(double value) {
-            total += value;
-            counter++;
-            return this;
-        }
-
-        public double getAverage() {
-            return total / counter;
-        }
-    }
-
-    private Double getAverageArea(List<FieldResponse> responses) {
-        return responses.stream()
-                .mapToDouble(FieldResponse::getArea)
-                .average().orElse(0.0);
-    }
-
-    public Map<String, Double> getUsersMinArea(Double splitValue) {
-        return doActionBasedOnSplitValue(splitValue,
-                (acc, v) -> getUsersAreaSplitByStep(acc, v, this::splitMinAreaFieldsByStep),
-                (acc) -> getSplitByLogin(acc, this::getMinArea)
-        );
-    }
-
-    private Map<String, Double> splitMinAreaFieldsByStep(List<FieldResponse> responses, Double splitValue) {
-        Map<String, Double> minAreasSplitByStep = new HashMap<>();
-
-        for (FieldResponse response : responses) {
-            long bucket = (long) Math.floor(response.getArea() / splitValue);
-            minAreasSplitByStep.compute(
-                    Long.toString(bucket), (k, v) -> v == null ? response.getArea() : Math.min(v, response.getArea())
-            );
-        }
-
-        return minAreasSplitByStep;
-    }
-
-    private Double getMinArea(List<FieldResponse> responses) {
-        return responses.stream()
-                .mapToDouble(FieldResponse::getArea)
-                .min().orElse(0.0);
-    }
-
-    private Map<String, Double> doActionBasedOnSplitValue(Double splitValue,
-                                                          BiFunction<List<Account>, Double, Map<String, Double>> positiveFunction,
-                                                          Function<List<Account>, Map<String, Double>> zeroFunction) {
-        List<Account> accounts = accountService.findAllByType(AccountType.rancher);
-
-        if (Double.compare(splitValue, 0) > 1) {
-            return positiveFunction.apply(accounts, splitValue);
-        } else if (Double.compare(splitValue, 0) == 0) {
-            return zeroFunction.apply(accounts);
-        }
-
-        throw new IllegalArgumentException("Split value can't be negative");
-    }
-
-    private Map<String, Double> getUsersAreaSplitByStep(List<Account> accounts, Double splitValue,
-                                                       BiFunction<List<FieldResponse>, Double, Map<String, Double>> splitFunction) {
-        List<FieldResponse> fieldResponses = accounts.stream()
-                .map(this::mapAccountToFielderRequest)
-                .map(fielderGrpcService::getByEmailAndTelephone)
-                .map(FielderResponse::getFieldsList)
-                .flatMap(Collection::stream).toList();
-
-        return splitFunction.apply(fieldResponses, splitValue);
-    }
-
-    private Map<String, Double> getSplitByLogin(List<Account> accounts,
-                                                Function<List<FieldResponse>, Double> splitFunction) {
-        Map<String, Double> userMaxArea = new HashMap<>();
         for (Account account : accounts) {
-            FielderRequest request = mapAccountToFielderRequest(account);
-            FielderResponse response = fielderGrpcService.getByEmailAndTelephone(request);
-            userMaxArea.put(account.getLogin(), splitFunction.apply(response.getFieldsList()));
+            FielderResponse response = fielderGrpcService.getByEmailAndTelephone(mapAccountToFielderRequest(account));
+            areaStatSplitByLogin.put(account.getLogin(), areaStatisticsMapper.mapToAreaStatisticsResponse(response));
         }
-        return userMaxArea;
+
+        return areaStatSplitByLogin;
     }
 
     private FielderRequest mapAccountToFielderRequest(Account account) {

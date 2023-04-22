@@ -1,10 +1,10 @@
-package ru.tinkoff.academy.rancher;
+package ru.tinkoff.academy.rancher.fielder;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderRequest;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderResponse;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderServiceGrpc;
+import ru.tinkoff.academy.proto.fielder.FielderRequest;
+import ru.tinkoff.academy.proto.fielder.FielderResponse;
+import ru.tinkoff.academy.proto.fielder.FielderServiceGrpc;
 
 @Component
 public class FielderGrpcService {
@@ -12,6 +12,6 @@ public class FielderGrpcService {
     private FielderServiceGrpc.FielderServiceBlockingStub fielderServiceBlockingStub;
 
     public FielderResponse getByEmailAndTelephone(FielderRequest request) {
-        return fielderServiceBlockingStub.getByEmailAndTelephone(request);
+        return fielderServiceBlockingStub.getAreasStatByEmailAndTelephone(request);
     }
 }

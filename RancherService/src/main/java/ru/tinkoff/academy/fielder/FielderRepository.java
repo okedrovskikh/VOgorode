@@ -19,14 +19,12 @@ public interface FielderRepository extends JpaRepository<Fielder, Long> {
     List<Fielder> findAll();
 
     @Query(nativeQuery = true, value = "select max(ST_Area(area)), avg(ST_Area(area)), min(ST_Area(area)) " +
-            "filter ( where fielder_id is not null and fielder_id = (select fielder.id from fielder " +
-            "where :email = email and telephone is null) ) " +
-            "from field;")
-    Optional<Double[]> findAreasStatByEmail(String email);
+            "from field where fielder_id = (select fielder.id from fielder " +
+            "where :email = email and telephone is null);")
+    Optional<Object> findAreasStatByEmail(String email);
 
     @Query(nativeQuery = true, value = "select max(ST_Area(area)), avg(ST_Area(area)), min(ST_Area(area)) " +
-            "filter ( where fielder_id is not null and fielder_id = (select fielder.id from fielder " +
-            "where :email = email and :telephone = telephone) ) " +
-            "from field;")
-    Optional<Double[]> findAreasStatByEmailAndTelephone(String email, String telephone);
+            "from field where fielder_id = (select fielder.id from fielder " +
+            "where :email = email and :telephone = telephone);")
+    Optional<Object> findAreasStatByEmailAndTelephone(String email, String telephone);
 }

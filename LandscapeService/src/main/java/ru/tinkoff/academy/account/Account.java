@@ -12,7 +12,6 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +21,7 @@ import ru.tinkoff.academy.account.type.AccountType;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -31,7 +31,6 @@ import java.util.UUID;
 @Builder
 @Entity(name = "account")
 @Table(schema = "public", catalog = "vogorode")
-@EqualsAndHashCode
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -65,5 +64,19 @@ public class Account {
     @PreUpdate
     public void updateDate() {
         this.updateDate = Timestamp.from(Instant.now());
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Account account)) {
+            return false;
+        }
+
+        return Objects.equals(id, account.id);
     }
 }

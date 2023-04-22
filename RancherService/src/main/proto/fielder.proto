@@ -4,11 +4,11 @@ import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 package ru.tinkoff.academy;
 
-option java_package = "ru.tinkoff.academy.proto.rancher.fielder";
+option java_package = "ru.tinkoff.academy.proto.fielder";
 option java_multiple_files = true;
 
 service FielderService {
-  rpc getAreasStatByEmail(FielderRequest) returns (FielderResponse);
+  rpc getAreasStatByEmailAndTelephone(FielderRequest) returns (FielderResponse);
 }
 
 message FielderResponse {

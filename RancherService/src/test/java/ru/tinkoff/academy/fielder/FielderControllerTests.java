@@ -92,15 +92,7 @@ public class FielderControllerTests extends AbstractIntegrationTest {
                 .name("name2")
                 .surname("surname2")
                 .email("email2@email.com")
-                .fields(List.of(
-                        FieldDto.builder()
-                                .id(1L)
-                                .address("addr1")
-                                .latitude(800D)
-                                .longitude(800D)
-                                .area(25.0)
-                                .build()
-                ))
+                .fields(List.of())
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(fieldersById, id))

@@ -14,18 +14,9 @@ import java.util.Map;
 public class RancherStatisticsController {
     private final RancherStatisticsService rancherService;
 
-    @GetMapping("/area/max")
-    public Map<String, Double> getUsersMaxArea(@RequestParam(name = "spliter", required = false) Double spliter) {
-        return rancherService.getUsersMaxArea(spliter);
-    }
-
-    @GetMapping("/area/min")
-    public Map<String, Double> getUsersMinArea(@RequestParam(name = "spliter", required = false) Double spliter) {
-        return rancherService.getUsersMinArea(spliter);
-    }
-
-    @GetMapping("/area/average")
-    public Map<String, Double> getUsersAverageArea(@RequestParam(name = "spliter", required = false) Double spliter) {
-        return rancherService.getUserAverageArea(spliter);
+    @GetMapping("/area")
+    public Map<String, AreaStatisticsResponse> getAreasStatSplit(
+            @RequestParam(name = "splitValue", required = false, defaultValue = "0.0") Double splitValue) {
+        return rancherService.getAreasStatSplit(splitValue);
     }
 }

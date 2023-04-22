@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @RestController
 @RequestMapping("/stat/accounts")
@@ -14,12 +14,12 @@ public class AccountStatisticsController {
     private final AccountStatisticsService accountStatisticsService;
 
     @GetMapping("/date/creation/earliest")
-    public LocalDateTime getEarliestCreationDate() {
+    public Timestamp getEarliestCreationDate() {
         return accountStatisticsService.getEarliestCreationDate();
     }
 
     @GetMapping("/date/creation/latest")
-    public LocalDateTime getLatestCreationDate() {
+    public Timestamp getLatestCreationDate() {
         return accountStatisticsService.getLatestCreationDate();
     }
 }

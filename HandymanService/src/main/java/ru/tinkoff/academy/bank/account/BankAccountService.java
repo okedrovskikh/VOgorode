@@ -30,6 +30,10 @@ public class BankAccountService {
         return bankAccountRepository.findById(id);
     }
 
+    public List<String> findAllBanks() {
+        return bankAccountRepository.findAllBanks();
+    }
+
     public List<BankAccount> findAll() {
         return bankAccountRepository.findAll();
     }

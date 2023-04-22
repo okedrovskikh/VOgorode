@@ -8,6 +8,7 @@ import ru.tinkoff.academy.account.dto.AccountCreateDto;
 import ru.tinkoff.academy.account.dto.AccountUpdateDto;
 import ru.tinkoff.academy.account.type.AccountType;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,6 +31,14 @@ public class AccountService {
 
     public Optional<Account> findById(UUID id) {
         return accountRepository.findById(id);
+    }
+
+    public Timestamp findEarliestCreationDate() {
+        return accountRepository.findEarliestCreationDate();
+    }
+
+    public Timestamp findLatestCreationDate() {
+        return accountRepository.findLatestCreationDate();
     }
 
     public List<Account> findAll() {

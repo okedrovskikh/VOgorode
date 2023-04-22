@@ -1,50 +1,23 @@
 package ru.tinkoff.academy.handyman;
 
-import io.grpc.stub.StreamObserver;
+import com.google.protobuf.Empty;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Component;
-import ru.tinkoff.academy.proto.handyman.user.UserRequest;
-import ru.tinkoff.academy.proto.handyman.user.UserResponse;
-import ru.tinkoff.academy.proto.handyman.user.UserResponseQuote;
-import ru.tinkoff.academy.proto.handyman.user.UserServiceGrpc;
+import ru.tinkoff.academy.proto.account.BankAccountResponse;
+import ru.tinkoff.academy.proto.account.BankAccountServiceGrpc;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Component
 public class UserGrpcService {
     @GrpcClient("HandymanClient")
-    private UserServiceGrpc.UserServiceStub userServiceStub;
+    private BankAccountServiceGrpc.BankAccountServiceBlockingStub bankAccountServiceBlockingStub;
 
-    public List<UserResponse> findAllByEmailAndTelephone(List<UserRequest> requests) {
-        List<UserResponse> response = new ArrayList<>();
-        StreamObserver<UserRequest> requestObserver = userServiceStub.findAllByEmailAndTelephone(new UserStreamObserver(response));
-
-        for (UserRequest request : requests) {
-            requestObserver.onNext(request);
-        }
-        requestObserver.onCompleted();
-
-        return response;
-    }
-
-    private record UserStreamObserver(List<UserResponse> response) implements StreamObserver<UserResponseQuote> {
-
-        @Override
-        public void onNext(UserResponseQuote value) {
-            if (value.hasResponse()) {
-                response.add(value.getResponse());
-            }
-        }
-
-        @Override
-        public void onError(Throwable t) {
-
-        }
-
-        @Override
-        public void onCompleted() {
-
-        }
+    public List<BankAccountResponse> findAllBanks() {
+        Iterator<BankAccountResponse> responseIter = bankAccountServiceBlockingStub.findAllBanks(Empty.getDefaultInstance());
+        Iterable<BankAccountResponse> responseIterable = () -> responseIter;
+        return StreamSupport.stream(responseIterable.spliterator(), false).toList();
     }
 }

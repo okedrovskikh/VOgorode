@@ -1,56 +1,15 @@
 syntax = "proto3";
 
 import "google/protobuf/empty.proto";
-import "google/rpc/status.proto";
 package ru.tinkoff.academy;
 
-option java_package = "ru.tinkoff.academy.proto.handyman.user";
+option java_package = "ru.tinkoff.academy.proto.account";
 option java_multiple_files = true;
 
-service UserService {
-  rpc findAllByEmailAndTelephone(stream UserRequest) returns (stream UserResponseQuote);
-}
-
-message UserResponseQuote {
-  oneof message {
-    UserResponse response = 1;
-    google.rpc.Status error = 2;
-  }
-}
-
-message UserResponse {
-  int64 id = 1;
-  string name = 2;
-  string surname = 3;
-  repeated WorkEnum skills = 4;
-  string email = 5;
-  string telephone = 6;
-  repeated BankAccountResponse accounts = 7;
-  bytes photo = 8;
+service BankAccountService {
+  rpc findAllBanks(google.protobuf.Empty) returns (stream BankAccountResponse);
 }
 
 message BankAccountResponse {
-  int64 id = 1;
-  string cardId = 2;
-  PaymentSystem paymentSystem = 3;
-  string bank = 4;
-}
-
-enum PaymentSystem {
-  visa = 0;
-  mastercard = 1;
-  mir = 2;
-  unionpay = 3;
-}
-
-enum WorkEnum {
-  shovel = 0;
-  plant = 1;
-  water = 2;
-  sow = 3;
-}
-
-message UserRequest {
-    string email = 1;
-    string telephone = 2;
+  string bank = 1;
 }

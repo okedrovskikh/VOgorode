@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderRequest;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderResponse;
-import ru.tinkoff.academy.proto.rancher.fielder.FielderServiceGrpc;
+import ru.tinkoff.academy.proto.fielder.FielderRequest;
+import ru.tinkoff.academy.proto.fielder.FielderResponse;
+import ru.tinkoff.academy.proto.fielder.FielderServiceGrpc;
 
 @SpringBootTest(properties = {
         "grpc.server.in-process-name=test",
@@ -37,7 +37,7 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
                 .setEmail("email2@email.com")
                 .build();
 
-        FielderResponse actualResponse = fielderServiceBlockingStub.getAreasStatByEmail(request);
+        FielderResponse actualResponse = fielderServiceBlockingStub.getAreasStatByEmailAndTelephone(request);
         Assertions.assertEquals(expectedResponse, actualResponse);
     }
 
@@ -54,7 +54,7 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
                 .setTelephone(StringValue.of("800-800-800"))
                 .build();
 
-        FielderResponse actualResponse = fielderServiceBlockingStub.getAreasStatByEmail(request);
+        FielderResponse actualResponse = fielderServiceBlockingStub.getAreasStatByEmailAndTelephone(request);
         Assertions.assertEquals(expectedResponse, actualResponse);
     }
 
@@ -66,7 +66,7 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
                 .build();
 
         Assertions.assertThrows(StatusRuntimeException.class,
-                () -> fielderServiceBlockingStub.getAreasStatByEmail(request),
+                () -> fielderServiceBlockingStub.getAreasStatByEmailAndTelephone(request),
                 "Fielder by email=email6@email.com, telephone=890-900-678 doesn't have fields"
         );
     }
@@ -79,7 +79,7 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
                 .build();
 
         Assertions.assertThrows(StatusRuntimeException.class,
-                () -> fielderServiceBlockingStub.getAreasStatByEmail(request),
+                () -> fielderServiceBlockingStub.getAreasStatByEmailAndTelephone(request),
                 "Fielder by email=notexistemail@email.com, telephone=7897878709-989 doesn't have fields"
         );
     }
@@ -91,7 +91,7 @@ public class FielderGrpcServiceImplTest extends AbstractIntegrationTest {
                 .build();
 
         Assertions.assertThrows(StatusRuntimeException.class,
-                () -> fielderServiceBlockingStub.getAreasStatByEmail(request),
+                () -> fielderServiceBlockingStub.getAreasStatByEmailAndTelephone(request),
                 "Fielder by email=notexistemail@email.com, telephone=null doesn't have fields"
         );
     }

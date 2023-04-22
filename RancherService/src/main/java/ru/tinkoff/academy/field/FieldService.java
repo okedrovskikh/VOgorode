@@ -32,6 +32,10 @@ public class FieldService {
         return fieldRepository.findById(id);
     }
 
+    public List<Object> findAreaStatBySplitValue(Double splitValue) {
+        return fieldRepository.findAreasStatBySplitValue(splitValue);
+    }
+
     public List<Field> findAll() {
         return fieldRepository.findAll();
     }
