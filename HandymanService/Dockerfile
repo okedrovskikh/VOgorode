@@ -1,5 +1,5 @@
 FROM gradle:7.4-jdk17 as build
-COPY ./ /usr/HandymanService/src
+COPY service /usr/HandymanService/src
 WORKDIR /usr/HandymanService/src
 RUN gradle build -x test
 

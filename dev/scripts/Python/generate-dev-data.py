@@ -12,6 +12,7 @@ from faker.providers.geo import Provider as GeoProvide
 from faker.providers.credit_card import Provider as BankProvide
 from faker.providers.person import Provider as PersonProvider
 import requests
+from multiprocessing.pool import ThreadPool
 
 parser = argparse.ArgumentParser(
     prog='VOgorode data generator',
@@ -30,7 +31,7 @@ person_provider = PersonProvider(Faker())
 
 skills = ['plant', 'water', 'sow', 'shovel']
 
-banks = ['Cici Bank', 'Bank of Emerika', 'Kremniy Alley Bank','Chicha construction Bank', 'Bisto credit',
+banks = ['Cici Bank', 'Bank of Emerika', 'Kremniy Alley Bank', 'Chicha construction Bank', 'Bisto credit',
          'Slavebank', 'Bank of Prikolov', 'Royal bank of USCR', 'Sperbank', 'Credit Chicha Bank']
 payment_systems = ['mastercard', 'visa', 'mir', 'unionpay']
 
@@ -97,44 +98,6 @@ class User:
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
 
 
-class Field:
-    def __init__(self, address, latitude, longitude, area):
-        self.address = address
-        self.latitude = latitude
-        self.longitude = longitude
-        self.area = area
-
-    @staticmethod
-    def generate():
-        latitude = float(geo_provider.latitude())
-        longitude = float(geo_provider.longitude())
-        area = generate_polygon()
-        return Field(address_faker.address(), latitude, longitude, area)
-
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
-
-
-class Fielder:
-    def __init__(self, name, surname, email, telephone, fields_id):
-        self.name = name
-        self.surname = surname
-        self.email = email
-        self.telephone = telephone
-        self.fields_id = fields_id
-
-    @staticmethod
-    def generate(line, responses):
-        email, telephone = get_email_and_telephone(line)
-        fields_id = [e['id'] for e in responses]
-        return Fielder(person_provider.first_name(),
-                       person_provider.last_name(),
-                       email, telephone, fields_id)
-
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
-
-
 def pool_execute(line):
     if 'handyman' in line:
         accounts = [Account.generate() for _ in range(random.randint(1, 4))]
@@ -155,29 +118,13 @@ def pool_execute(line):
             print(user.to_json())
             print(response.content.decode('utf-8'))
             sys.exit(-1)
-    if 'rancher' in line:
-        fields = [Field.generate() for _ in range(random.randint(0, 3))]
-        responses = []
-        for e in fields:
-            response = requests.request('post', args['r'] + '/fields',  headers={'Content-Type':'application/json'},data=e.to_json())
-            if response.status_code != 200:
-                print(response.status_code)
-                print(e.to_json())
-                print(response.content.decode('utf-8'))
-                sys.exit(-1)
-            responses.append(response.json())
-        fielder = Fielder.generate(line, responses)
-        response = requests.request('post', args['r'] + '/fielders', headers={'Content-Type': 'application/json'}, data=fielder.to_json())
-        if response.status_code != 200:
-            print(response.status_code)
-            print(fielder.to_json())
-            print(response.content.decode('utf-8'))
-            sys.exit(-1)
 
 
 with open(file='users_data.sql', mode='r') as file:
-    while True:
-        line = file.readline()
-        if not line:
-            break
-        pool_execute(line)
+    with ThreadPool(8) as pool:
+        while True:
+            line = file.readline()
+            if not line:
+                break
+            pool.apply(pool_execute, [line])
+    pool.join()
