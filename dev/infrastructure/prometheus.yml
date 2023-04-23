@@ -15,4 +15,4 @@ scrape_configs:
     scrape_interval: 15s
     metrics_path: '/actuator/metrics'
     static_configs:
-      - targets: [ 'host.docker.internal:8083' ]
+      - targets: [ 'host.docker.internal:8082' ]

@@ -1,9 +1,10 @@
 package ru.tinkoff.academy.bank.account;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.bank.account.dto.BankAccountCreateDto;
 import ru.tinkoff.academy.bank.account.dto.BankAccountUpdateDto;
 import ru.tinkoff.academy.user.User;
@@ -39,10 +40,6 @@ public class BankAccountService {
         return bankAccountRepository.findAll();
     }
 
-    public List<BankAccount> findAllByIds(Iterable<Long> ids) {
-        return bankAccountRepository.findAllById(ids);
-    }
-
     @Transactional
     public BankAccount update(BankAccountUpdateDto updateDto) {
         BankAccount bankAccount = bankAccountRepository.getReferenceById(updateDto.getId());
@@ -50,6 +47,7 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public List<BankAccount> updateBankAccountsUser(List<Long> fieldsId, User user) {
         List<BankAccount> accounts = bankAccountRepository.findAllById(fieldsId);
         accounts.forEach(a -> a.setUser(user));

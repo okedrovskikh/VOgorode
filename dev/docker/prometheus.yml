@@ -15,4 +15,4 @@ scrape_configs:
     scrape_interval: 15s
     metrics_path: '/actuator/metrics'
     static_configs:
-      - targets: [ 'landscape-service:8083' ]
+      - targets: [ 'landscape-service:8082' ]

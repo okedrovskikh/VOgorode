@@ -1,10 +1,12 @@
 package ru.tinkoff.academy.user;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.tinkoff.academy.bank.account.BankAccount;
+import ru.tinkoff.academy.bank.account.BankAccountService;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
@@ -15,11 +17,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final BankAccountService bankAccountService;
     private final UserMapper userMapper;
 
     @Transactional
     public User save(UserCreateDto createDto) {
         User user = userMapper.dtoToUser(createDto);
+        List<BankAccount> accounts = bankAccountService.updateBankAccountsUser(createDto.getAccountsId(), user);
+        user.setAccounts(accounts);
         return userRepository.save(user);
     }
 

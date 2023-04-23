@@ -1,9 +1,10 @@
 package ru.tinkoff.academy.field;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
 import ru.tinkoff.academy.fielder.Fielder;
@@ -50,6 +51,7 @@ public class FieldService {
         return fieldRepository.save(field);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public List<Field> updateFieldsFielder(List<Long> fieldsId, Fielder fielder) {
         List<Field> fields = findAllByIds(fieldsId).stream().peek((field) -> field.setFielder(fielder)).toList();
         return fieldRepository.saveAll(fields);

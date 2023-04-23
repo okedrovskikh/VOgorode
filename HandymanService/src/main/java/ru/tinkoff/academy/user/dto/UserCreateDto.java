@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
 import ru.tinkoff.academy.work.WorkEnum;
 
@@ -12,6 +13,7 @@ public class UserCreateDto {
     private WorkEnum[] skills;
     private String email;
     private String telephone;
+    @JsonAlias({"accounts_id"})
     private List<Long> accountsId;
     private Byte[] photo;
 }

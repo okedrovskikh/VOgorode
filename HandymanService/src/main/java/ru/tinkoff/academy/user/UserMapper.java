@@ -13,7 +13,7 @@ public abstract class UserMapper {
     protected BankAccountService bankAccountService;
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "accounts", expression = "java(createDto.getAccountsId() != null ? bankAccountService.findAllByIds(createDto.getAccountsId()) : null)")
+    @Mapping(target = "accounts", ignore = true)
     public abstract User dtoToUser(UserCreateDto createDto);
 
     public User updateUser(User user, UserUpdateDto updateDto) {
@@ -22,11 +22,6 @@ public abstract class UserMapper {
         user.setSkills(updateDto.getSkills());
         user.setEmail(updateDto.getEmail());
         user.setTelephone(updateDto.getTelephone());
-        if (updateDto.getAccountsId() != null) {
-            user.setAccounts(bankAccountService.findAllByIds(updateDto.getAccountsId()));
-        } else {
-            user.setAccounts(null);
-        }
         user.setPhoto(updateDto.getPhoto());
         return user;
     }

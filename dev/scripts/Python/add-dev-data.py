@@ -6,9 +6,9 @@ import psycopg2
 
 status_code = 0
 
-download_requirements_skip_flag = False
+download_requirements_skip_flag = True
 generate_landscape_accounts_skip_flag = not os.path.exists('users_data.sql')
-postgres_skip_flag = False
+postgres_skip_flag = True
 generate_data_skip_flag = False
 
 requirements = "python -m pip install --user -r requirements.txt"

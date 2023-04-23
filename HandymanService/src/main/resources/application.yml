@@ -30,6 +30,8 @@ spring:
     url: ${POSTGRES_DB_URL:jdbc:postgresql://localhost:5433/vogorode}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:123}
+    hikari:
+      maximum-pool-size: 20
   data:
     mongodb:
       authentication-database: ${MONGO_DB_AUTH_DB:admin}

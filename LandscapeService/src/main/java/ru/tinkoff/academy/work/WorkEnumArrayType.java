@@ -5,6 +5,7 @@ import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserTypeSupport;
 
 import java.sql.Array;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,8 +23,10 @@ public class WorkEnumArrayType extends UserTypeSupport<Object> {
         if(value == null) {
             st.setNull(index, Types.ARRAY);
         } else {
-            Array array = session.getJdbcConnectionAccess().obtainConnection()
-                    .createArrayOf("work", (WorkEnum[])value);
+            Array array;
+            try (Connection connection = session.getJdbcConnectionAccess().obtainConnection()) {
+                array = connection.createArrayOf("work", (WorkEnum[])value);
+            }
             st.setObject(index, array, Types.ARRAY);
         }
     }

@@ -22,9 +22,9 @@ args = parser.parse_args().__dict__
 format_str = '(\'{}\', \'{}\', \'{}\', \'{}\', \'{}\', \'{}\')'
 type_counter = 0
 user_types = ['handyman', 'landscape', 'rancher']
-fake = Faker()
-email_fake = EmailProvider(fake)
-phone_fake = PhoneProvider(fake)
+
+email_fake = EmailProvider(Faker())
+phone_fake = PhoneProvider(Faker())
 
 
 def create_type():
@@ -47,18 +47,13 @@ def escape_str(s, escape_sym):
 
 def generate_data():
     creation_date = datetime.datetime.utcnow().__str__()
-    return format_str.format(create_type(), email_fake.user_name(),
-                             email_fake.email(), phone_fake.phone_number(),
-                             creation_date, creation_date)
+    return format_str.format(create_type(), email_fake.user_name(), email_fake.email(),
+                             phone_fake.phone_number(), creation_date, creation_date)
 
 
-sql_str = 'insert into account ("{}", "{}", "{}", "{}", "{}", "{}") values'.format(args['type'],
-                                                                       args['login'],
-                                                                       args['email'],
-                                                                       args['telephone'],
-                                                                       args['creation_date'],
-                                                                       args['update_date']) + \
-                                                                       ' {};\n'
+sql_str = 'insert into account ("{}", "{}", "{}", "{}", "{}", "{}") values'.format(args['type'], args['login'],
+                                                                       args['email'], args['telephone'],
+                                                                       args['creation_date'], args['update_date']) + ' {};\n'
 
 with open(file='users_data.sql', mode='w') as file:
     for _ in range(3_140_000):
