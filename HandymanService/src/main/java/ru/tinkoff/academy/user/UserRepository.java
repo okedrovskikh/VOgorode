@@ -21,7 +21,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Override
     @EntityGraph(value = "User.bankAccounts")
     List<User> findAll(Sort sort);
-
-    @EntityGraph(value = "User.bankAccounts")
-    Optional<User> findByEmailAndTelephone(String emails, String telephones);
 }

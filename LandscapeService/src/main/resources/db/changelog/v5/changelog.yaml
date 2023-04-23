@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_account_table
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v5/create_account_table.sql
+  - changeSet:
+      id: create_account_types_enum_and_replace_u_type
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v5/create_account_types_enum_and_replace_u_type.sql
+  - changeSet:
+      id: create_procedure_update_u_type
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v5/create_procedure_update_u_type.sql

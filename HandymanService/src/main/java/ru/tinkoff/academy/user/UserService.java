@@ -17,6 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    @Transactional
     public User save(UserCreateDto createDto) {
         User user = userMapper.dtoToUser(createDto);
         return userRepository.save(user);
@@ -29,15 +30,6 @@ public class UserService {
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
-    }
-
-    public User getByEmailAndTelephone(String email, String telephone) {
-        return findByEmailAndTelephone(email, telephone)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by email=%S or telephone=%S", email, telephone)));
-    }
-
-    public Optional<User> findByEmailAndTelephone(String email, String telephone) {
-        return userRepository.findByEmailAndTelephone(email, telephone);
     }
 
     public List<User> findAll(boolean sortedBySurname) {

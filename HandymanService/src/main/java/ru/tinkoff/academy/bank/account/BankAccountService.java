@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.bank.account.dto.BankAccountCreateDto;
 import ru.tinkoff.academy.bank.account.dto.BankAccountUpdateDto;
+import ru.tinkoff.academy.user.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,12 @@ public class BankAccountService {
         BankAccount bankAccount = bankAccountRepository.getReferenceById(updateDto.getId());
         bankAccount = bankAccountMapper.updateAccount(bankAccount, updateDto);
         return bankAccountRepository.save(bankAccount);
+    }
+
+    public List<BankAccount> updateBankAccountsUser(List<Long> fieldsId, User user) {
+        List<BankAccount> accounts = bankAccountRepository.findAllById(fieldsId);
+        accounts.forEach(a -> a.setUser(user));
+        return bankAccountRepository.saveAll(accounts);
     }
 
     public void delete(Long id) {

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
 import ru.tinkoff.academy.fielder.Fielder;
-import ru.tinkoff.academy.fielder.FielderService;
 
 import java.util.Optional;
 import java.util.List;
@@ -51,7 +50,7 @@ public class FieldService {
         return fieldRepository.save(field);
     }
 
-    public List<Field> setFieldsFielder(List<Long> fieldsId, Fielder fielder) {
+    public List<Field> updateFieldsFielder(List<Long> fieldsId, Fielder fielder) {
         List<Field> fields = findAllByIds(fieldsId).stream().peek((field) -> field.setFielder(fielder)).toList();
         return fieldRepository.saveAll(fields);
     }

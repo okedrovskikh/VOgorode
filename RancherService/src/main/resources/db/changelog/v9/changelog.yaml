@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_fielder_email_and_telephone_constraint
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v9/add_fielder_email_and_telephone_constraint.sql
+  - changeSet:
+      id: add_fielder_email_and_telephone_idx
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v9/add_fielder_email_and_telephone_idx.sql

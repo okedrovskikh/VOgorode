@@ -1,21 +1,5 @@
 databaseChangeLog:
-  - changeSet:
-      id: add_h_user_table
-      author: o.kedrovskikh
-      sqlFile:
-        path: classpath:db/changelog/v8/add_h_user_table.sql
-  - changeSet:
-      id: add_bank_account_table
-      author: o.kedrovskikh
-      sqlFile:
-        path: classpath:db/changelog/v8/add_bank_account_table.sql
-  - changeSet:
-      id: add_bank_account_bank_field
-      author: o.kedrovskikh
-      sqlFile:
-        path: classpath:db/changelog/v9/add_bank_account_bank_field.sql
-  - changeSet:
-      id: add_bank_account_bank_idx
-      author: o.kedrovskikh
-      sqlFile:
-        path: classpath:db/changelog/v9/add_bank_account_bank_idx.sql
+  - include:
+      file: classpath:db/changelog/v8/changelog.yaml
+  - include:
+      file: classpath:db/changelog/v9/changelog.yaml

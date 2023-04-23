@@ -8,6 +8,7 @@ from faker.providers.geo import Provider as GeoProvide
 from faker.providers.credit_card import Provider as BankProvide
 from faker.providers.person import Provider as PersonProvider
 import requests
+from multiprocessing.pool import ThreadPool
 
 parser = ArgumentParser(
     prog='VOgorode data generator',
@@ -15,7 +16,7 @@ parser = ArgumentParser(
 )
 parser.add_argument('-h', default='http://localhost:8080', help='HandymanService address')
 parser.add_argument('-l', default='http://localhost:8081', help='LandscapeService address')
-parser.add_argument('-r', default='http://localhost:8082', help='RancherService address')
+parser.add_argument('-r', default='http://localhost:8083', help='RancherService address')
 
 args = parser.parse_args().__dict__
 
@@ -27,7 +28,8 @@ person_provider = PersonProvider(fake)
 
 skills = ['plant', 'water', 'sow', 'shovel']
 
-banks = []
+banks = ['Cici Bank', 'Bank of Emerika', 'Kremniy Alley Bank', 'Chicha construction Bank', 'Bisto credit',
+         'Slavebank', 'Bank of Prikol', 'Royal bank of USCR', 'Richer bank', 'Credit Chicha Bank']
 payment_systems = ['mastercard', 'visa', 'mir', 'unionpay']
 
 default_photo = ''
@@ -40,16 +42,19 @@ regex = re.compile(r'(\(.\))')
 
 
 def get_skills():
-    res = []
-    rand_skills = skills.copy()
-    for i in range(random.randint(1, 4)):
-        res.append(rand_skills[i])
-        rand_skills.remove(rand_skills[i])
-    return res
+    return set([skills[i] for i in range(random.randint(1, 4))])
 
 
 def unescape_str(s):
     return s.replace('\'', '')
+
+
+def generate_polygon():
+    x1 = geo_provider.coordinate()
+    x2 = geo_provider.coordinate()
+    y1 = geo_provider.coordinate()
+    y2 = geo_provider.coordinate()
+    return f'Polygon (({x1} {y1}, {x1} {y2}, {x2} {y2}, {x2} {y1}))'
 
 
 def get_email_and_telephone(line):
@@ -58,13 +63,14 @@ def get_email_and_telephone(line):
 
 
 class Account:
-    def __init__(self, card_id, payment_system):
+    def __init__(self, card_id, payment_system, bank):
         self.card_id = card_id
         self.payment_system = payment_system
+        self.bank = bank
 
     @staticmethod
     def generate():
-        return Account(bank_provide.credit_card_number(), random.choice(payment_systems))
+        return Account(bank_provide.credit_card_number(), random.choice(payment_systems), random.choice(banks))
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
@@ -83,6 +89,8 @@ class User:
     @staticmethod
     def generate(line, responses):
         email, telephone = get_email_and_telephone(line)
+        print(email)
+        print(telephone)
         accounts = [e['id'] for e in responses]
         return User(person_provider.first_name(), person_provider.last_name(), get_skills(),
                     email, telephone, accounts, default_photo)
@@ -102,17 +110,8 @@ class Field:
     def generate():
         latitude = float(geo_provider.latitude())
         longitude = float(geo_provider.longitude())
-        point = Point(float(geo_provider.coordinate(latitude)), float(geo_provider.coordinate(longitude)))
-        return Field(address_faker.address(), latitude, longitude, point)
-
-    def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__, indent=4)
-
-
-class Point:
-    def __init__(self, x1, y1):
-        self.x1 = x1
-        self.y1 = y1
+        area = generate_polygon()
+        return Field(address_faker.address(), latitude, longitude, area)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
@@ -137,22 +136,32 @@ class Fielder:
         return json.dumps(self, default=lambda o: o.__dict__, indent=4)
 
 
+def pool_execute(line):
+    if 'handyman' in line:
+        accounts = [Account.generate() for _ in range(random.randint(1, 4))]
+        responses = []
+        for e in accounts:
+            responses.append(requests.request('post', args['h'] + '/accounts',
+                                              json=e.to_json()))
+        account = User.generate(line, responses)
+        requests.request('post', args['h'] + '/accounts',
+                         json=account.to_json())
+    if 'rancher' in line:
+        fields = [Field.generate() for _ in range(random.randint(0, 3))]
+        responses = []
+        for e in fields:
+            responses.append(requests.request('post', args['r'] + '/fields',
+                                              json=e.to_json()))
+        fielder = Fielder.generate(line, responses)
+        requests.request('post', args['r'] + '/fielders',
+                         json=fielder.to_json())
+
+
 with open(file='users_data.sql', mode='r') as file:
-    while True:
-        line = file.readline()
-        if line is None:
-            break
-        if 'handyman' in line:
-            accounts = [Account.generate() for _ in range(random.randint(1, 4))]
-            responses = []
-            for e in accounts:
-                responses.append(requests.request('post', args['h'] + '/accounts', json=e.to_json()))
-            account = User.generate(line, responses)
-            requests.request('post', args['h'] + '/accounts', json=account.to_json())
-        if 'rancher' in line:
-            fields = [Field.generate() for _ in range(random.randint(0, 3))]
-            responses = []
-            for e in fields:
-                responses.append(requests.request('post', args['r'] + '/fields', json=e.to_json()))
-            fielder = Fielder.generate(line, responses)
-            requests.request('post', args['r'] + '/fielders', json=fielder.to_json())
+    with ThreadPool(10) as pool:
+        while True:
+            line = file.readline()
+            if not line:
+                break
+            pool.apply(pool_execute, line)
+    pool.join()
