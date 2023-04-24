@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.id
+import ru.tinkoff.academy.tasks.LoadRancherDevDataTask
 
 plugins {
     id("org.springframework.boot") version "3.0.5"
@@ -93,5 +94,9 @@ tasks {
                 }
             }
         }
+    }
+
+    register<LoadRancherDevDataTask>("loadDevData") {
+        skipLines = 0
     }
 }
