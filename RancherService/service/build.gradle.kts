@@ -98,5 +98,6 @@ tasks {
 
     register<LoadRancherDevDataTask>("loadDevData") {
         skipLines = 0
+        threadPoolSize = 4
     }
 }

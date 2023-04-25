@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.id
+import ru.tinkoff.academy.tasks.LoadHandymanDevDataTask
 
 plugins {
     id("org.springframework.boot") version "3.0.5"
@@ -92,5 +93,10 @@ tasks {
                 }
             }
         }
+    }
+
+    register<LoadHandymanDevDataTask>("loadDevData") {
+        skipLines = 0
+        threadPoolSize = 4
     }
 }
