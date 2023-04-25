@@ -17,6 +17,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.Path
 
 abstract class LoadHandymanDevDataTask : DefaultTask() {
     private val faker = Faker()
@@ -37,12 +38,16 @@ abstract class LoadHandymanDevDataTask : DefaultTask() {
     @get:InputFile
     var sqlFile = Path.of(System.getProperty("user.dir"), "buildSrc", "users_data.sql")
 
+    @get:InputFile
+    var photoFile = Path(System.getProperty("user.dir"), "buildSrc", "default-photo.jpg")
+
     @get:Input
     var threadPoolSize = Runtime.getRuntime().availableProcessors() / 2
 
     @OptIn(DelicateCoroutinesApi::class)
     @TaskAction
     fun run() {
+        userGenerator.defaultPhoto = photoFile.toFile().readBytes()
         val thPool = newFixedThreadPoolContext(threadPoolSize, "Executor")
         runBlocking(thPool) {
             Files.newBufferedReader(sqlFile).use {

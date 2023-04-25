@@ -4,6 +4,8 @@ import net.datafaker.Faker
 import kotlin.io.path.Path
 
 class UserGenerator(private val faker: Faker) {
+    lateinit var defaultPhoto: ByteArray
+
     fun generate(email: String, telephone: String, accountsId: List<Long>): UserRequest =
         UserRequest(
             name = faker.name().firstName(),
@@ -21,9 +23,4 @@ class UserGenerator(private val faker: Faker) {
             accountsId = accountsId,
             photo = defaultPhoto
         )
-
-    companion object {
-        val defaultPhoto = Path(System.getProperty("user.dir"), "buildSrc", "default-photo.jpg")
-            .toFile().readBytes()
-    }
 }
