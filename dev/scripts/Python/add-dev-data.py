@@ -36,7 +36,7 @@ print("Start putting value in postgres")
 if not postgres_skip_flag:
     conn = psycopg2.connect(dbname='vogorode', user='postgres', password='123', host='localhost', port=10001)
 
-    with open(file='users_data.sql', mode='r') as file:
+    with open(file='dev/scripts/Python/users_data.sql', mode='r') as file:
         with conn.cursor() as cursor:
             while True:
                 line = file.readline()

@@ -30,10 +30,10 @@ abstract class LoadHandymanDevDataTask : DefaultTask() {
     var skipLines = 0
 
     @get:Input
-    var accounts: URI = URI.create("http://localhost:8081/accounts")
+    var accounts: URI = URI.create("http://localhost:8080/accounts")
 
     @get:Input
-    var users: URI = URI.create("http://localhost:8081/users")
+    var users: URI = URI.create("http://localhost:8080/users")
 
     @get:InputFile
     var sqlFile = Path.of(System.getProperty("user.dir"), "buildSrc", "users_data.sql")
@@ -48,12 +48,11 @@ abstract class LoadHandymanDevDataTask : DefaultTask() {
     @TaskAction
     fun run() {
         userGenerator.defaultPhoto = photoFile.toFile().readBytes()
-        val thPool = newFixedThreadPoolContext(threadPoolSize, "Executor")
-        runBlocking(thPool) {
+        runBlocking(newFixedThreadPoolContext(threadPoolSize, "Executor")) {
             Files.newBufferedReader(sqlFile).use {
                 it.readLines().filter { it.contains("handyman") }
                     .drop(skipLines)
-                    .forEach { launch { execute(it) } }
+                    .forEach { launch(this.coroutineContext) { execute(it) } }
             }
         }
     }
