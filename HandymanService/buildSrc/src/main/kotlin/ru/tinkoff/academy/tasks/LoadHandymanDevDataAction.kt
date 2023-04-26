@@ -9,17 +9,15 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
-    private val client: HttpClient = HttpClient.newBuilder()
-        .build()
+abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
 
     override fun execute() {
-        val fieldsId = (1..faker.random().nextInt(1, 5))
-            .map { executeHttp(fieldGenerator.generate(), parameters.getFields().get()) }
-            .map { mapper.readFromHttpBody<FieldResponse>(it) }
+        val accountsId = (1..faker.random().nextInt(5))
+            .map { executeHttp(bankAccountGenerator.generate(), parameters.getAccounts().get()) }
+            .map { mapper.readFromHttpBody<BankAccountResponse>(it) }
             .map { it.id }
         val pair = getEmailAndTelephone(parameters.getLine().get())
-        executeHttp(fielderGenerator.generate(pair.first, pair.second, fieldsId), parameters.getFielders().get())
+        executeHttp(userGenerator.generate(pair.first, pair.second, accountsId), parameters.getUsers().get())
     }
 
     private fun <T> executeHttp(obj: T, uri: URI): HttpResponse<String> {
@@ -31,7 +29,7 @@ abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
 
         return client.send(request, HttpResponse.BodyHandlers.ofString()).also {
             if (it.statusCode() != 200) {
-                error(it.body())
+                throw IllegalStateException(it.body())
             }
         }
     }
@@ -45,9 +43,15 @@ abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
 
     companion object {
         private val faker = Faker()
-        private val fieldGenerator = FieldGenerator(faker)
-        private val fielderGenerator = FielderGenerator(faker)
+        private val bankAccountGenerator = BankAccountGenerator(faker)
+        private val userGenerator = UserGenerator(faker)
+        private val client = HttpClient.newBuilder().build()
         private val mapper = jacksonObjectMapper()
         val regex = Regex("\\('.*', '.*', '(.*)', '(.*)', '.*', '.*'\\)")
+
+        @JvmStatic
+        fun setDefaultPhoto(photo: ByteArray) {
+            userGenerator.defaultPhoto = photo
+        }
     }
 }

@@ -1,6 +1,6 @@
 FROM gradle:7.4-jdk17 as build
-COPY ./ /usr/LandscapeService/src
-WORKDIR /usr/LandscapeService/src
+COPY ./ /usr/LandscapeService
+WORKDIR /usr/LandscapeService
 RUN gradle build -x test
 
 FROM openjdk:17-alpine3.14
