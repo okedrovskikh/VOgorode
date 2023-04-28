@@ -12,15 +12,15 @@ public class SystemStatusService {
 
     private final Logger logger = LoggerFactory.getLogger(SystemStatusService.class);
 
-    /**
-     * Change system status to Malfunction defined on value of {@code isChangeTo}
-     *
-     * @param isChangeTo if {@code true} change status to {@link SystemStatus#MALFUNCTION},
-     *                   if {@code false} change status to {@link SystemStatus#OK}
-     */
-    public synchronized void changeToMalfunction(boolean isChangeTo) {
+    public synchronized void switchToMalfunction() {
         SystemStatus oldSystemStatus = systemStatus;
-        systemStatus = isChangeTo ? SystemStatus.MALFUNCTION : SystemStatus.OK;
+        systemStatus = SystemStatus.MALFUNCTION;
+        logger.info(createChangeSystemStatusLogString(oldSystemStatus, systemStatus));
+    }
+
+    public synchronized void switchToOK() {
+        SystemStatus oldSystemStatus = systemStatus;
+        systemStatus = SystemStatus.OK;
         logger.info(createChangeSystemStatusLogString(oldSystemStatus, systemStatus));
     }
 
