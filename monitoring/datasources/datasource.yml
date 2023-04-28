@@ -9,3 +9,18 @@ datasources:
     basicAuth: false
     isDefault: true
     editable: true
+
+  - name: Postgres
+    type: postgres
+    url: postgres:5432
+    database: postgres
+    user: postgres
+    secureJsonData:
+      password: 123
+    jsonData:
+      sslmode: "disable"
+      maxOpenConns: 0
+      maxIdleConns: 2
+      connMaxLifetime: 14400
+      postgresVersion: 1200
+      timescaledb: false
