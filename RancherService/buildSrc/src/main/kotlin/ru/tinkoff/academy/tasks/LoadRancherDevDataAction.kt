@@ -10,16 +10,15 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
-    private val client: HttpClient = HttpClient.newBuilder()
-        .build()
+    private val client = HttpClient.newHttpClient()
 
     override fun execute() {
         val fieldsId = (1..faker.random().nextInt(1, 5))
-            .map { executeHttp(fieldGenerator.generate(), parameters.getFields().get()) }
+            .map { executeHttp(fieldGenerator.generate(), fielders) }
             .map { mapper.readFromHttpBody<FieldResponse>(it) }
             .map { it.id }
         val pair = getEmailAndTelephone(parameters.getLine().get())
-        executeHttp(fielderGenerator.generate(pair.first, pair.second, fieldsId), parameters.getFielders().get())
+        executeHttp(fielderGenerator.generate(pair.first, pair.second, fieldsId), fields)
     }
 
     private fun <T> executeHttp(obj: T, uri: URI): HttpResponse<String> {
@@ -48,6 +47,18 @@ abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
         private val fieldGenerator = FieldGenerator(faker)
         private val fielderGenerator = FielderGenerator(faker)
         private val mapper = jacksonObjectMapper()
+        private lateinit var fielders: URI
+        private lateinit var fields: URI
         val regex = Regex("\\('.*', '.*', '(.*)', '(.*)', '.*', '.*'\\)")
+
+        @JvmStatic
+        fun setFieldersURI(fielders: URI) {
+            this.fielders = fielders
+        }
+
+        @JvmStatic
+        fun setFieldsURI(fields: URI) {
+            this.fields = fields
+        }
     }
 }

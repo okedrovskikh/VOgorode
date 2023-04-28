@@ -6,8 +6,4 @@ import java.net.URI
 
 interface LoadRancherDevDataWork : WorkParameters {
     fun getLine(): Property<String>
-
-    fun getFields(): Property<URI>
-
-    fun getFielders(): Property<URI>
 }

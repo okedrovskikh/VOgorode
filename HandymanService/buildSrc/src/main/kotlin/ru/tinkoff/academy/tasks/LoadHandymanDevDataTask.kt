@@ -28,19 +28,21 @@ abstract class LoadHandymanDevDataTask : DefaultTask() {
 
     @TaskAction
     fun run() {
-        var workQueue = getWorkerExecutor().noIsolation()
-
         LoadHandymanDevDataAction.setDefaultPhoto(photoFile.toFile().readBytes())
+        LoadHandymanDevDataAction.setAccountsURI(accounts)
+        LoadHandymanDevDataAction.setUsersURI(users)
+
+        var workQueue = getWorkerExecutor().processIsolation() { it.forkOptions.maxHeapSize = "2048m" }
 
         Files.newBufferedReader(sqlFile).use {
             it.lines().filter { it.contains("handyman") }
                 .forEach { line ->
                     workQueue.submit(LoadHandymanDevDataAction::class.java) {
                         it.getLine().set(line)
-                        it.getAccounts().set(accounts)
-                        it.getUsers().set(users)
                     }
                 }
         }
+
+        workQueue.await()
     }
 }

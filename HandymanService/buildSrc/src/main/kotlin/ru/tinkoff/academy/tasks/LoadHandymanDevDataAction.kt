@@ -13,11 +13,11 @@ abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
 
     override fun execute() {
         val accountsId = (1..faker.random().nextInt(5))
-            .map { executeHttp(bankAccountGenerator.generate(), parameters.getAccounts().get()) }
+            .map { executeHttp(bankAccountGenerator.generate(), accounts) }
             .map { mapper.readFromHttpBody<BankAccountResponse>(it) }
             .map { it.id }
         val pair = getEmailAndTelephone(parameters.getLine().get())
-        executeHttp(userGenerator.generate(pair.first, pair.second, accountsId), parameters.getUsers().get())
+        executeHttp(userGenerator.generate(pair.first, pair.second, accountsId), users)
     }
 
     private fun <T> executeHttp(obj: T, uri: URI): HttpResponse<String> {
@@ -47,11 +47,23 @@ abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
         private val userGenerator = UserGenerator(faker)
         private val client = HttpClient.newBuilder().build()
         private val mapper = jacksonObjectMapper()
+        private lateinit var accounts: URI
+        private lateinit var users: URI
         val regex = Regex("\\('.*', '.*', '(.*)', '(.*)', '.*', '.*'\\)")
 
         @JvmStatic
         fun setDefaultPhoto(photo: ByteArray) {
             userGenerator.defaultPhoto = photo
+        }
+
+        @JvmStatic
+        fun setAccountsURI(accounts: URI) {
+            this.accounts = accounts
+        }
+
+        @JvmStatic
+        fun setUsersURI(users: URI) {
+            this.users = users
         }
     }
 }
