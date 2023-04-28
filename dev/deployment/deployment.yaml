@@ -44,7 +44,7 @@ spec:
               containerPort: 5432
           volumeMounts:
             - name: postgres-volume
-              mountPath: /postgres_data
+              mountPath: /var/lib/postgresql/data
 ---
 # Postgres service
 apiVersion: v1
@@ -57,6 +57,66 @@ spec:
   ports:
     - port: 5432
       targetPort: postgres-server
+---
+# Mongo persistent volume
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+---
+# Mongo container
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      volumes:
+        - name: mongo-volume
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+      containers:
+        - image: mongo
+          name: mongo
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: example
+            - name: MONGO_INITDB_DATABASE
+              value: vogorode
+          ports:
+            - name: mongo-port
+              containerPort: 27017
+          volumeMounts:
+            - name: mongo-volume
+              mountPath: /data/db
+---
+# Mongo service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo
+  ports:
+    - port: 27017
+      name: mongo-port
 ---
 # HandymanService container
 apiVersion: apps/v1
@@ -79,11 +139,25 @@ spec:
           imagePullPolicy: Never
           env:
             - name: POSTGRES_DB_URL
-              value: jdbc:postgresql://postgres:5432/vogorode
+              value: jdbc:postgresql://postgres-service:5432/vogorode
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASSWORD
               value: '123'
+            - name: LANDSCAPE_URL
+              value: http://landscape-service-service:8082
+            - name: MONGO_DB_AUTH_DB
+              value: admin
+            - name: MONGO_DB_USERNAME
+              value: root
+            - name: MONGO_DB_PASSWORD
+              value: example
+            - name: MONGO_DB_DB
+              value: vogorode
+            - name: MONGO_DB_HOST
+              value: mongo-service
+            - name: MONGO_DB_PORT
+              value: '27017'
           ports:
             - name: server
               containerPort: 8080
@@ -94,7 +168,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: handyman-service
+  name: handyman-service-service
 spec:
   selector:
     app: handyman-service
@@ -128,11 +202,25 @@ spec:
           imagePullPolicy: Never
           env:
             - name: POSTGRES_DB_URL
-              value: jdbc:postgresql://postgres:5432/vogorode
+              value: jdbc:postgresql://postgres-service:5432/vogorode
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASSWORD
               value: '123'
+            - name: LANDSCAPE_URL
+              value: http://landscape-service-service:8082
+            - name: MONGO_DB_AUTH_DB
+              value: admin
+            - name: MONGO_DB_USERNAME
+              value: root
+            - name: MONGO_DB_PASSWORD
+              value: example
+            - name: MONGO_DB_DB
+              value: vogorode
+            - name: MONGO_DB_HOST
+              value: mongo-service
+            - name: MONGO_DB_PORT
+              value: '27017'
           ports:
             - name: server
               containerPort: 8081
@@ -143,7 +231,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rancher-service
+  name: rancher-service-service
 spec:
   selector:
     app: rancher-service
@@ -177,11 +265,11 @@ spec:
           imagePullPolicy: Never
           env:
             - name: HANDYMAN_GRPC_SERVER_ADDRESS
-              value: 'handyman-service:9090'
+              value: 'handyman-service-service:9090'
             - name: RANCHER_GRPC_SERVER_ADDRESS
-              value: 'rancher-service:9091'
+              value: 'rancher-service-service:9091'
             - name: POSTGRES_DB_URL
-              value: jdbc:postgresql://postgres:5432/vogorode
+              value: jdbc:postgresql://postgres-service:5432/vogorode
             - name: POSTGRES_USER
               value: postgres
             - name: POSTGRES_PASSWORD
@@ -194,7 +282,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: landscape-service
+  name: landscape-service-service
 spec:
   selector:
     app: landscape-service

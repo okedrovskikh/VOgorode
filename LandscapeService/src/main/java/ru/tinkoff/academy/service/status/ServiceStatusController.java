@@ -21,6 +21,6 @@ public class ServiceStatusController {
      */
     @GetMapping("")
     public Map<String, List<ServiceStatus>> getServicesStatus() {
-        return serviceStatusService.getServicesStatuses();
+        return this.serviceStatusService.getServicesStatuses();
     }
 }

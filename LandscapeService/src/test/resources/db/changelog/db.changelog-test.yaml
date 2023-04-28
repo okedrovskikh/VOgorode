@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - include:
+      context: test
+      file: classpath:db/changelog/db.changelog-master.yaml
+  - changeSet:
+      id: add_users_test_data
+      author: o.kedrovskikh
+      context: test
+      sqlFile:
+        path: classpath:db/changelog/v6/users_test_data.sql
+  - changeSet:
+      id: add_sites_test_data
+      author: o.kedrovskikh
+      context: test
+      sqlFile:
+        path: classpath:db/changelog/v6/sites_test_data.sql

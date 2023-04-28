@@ -25,7 +25,7 @@ public class ServiceStatusImpl extends ServiceStatusGrpc.ServiceStatusImplBase {
     @Override
     public void getReadiness(Empty request, StreamObserver<ReadinessResponse> responseObserver) {
         ReadinessResponse readinessResponse = ReadinessResponse.newBuilder()
-                .setStatus(systemStatusService.getSystemStatus().name())
+                .setStatus(this.systemStatusService.getSystemStatus().name())
                 .build();
         responseObserver.onNext(readinessResponse);
         responseObserver.onCompleted();
@@ -40,10 +40,10 @@ public class ServiceStatusImpl extends ServiceStatusGrpc.ServiceStatusImplBase {
     @Override
     public void getVersion(Empty request, StreamObserver<VersionResponse> responseObserver) {
         VersionResponse versionResponse = VersionResponse.newBuilder()
-                .setVersion(buildProperties.getVersion())
-                .setGroup(buildProperties.getGroup())
-                .setName(buildProperties.getName())
-                .setArtifact(buildProperties.getArtifact())
+                .setVersion(this.buildProperties.getVersion())
+                .setGroup(this.buildProperties.getGroup())
+                .setName(this.buildProperties.getName())
+                .setArtifact(this.buildProperties.getArtifact())
                 .build();
         responseObserver.onNext(versionResponse);
         responseObserver.onCompleted();

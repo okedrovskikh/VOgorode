@@ -3,14 +3,24 @@ databaseChangeLog:
       id: CREATE_users_TABLE
       author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v4/CREATE_users_TABLE.sql
+        path: classpath:db/changelog/v5/CREATE_v_user_TABLE.sql
   - changeSet:
       id: CREATE_user_types_ENUM_AND_REPLACE_u_type
       author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v4/CREATE_user_types_ENUM_AND_REPLACE_u_type.sql
+        path: classpath:db/changelog/v5/CREATE_v_user_types_ENUM_AND_REPLACE_u_type.sql
   - changeSet:
       id: CREATE_PROCEDURE_UPDATE_u_type
       author: o.kedrovskikh
       sqlFile:
-        path: classpath:db/changelog/v4/CREATE_PROCEDURE_UPDATE_u_type.sql
+        path: classpath:db/changelog/v5/CREATE_PROCEDURE_UPDATE_u_type.sql
+  - changeSet:
+      id: CREATE_site_TABLE
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v6/CREATE_site_TABLE.sql
+  - changeSet:
+      id: ADD_laitude_longitude_USERS
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v6/ADD_latitude_longitude_v_user.sql

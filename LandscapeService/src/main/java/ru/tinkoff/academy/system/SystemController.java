@@ -30,7 +30,7 @@ public class SystemController {
      */
     @GetMapping("/readiness")
     public Map<String, SystemStatus> getReadiness() {
-        return systemService.getReadiness();
+        return this.systemService.getReadiness();
     }
 
     /**
@@ -41,6 +41,6 @@ public class SystemController {
      */
     @GetMapping("/forceMalfunction")
     public void forceMalfunction(@RequestParam(name = "isChangeTo", required = false, defaultValue = "true") boolean isChangeTo) {
-        systemService.forceMalfunction(isChangeTo);
+        this.systemService.forceMalfunction(isChangeTo);
     }
 }

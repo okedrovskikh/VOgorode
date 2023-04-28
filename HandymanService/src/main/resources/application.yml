@@ -1,5 +1,6 @@
 server:
   port: ${SERVER_PORT:8080}
+
 management:
   endpoints:
     web:
@@ -11,13 +12,28 @@ management:
     export:
       prometheus:
         enabled: true
+
 grpc:
   server:
     port: ${GRPC_SERVER_PORT:9090}
+
 spring:
   liquibase:
-    enabled: false
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   datasource:
-    url: ${POSTGRES_DB_URL:jdbc:postgresql://0.0.0.0:5432/vogorode}
+    url: ${POSTGRES_DB_URL:jdbc:postgresql://localhost:5432/vogorode}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:123}
+  data:
+    mongodb:
+      authentication-database: ${MONGO_DB_AUTH_DB:admin}
+      username: ${MONGO_DB_USERNAME:root}
+      password: ${MONGO_DB_PASSWORD:example}
+      database: ${MONGO_DB_DB:vogorode}
+      host: ${MONGO_DB_HOST:localhost}
+      port: ${MONGO_DB_PORT:27017}
+
+rest:
+  landscape:
+    url: ${LANDSCAPE_URL:http://localhost:8082}

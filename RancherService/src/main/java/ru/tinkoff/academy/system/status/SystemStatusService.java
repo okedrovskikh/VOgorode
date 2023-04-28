@@ -20,9 +20,9 @@ public class SystemStatusService {
      *                   if {@code false} change status to {@link SystemStatus#OK}
      */
     public synchronized void changeToMalfunction(boolean isChangeTo) {
-        SystemStatus oldSystemStatus = systemStatus;
-        systemStatus = isChangeTo ? SystemStatus.MALFUNCTION : SystemStatus.OK;
-        logger.info(createChangeSystemStatusLogString(oldSystemStatus, systemStatus));
+        SystemStatus oldSystemStatus = this.systemStatus;
+        this.systemStatus = isChangeTo ? SystemStatus.MALFUNCTION : SystemStatus.OK;
+        this.logger.info(createChangeSystemStatusLogString(oldSystemStatus, this.systemStatus));
     }
 
     private String createChangeSystemStatusLogString(SystemStatus oldStatus, SystemStatus newStatus) {

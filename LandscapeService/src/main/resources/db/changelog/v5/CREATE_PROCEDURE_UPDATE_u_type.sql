@@ -11,7 +11,7 @@ create or replace procedure all_rows_update_u_type(new_u_type user_types, portio
                 loop_size = least(size - f_start, portion);
                 for i in 0..loop_size
                     loop
-                        update users set u_type = new_u_type where id = i + f_start;
+                        update v_user set u_type = new_u_type where id = i + f_start;
                     end loop;
                 raise notice ''% - Committed % rows. Migration paused for % sec.'', current_timestamp, loop_size, timestep;
                 f_start = f_start + loop_size + 1;
