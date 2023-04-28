@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.landscape;
+package ru.tinkoff.academy.configuration.landscape;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
