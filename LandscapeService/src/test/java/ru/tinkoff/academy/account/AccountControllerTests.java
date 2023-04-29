@@ -39,7 +39,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
         Account expectedAccount = Account.builder()
                 .type(AccountType.landscape)
                 .login("login")
-                .email("email@email.com")
+                .email("email10@email.com")
                 .telephone("89999999999")
                 .latitude(100.0)
                 .longitude(100.0)
@@ -48,7 +48,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
         AccountCreateDto accountCreateDto = new AccountCreateDto();
         accountCreateDto.setType(AccountType.landscape);
         accountCreateDto.setLogin("login");
-        accountCreateDto.setEmail("email@email.com");
+        accountCreateDto.setEmail("email10@email.com");
         accountCreateDto.setTelephone("89999999999");
         accountCreateDto.setLatitude("100.0");
         accountCreateDto.setLongitude("100.0");
@@ -88,7 +88,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
                 .id(id)
                 .type(AccountType.rancher)
                 .login("login")
-                .email("email@email.com")
+                .email("email1@email.com")
                 .telephone("89999999999")
                 .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
                 .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
@@ -122,7 +122,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
                         .id(UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b07c2166152d"))
                         .type(AccountType.rancher)
                         .login("login")
-                        .email("email@email.com")
+                        .email("email1@email.com")
                         .telephone("89999999999")
                         .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
                         .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
@@ -133,7 +133,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
                         .id(UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b08c2166152d"))
                         .type(AccountType.rancher)
                         .login("login")
-                        .email("email@email.com")
+                        .email("email2@email.com")
                         .telephone("89999999999")
                         .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
@@ -144,7 +144,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
                         .id(UUID.fromString("3e76f3f6-9f6e-41fd-8e0f-b07c2166152c"))
                         .type(AccountType.rancher)
                         .login("login")
-                        .email("email@email.com")
+                        .email("email3@email.com")
                         .telephone("89999999999")
                         .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .updateDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
@@ -171,7 +171,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
                 .id(id)
                 .type(AccountType.landscape)
                 .login("new-login")
-                .email("email@email.com")
+                .email("email11@email.com")
                 .telephone("89999999998")
                 .creationDate(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                 .latitude(890.0)
@@ -182,7 +182,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
         accountUpdateDto.setId(id);
         accountUpdateDto.setType(AccountType.landscape);
         accountUpdateDto.setLogin("new-login");
-        accountUpdateDto.setEmail("email@email.com");
+        accountUpdateDto.setEmail("email11@email.com");
         accountUpdateDto.setTelephone("89999999998");
         accountUpdateDto.setLatitude("890.0");
         accountUpdateDto.setLongitude("900.9");
@@ -207,7 +207,7 @@ public class AccountControllerTests extends AbstractIntegrationTest {
         accountUpdateDto.setId(id);
         accountUpdateDto.setType(AccountType.landscape);
         accountUpdateDto.setLogin("new-login");
-        accountUpdateDto.setEmail("email@email.com");
+        accountUpdateDto.setEmail("email12@email.com");
         accountUpdateDto.setTelephone("89999999998");
         accountUpdateDto.setLatitude("890.0");
         accountUpdateDto.setLongitude("900.9");

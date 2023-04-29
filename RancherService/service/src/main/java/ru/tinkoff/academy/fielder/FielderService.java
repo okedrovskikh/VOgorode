@@ -36,24 +36,6 @@ public class FielderService {
         return fielderRepository.findById(id);
     }
 
-    public Object getAreasStatByEmail(String email) {
-        return findAreasStatByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Fielder by email=%s, telephone=%s doesn't have fields", email, null)));
-    }
-
-    public Optional<Object> findAreasStatByEmail(String email) {
-        return fielderRepository.findAreasStatByEmail(email);
-    }
-
-    public Object getAreasStatByEmailAndTelephone(String email, String telephone) {
-        return findAreasStatByEmailAndTelephone(email, telephone)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Fielder by email=%s, telephone=%s doesn't have fields", email, telephone)));
-    }
-
-    public Optional<Object> findAreasStatByEmailAndTelephone(String email, String telephone) {
-        return fielderRepository.findAreasStatByEmailAndTelephone(email, telephone);
-    }
-
     public List<Fielder> findAll() {
         return fielderRepository.findAll();
     }

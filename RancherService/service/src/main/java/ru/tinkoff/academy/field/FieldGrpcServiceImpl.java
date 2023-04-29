@@ -1,13 +1,13 @@
 package ru.tinkoff.academy.field;
 
-import com.google.rpc.Code;
+import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
+import ru.tinkoff.academy.proto.field.AreaStat;
+import ru.tinkoff.academy.proto.field.AreaStatRequest;
+import ru.tinkoff.academy.proto.field.AreaStatResponse;
 import ru.tinkoff.academy.proto.field.FieldServiceGrpc;
-import ru.tinkoff.academy.proto.field.SplitValueRequest;
-import ru.tinkoff.academy.proto.field.SplitValueResponse;
-import ru.tinkoff.academy.proto.field.SplitValueResponseQuote;
 
 import java.util.List;
 
@@ -15,46 +15,70 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FieldGrpcServiceImpl extends FieldServiceGrpc.FieldServiceImplBase {
     private static final String splitRange = "%s - %s";
+    private static final String splitByEmailAndTelephone = "%s:%s";
 
     private final FieldService fieldService;
 
     @Override
-    public void getAreasStatBySplitValue(SplitValueRequest request, StreamObserver<SplitValueResponseQuote> responseObserver) {
-        List<Object[]> stats;
+    public void getAreasStatSplitByEmailAndTelephone(Empty request, StreamObserver<AreaStatResponse> responseObserver) {
         try {
-            stats = fieldService.findAreaStatBySplitValue(request.getSplitValue()).stream()
-                    .map(s -> (Object[]) s)
+            List<AreaStat> stats = fieldService.findAreasStat().stream()
+                    .map(this::mapToAreaStatSplitByEmailAndTelephone)
                     .toList();
-        } catch (Throwable t) {
-            responseObserver.onNext(SplitValueResponseQuote.newBuilder()
-                    .setError(com.google.rpc.Status.newBuilder().setCode(Code.INTERNAL.getNumber())
-                            .setMessage(t.getMessage()).build()).build());
+
+            responseObserver.onNext(buildResponse(stats));
             responseObserver.onCompleted();
-            return;
+        } catch (Throwable t) {
+            responseObserver.onError(t);
         }
+    }
 
-        for (Object[] stat : stats) {
-            try {
-                responseObserver.onNext(SplitValueResponseQuote.newBuilder()
-                        .setResponse(SplitValueResponse.newBuilder()
-                                .setSplitValueRange(formSplitRange(((Double) stat[0]).longValue(), (long) request.getSplitValue()))
-                                .setMax((Double) stat[1])
-                                .setAverage((Double) stat[2])
-                                .setMin((Double) stat[3])
-                                .build()
-                        ).build()
-                );
-            } catch (Throwable t) {
-                responseObserver.onNext(SplitValueResponseQuote.newBuilder()
-                        .setError(com.google.rpc.Status.newBuilder().setCode(Code.INTERNAL.getNumber())
-                                .setMessage(t.getMessage()).build()).build());
-            }
+    private AreaStat mapToAreaStatSplitByEmailAndTelephone(Object[] stat) {
+        String splitByEmailAndTelephone = formEmailAndTelephoneSplitValue((String) stat[0], (String) stat[1]);
+        return AreaStat.newBuilder()
+                .setSplitValue(splitByEmailAndTelephone)
+                .setMax((Double) stat[2])
+                .setAverage((Double) stat[3])
+                .setMin((Double) stat[4])
+                .build();
+    }
+
+    private String formEmailAndTelephoneSplitValue(String email, String telephone) {
+        return String.format(splitByEmailAndTelephone, email, telephone);
+    }
+
+    @Override
+    public void getAreasStatBySplitValue(AreaStatRequest request, StreamObserver<AreaStatResponse> responseObserver) {
+        try {
+            List<AreaStat> stats = fieldService.findAreasStatBySplitValue(request.getSplitValue()).stream()
+                    .map((stat) -> mapToAreaStatBySplitRange(stat, (long) request.getSplitValue()))
+                    .toList();
+
+            responseObserver.onNext(buildResponse(stats));
+            responseObserver.onCompleted();
+        } catch (Throwable t) {
+            responseObserver.onError(t);
         }
+    }
 
-        responseObserver.onCompleted();
+    private AreaStat mapToAreaStatBySplitRange(Object[] stats, long splitValue) {
+        String splitRange = formSplitRange(((Double) stats[0]).longValue(), splitValue);
+        return AreaStat.newBuilder()
+                .setSplitValue(splitRange)
+                .setMax((Double) stats[1])
+                .setAverage((Double) stats[2])
+                .setMin((Double) stats[3])
+                .build();
+
     }
 
     private String formSplitRange(long splitBucket, long multilayer) {
         return String.format(splitRange, splitBucket * multilayer, (splitBucket + 1) * multilayer);
+    }
+
+    private AreaStatResponse buildResponse(List<AreaStat> stats) {
+        return AreaStatResponse.newBuilder()
+                .addAllResponse(stats)
+                .build();
     }
 }

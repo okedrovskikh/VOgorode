@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
 import "google/rpc/status.proto";
 package ru.tinkoff.academy;
 
@@ -7,23 +8,21 @@ option java_package = "ru.tinkoff.academy.proto.field";
 option java_multiple_files = true;
 
 service FieldService {
-  rpc getAreasStatBySplitValue(SplitValueRequest) returns (stream SplitValueResponseQuote);
+  rpc getAreasStatSplitByEmailAndTelephone(google.protobuf.Empty) returns (AreaStatResponse);
+  rpc getAreasStatBySplitValue(AreaStatRequest) returns (AreaStatResponse);
 }
 
-message SplitValueResponseQuote {
-  oneof message {
-    SplitValueResponse response = 1;
-    google.rpc.Status error = 2;
-  }
+message AreaStatResponse {
+  repeated AreaStat response = 1;
 }
 
-message SplitValueResponse {
-  string splitValueRange = 1;
+message AreaStat {
+  string splitValue = 1;
   double max = 2;
   double average = 3;
   double min = 4;
 }
 
-message SplitValueRequest {
+message AreaStatRequest {
   double splitValue = 1;
 }

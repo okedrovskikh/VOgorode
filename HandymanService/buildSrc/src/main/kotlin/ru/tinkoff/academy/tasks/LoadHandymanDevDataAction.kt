@@ -10,14 +10,15 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
 abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
+    private val client = HttpClient.newBuilder().build()
 
     override fun execute() {
         val accountsId = (1..faker.random().nextInt(5))
-            .map { executeHttp(bankAccountGenerator.generate(), accounts) }
+            .map { executeHttp(bankAccountGenerator.generate(), URI.create(parameters.getAccounts().get())) }
             .map { mapper.readFromHttpBody<BankAccountResponse>(it) }
             .map { it.id }
         val pair = getEmailAndTelephone(parameters.getLine().get())
-        executeHttp(userGenerator.generate(pair.first, pair.second, accountsId), users)
+        executeHttp(userGenerator.generate(pair.first, pair.second, accountsId), URI.create(parameters.getUsers().get()))
     }
 
     private fun <T> executeHttp(obj: T, uri: URI): HttpResponse<String> {
@@ -29,7 +30,8 @@ abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
 
         return client.send(request, HttpResponse.BodyHandlers.ofString()).also {
             if (it.statusCode() != 200) {
-                throw IllegalStateException(it.body())
+                println(it.body())
+                error(it.body())
             }
         }
     }
@@ -45,25 +47,7 @@ abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
         private val faker = Faker()
         private val bankAccountGenerator = BankAccountGenerator(faker)
         private val userGenerator = UserGenerator(faker)
-        private val client = HttpClient.newBuilder().build()
         private val mapper = jacksonObjectMapper()
-        private lateinit var accounts: URI
-        private lateinit var users: URI
         val regex = Regex("\\('.*', '.*', '(.*)', '(.*)', '.*', '.*'\\)")
-
-        @JvmStatic
-        fun setDefaultPhoto(photo: ByteArray) {
-            userGenerator.defaultPhoto = photo
-        }
-
-        @JvmStatic
-        fun setAccountsURI(accounts: URI) {
-            this.accounts = accounts
-        }
-
-        @JvmStatic
-        fun setUsersURI(users: URI) {
-            this.users = users
-        }
     }
 }

@@ -10,35 +10,28 @@ import java.nio.file.Files
 import java.nio.file.Path
 import javax.inject.Inject
 
-abstract class LoadHandymanDevDataTask : DefaultTask() {
-    @Inject
-    abstract fun getWorkerExecutor(): WorkerExecutor
+abstract class LoadHandymanDevDataTask @Inject constructor(private val workerExecutor: WorkerExecutor) : DefaultTask() {
 
     @get:Input
-    var users: URI = URI.create("http://localhost:8080/accounts")
+    var accounts: URI = URI.create("http://localhost:8080/accounts")
 
     @get:Input
-    var accounts: URI = URI.create("http://localhost:8080/users")
+    var users: URI = URI.create("http://localhost:8080/users")
 
     @get:InputFile
     abstract var sqlFile: Path
 
-    @get:InputFile
-    var photoFile: Path = Path.of(System.getProperty("user.dir"), "buildSrc", "default-photo.jpg")
-
     @TaskAction
     fun run() {
-        LoadHandymanDevDataAction.setDefaultPhoto(photoFile.toFile().readBytes())
-        LoadHandymanDevDataAction.setAccountsURI(accounts)
-        LoadHandymanDevDataAction.setUsersURI(users)
-
-        var workQueue = getWorkerExecutor().processIsolation() { it.forkOptions.maxHeapSize = "2048m" }
+        var workQueue = workerExecutor.processIsolation() { it.forkOptions.maxHeapSize = "1g" }
 
         Files.newBufferedReader(sqlFile).use {
             it.lines().filter { it.contains("handyman") }
                 .forEach { line ->
                     workQueue.submit(LoadHandymanDevDataAction::class.java) {
                         it.getLine().set(line)
+                        it.getAccounts().set(accounts.toString())
+                        it.getUsers().set(users.toString())
                     }
                 }
         }

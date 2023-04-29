@@ -14,11 +14,11 @@ abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
 
     override fun execute() {
         val fieldsId = (1..faker.random().nextInt(1, 5))
-            .map { executeHttp(fieldGenerator.generate(), fielders) }
+            .map { executeHttp(fieldGenerator.generate(), URI.create(parameters.getFields().get())) }
             .map { mapper.readFromHttpBody<FieldResponse>(it) }
             .map { it.id }
         val pair = getEmailAndTelephone(parameters.getLine().get())
-        executeHttp(fielderGenerator.generate(pair.first, pair.second, fieldsId), fields)
+        executeHttp(fielderGenerator.generate(pair.first, pair.second, fieldsId), URI.create(parameters.getFielers().get()))
     }
 
     private fun <T> executeHttp(obj: T, uri: URI): HttpResponse<String> {
@@ -30,6 +30,7 @@ abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
 
         return client.send(request, HttpResponse.BodyHandlers.ofString()).also {
             if (it.statusCode() != 200) {
+                println(it.body())
                 error(it.body())
             }
         }
@@ -47,18 +48,6 @@ abstract class LoadRancherDevDataAction() : WorkAction<LoadRancherDevDataWork> {
         private val fieldGenerator = FieldGenerator(faker)
         private val fielderGenerator = FielderGenerator(faker)
         private val mapper = jacksonObjectMapper()
-        private lateinit var fielders: URI
-        private lateinit var fields: URI
         val regex = Regex("\\('.*', '.*', '(.*)', '(.*)', '.*', '.*'\\)")
-
-        @JvmStatic
-        fun setFieldersURI(fielders: URI) {
-            this.fielders = fielders
-        }
-
-        @JvmStatic
-        fun setFieldsURI(fields: URI) {
-            this.fields = fields
-        }
     }
 }

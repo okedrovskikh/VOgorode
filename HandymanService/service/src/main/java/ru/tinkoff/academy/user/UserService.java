@@ -23,8 +23,12 @@ public class UserService {
     @Transactional
     public User save(UserCreateDto createDto) {
         User user = userMapper.dtoToUser(createDto);
-        List<BankAccount> accounts = bankAccountService.updateBankAccountsUser(createDto.getAccountsId(), user);
-        user.setAccounts(accounts);
+
+        if (createDto.getAccountsId() != null) {
+            List<BankAccount> accounts = bankAccountService.updateBankAccountsUser(createDto.getAccountsId(), user);
+            user.setAccounts(accounts);
+        }
+
         return userRepository.save(user);
     }
 

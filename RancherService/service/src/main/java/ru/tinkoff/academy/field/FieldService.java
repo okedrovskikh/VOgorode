@@ -32,8 +32,16 @@ public class FieldService {
         return fieldRepository.findById(id);
     }
 
-    public List<Object> findAreaStatBySplitValue(Double splitValue) {
-        return fieldRepository.findAreasStatBySplitValue(splitValue);
+    public List<Object[]> findAreasStatBySplitValue(Double splitValue) {
+        return fieldRepository.findAreasStatBySplitValue(splitValue).stream()
+                .map(stats -> (Object[]) stats)
+                .toList();
+    }
+
+    public List<Object[]> findAreasStat() {
+        return fieldRepository.findAreasStat().stream()
+                .map(stats -> (Object[]) stats)
+                .toList();
     }
 
     public List<Field> findAll() {

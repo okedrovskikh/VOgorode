@@ -4,8 +4,8 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
-import ru.tinkoff.academy.proto.account.BankAccountResponse;
-import ru.tinkoff.academy.proto.account.BankAccountServiceGrpc;
+import ru.tinkoff.academy.proto.bank.account.BankAccountResponse;
+import ru.tinkoff.academy.proto.bank.account.BankAccountServiceGrpc;
 
 import java.util.List;
 

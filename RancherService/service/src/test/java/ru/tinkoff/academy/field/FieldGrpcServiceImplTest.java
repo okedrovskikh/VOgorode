@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.field;
 
+import com.google.protobuf.Empty;
 import net.devh.boot.grpc.client.inject.GrpcClient;
-import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,14 +9,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
+import ru.tinkoff.academy.proto.field.AreaStat;
+import ru.tinkoff.academy.proto.field.AreaStatRequest;
+import ru.tinkoff.academy.proto.field.AreaStatResponse;
 import ru.tinkoff.academy.proto.field.FieldServiceGrpc;
-import ru.tinkoff.academy.proto.field.SplitValueRequest;
-import ru.tinkoff.academy.proto.field.SplitValueResponse;
-import ru.tinkoff.academy.proto.field.SplitValueResponseQuote;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.StreamSupport;
 
 @SpringBootTest(properties = {
         "grpc.server.in-process-name=test",
@@ -30,27 +26,47 @@ public class FieldGrpcServiceImplTest extends AbstractIntegrationTest {
     private FieldServiceGrpc.FieldServiceBlockingStub fieldServiceBlockingStub;
 
     @Test
-    public void testGetSplit() {
-        List<SplitValueResponseQuote> expectedResponse = List.of(
-                SplitValueResponseQuote.newBuilder()
-                        .setResponse(SplitValueResponse.newBuilder()
-                                .setSplitValueRange("20 - 30")
+    public void testGetAreasStatBySplitValue() {
+        AreaStatResponse expectedResponse = AreaStatResponse.newBuilder()
+                .addResponse(
+                        AreaStat.newBuilder()
+                                .setSplitValue("20 - 30")
                                 .setMax(25)
                                 .setAverage(25)
                                 .setMin(25)
                                 .build()
-                        )
-                        .build()
-        );
+                ).build();
 
-        SplitValueRequest request = SplitValueRequest.newBuilder()
+        AreaStatRequest request = AreaStatRequest.newBuilder()
                 .setSplitValue(10)
                 .build();
 
-        Iterator<SplitValueResponseQuote> actualResponseIter = fieldServiceBlockingStub.getAreasStatBySplitValue(request);
-        Iterable<SplitValueResponseQuote> actualResponseIterable = () -> actualResponseIter;
-        List<SplitValueResponseQuote> actualResponse = StreamSupport.stream(actualResponseIterable.spliterator(), false).toList();
+        AreaStatResponse actualResponse = fieldServiceBlockingStub.getAreasStatBySplitValue(request);
 
-        Assertions.assertTrue(CollectionUtils.isEqualCollection(expectedResponse, actualResponse));
+        Assertions.assertTrue(actualResponse.getResponseList().containsAll(expectedResponse.getResponseList()));
+    }
+
+    @Test
+    public void testGetAreasStat() {
+        AreaStatResponse expectedResponse = AreaStatResponse.newBuilder()
+                .addResponse(
+                        AreaStat.newBuilder()
+                                .setSplitValue("email2@email.com:null")
+                                .setMax(25)
+                                .setAverage(25)
+                                .setMin(25)
+                                .build()
+                ).addResponse(
+                        AreaStat.newBuilder()
+                                .setSplitValue("email3@email.com:800-800-800")
+                                .setMax(25)
+                                .setAverage(25)
+                                .setMin(25)
+                                .build()
+                ).build();
+
+        AreaStatResponse actualResponse = fieldServiceBlockingStub.getAreasStatSplitByEmailAndTelephone(Empty.getDefaultInstance());
+
+        Assertions.assertTrue(actualResponse.getResponseList().containsAll(expectedResponse.getResponseList()));
     }
 }

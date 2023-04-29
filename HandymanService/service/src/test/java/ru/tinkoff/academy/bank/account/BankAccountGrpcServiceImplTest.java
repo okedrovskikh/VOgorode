@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
-import ru.tinkoff.academy.proto.account.BankAccountResponse;
-import ru.tinkoff.academy.proto.account.BankAccountServiceGrpc;
+import ru.tinkoff.academy.proto.bank.account.BankAccountResponse;
+import ru.tinkoff.academy.proto.bank.account.BankAccountServiceGrpc;
 
 import java.util.Iterator;
 import java.util.List;

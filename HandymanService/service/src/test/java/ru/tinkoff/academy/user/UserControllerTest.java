@@ -39,6 +39,7 @@ public class UserControllerTest extends AbstractIntegrationTest {
                 .skills(new WorkEnum[]{WorkEnum.plant})
                 .email("email5@email.com")
                 .telephone("telephone")
+                .accounts(List.of())
                 .photo(new Byte[]{})
                 .build();
 

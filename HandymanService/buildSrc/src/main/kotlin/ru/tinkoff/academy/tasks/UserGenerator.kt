@@ -1,11 +1,10 @@
 package ru.tinkoff.academy.tasks
 
 import net.datafaker.Faker
-import kotlin.io.path.Path
+import java.nio.file.Files
+import java.nio.file.Path
 
 class UserGenerator(private val faker: Faker) {
-    lateinit var defaultPhoto: ByteArray
-
     fun generate(email: String, telephone: String, accountsId: List<Long>): UserRequest =
         UserRequest(
             name = faker.name().firstName(),
@@ -21,6 +20,6 @@ class UserGenerator(private val faker: Faker) {
             email = email,
             telephone = telephone,
             accountsId = accountsId,
-            photo = defaultPhoto
+            photo = arrayOf()
         )
 }

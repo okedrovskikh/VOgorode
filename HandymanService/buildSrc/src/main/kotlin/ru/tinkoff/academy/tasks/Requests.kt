@@ -17,7 +17,7 @@ data class UserRequest(
     val email: String,
     val telephone: String,
     val accountsId: List<Long>,
-    val photo: ByteArray
+    val photo: Array<Byte>
 )
 
 enum class WorkEnum {

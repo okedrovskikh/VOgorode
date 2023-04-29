@@ -49,8 +49,13 @@ public class AccountService {
         return accountRepository.findAllById(ids);
     }
 
-    public List<Account> findAllByType(AccountType type) {
-        return accountRepository.findAllByType(type);
+    public Account getByEmailAndTelephone(String email, String telephone) {
+        return findByEmailAndTelephone(email, telephone)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by email=%s, telephone=%s", email, telephone)));
+    }
+
+    public Optional<Account> findByEmailAndTelephone(String email, String telephone) {
+        return accountRepository.findByEmailAndTelephone(email, telephone);
     }
 
     @Transactional
