@@ -7,17 +7,18 @@ import ru.tinkoff.academy.proto.field.AreaStatRequest;
 import ru.tinkoff.academy.proto.field.AreaStatResponse;
 import ru.tinkoff.academy.proto.field.FieldServiceGrpc;
 
+import java.util.Iterator;
 
 @Component
 public class FieldGrpcService {
     @GrpcClient("RancherService")
     private FieldServiceGrpc.FieldServiceBlockingStub fieldServiceBlockingStub;
 
-    public AreaStatResponse getAreasStatSplitByEmailAndTelephone() {
+    public Iterator<AreaStatResponse> getAreasStatSplitByEmailAndTelephoneStream() {
         return fieldServiceBlockingStub.getAreasStatSplitByEmailAndTelephone(Empty.getDefaultInstance());
     }
 
-    public AreaStatResponse getAreasStatBySplitValue(AreaStatRequest request) {
+    public Iterator<AreaStatResponse> getAreasStatBySplitValueStream(AreaStatRequest request) {
         return fieldServiceBlockingStub.getAreasStatBySplitValue(request);
     }
 }

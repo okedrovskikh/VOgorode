@@ -12,7 +12,12 @@ import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
 import ru.tinkoff.academy.proto.field.AreaStat;
 import ru.tinkoff.academy.proto.field.AreaStatRequest;
 import ru.tinkoff.academy.proto.field.AreaStatResponse;
+import ru.tinkoff.academy.proto.field.AreaStats;
 import ru.tinkoff.academy.proto.field.FieldServiceGrpc;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 @SpringBootTest(properties = {
         "grpc.server.in-process-name=test",
@@ -28,45 +33,52 @@ public class FieldGrpcServiceImplTest extends AbstractIntegrationTest {
     @Test
     public void testGetAreasStatBySplitValue() {
         AreaStatResponse expectedResponse = AreaStatResponse.newBuilder()
-                .addResponse(
-                        AreaStat.newBuilder()
+                .setStats(AreaStats.newBuilder()
+                        .addStats(AreaStat.newBuilder()
                                 .setSplitValue("20 - 30")
                                 .setMax(25)
                                 .setAverage(25)
                                 .setMin(25)
                                 .build()
+                        ).build()
                 ).build();
 
         AreaStatRequest request = AreaStatRequest.newBuilder()
                 .setSplitValue(10)
                 .build();
 
-        AreaStatResponse actualResponse = fieldServiceBlockingStub.getAreasStatBySplitValue(request);
+        Iterator<AreaStatResponse> actualResponseIter = fieldServiceBlockingStub.getAreasStatBySplitValue(request);
+        Iterable<AreaStatResponse> actualResponseIterable = () -> actualResponseIter;
+        List<AreaStatResponse> actualResponse = StreamSupport.stream(actualResponseIterable.spliterator(), false).toList();
 
-        Assertions.assertTrue(actualResponse.getResponseList().containsAll(expectedResponse.getResponseList()));
+        Assertions.assertTrue(actualResponse.get(0).getStats().getStatsList().containsAll(expectedResponse.getStats().getStatsList()));
     }
 
     @Test
     public void testGetAreasStat() {
         AreaStatResponse expectedResponse = AreaStatResponse.newBuilder()
-                .addResponse(
-                        AreaStat.newBuilder()
-                                .setSplitValue("email2@email.com:null")
-                                .setMax(25)
-                                .setAverage(25)
-                                .setMin(25)
-                                .build()
-                ).addResponse(
-                        AreaStat.newBuilder()
-                                .setSplitValue("email3@email.com:800-800-800")
-                                .setMax(25)
-                                .setAverage(25)
-                                .setMin(25)
-                                .build()
+                .setStats(AreaStats.newBuilder()
+                        .addAllStats(List.of(
+                                        AreaStat.newBuilder()
+                                                .setSplitValue("email2@email.com:null")
+                                                .setMax(25)
+                                                .setAverage(25)
+                                                .setMin(25)
+                                                .build(),
+                                        AreaStat.newBuilder()
+                                                .setSplitValue("email3@email.com:800-800-800")
+                                                .setMax(25)
+                                                .setAverage(25)
+                                                .setMin(25)
+                                                .build()
+                                )
+                        ).build()
                 ).build();
 
-        AreaStatResponse actualResponse = fieldServiceBlockingStub.getAreasStatSplitByEmailAndTelephone(Empty.getDefaultInstance());
+        Iterator<AreaStatResponse> actualResponseIter = fieldServiceBlockingStub.getAreasStatSplitByEmailAndTelephone(Empty.getDefaultInstance());
+        Iterable<AreaStatResponse> actualResponseIterable = () -> actualResponseIter;
+        List<AreaStatResponse> actualResponse = StreamSupport.stream(actualResponseIterable.spliterator(), false).toList();
 
-        Assertions.assertTrue(actualResponse.getResponseList().containsAll(expectedResponse.getResponseList()));
+        Assertions.assertTrue(actualResponse.get(0).getStats().getStatsList().containsAll(expectedResponse.getStats().getStatsList()));
     }
 }
