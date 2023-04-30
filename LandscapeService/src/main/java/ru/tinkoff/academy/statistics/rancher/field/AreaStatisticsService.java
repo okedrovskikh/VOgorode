@@ -17,7 +17,6 @@ import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,20 +46,21 @@ public class AreaStatisticsService {
         AreaStatRequest request = AreaStatRequest.newBuilder()
                 .setSplitValue(splitValue).build();
 
-        return getAreasStat(() -> fieldServiceGrpc.getAreasStatBySplitValueStream(request), AreaStat::getSplitValue);
+        return getAreasStat(fieldServiceGrpc.getAreasStatBySplitValueStream(request), AreaStat::getSplitValue);
     }
 
     private Map<String, AreaStatisticsResponse> getAreasStatSplitByLogin() {
-        Map<EmailAndTelephone, String> loginByEmailAndTelephoneMap = accountService.findAllByType(AccountType.rancher).stream()
+        Iterator<AreaStatResponse> responseStream = fieldServiceGrpc.getAreasStatSplitByEmailAndTelephoneStream();
+        Map<EmailAndTelephone, String> loginByEmailAndTelephoneMap = accountService.findAllByType(AccountType.rancher)
+                .stream()
                 .collect(Collectors.toMap(account -> new EmailAndTelephone(account.getEmail(), account.getTelephone()), Account::getLogin));
 
-        return getAreasStat(fieldServiceGrpc::getAreasStatSplitByEmailAndTelephoneStream, stat -> getAccountLogin(stat, loginByEmailAndTelephoneMap));
+        return getAreasStat(responseStream, stat -> getAccountLogin(stat, loginByEmailAndTelephoneMap));
     }
 
-    private Map<String, AreaStatisticsResponse> getAreasStat(Supplier<Iterator<AreaStatResponse>> responseSupplier,
+    private Map<String, AreaStatisticsResponse> getAreasStat(Iterator<AreaStatResponse> responseStream,
                                                              Function<AreaStat, String> splitValueKeyFunction) {
         Map<String, AreaStatisticsResponse> areasStat = new IdentityHashMap<>();
-        Iterator<AreaStatResponse> responseStream = responseSupplier.get();
 
         while (responseStream.hasNext()) {
             AreaStatResponse response = responseStream.next();

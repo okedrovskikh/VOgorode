@@ -10,10 +10,10 @@ import java.util.List;
 public interface FieldRepository extends JpaRepository<Field, Long> {
     @Query(nativeQuery = true, value = "select distinct on(floor(ST_Area(area) / :splitValue)) " +
             "floor(st_area(area) / :splitValue), " +
-            "max(st_area(area)), " +
-            "avg(st_area(area)), " +
-            "min(st_area(area)) " +
-            "from field group by floor(ST_Area(area) / :splitValue), area;")
+            "max(st_area(area)) over (partition by floor(ST_Area(area) / :splitValue)), " +
+            "avg(st_area(area)) over (partition by floor(ST_Area(area) / :splitValue)), " +
+            "min(st_area(area)) over (partition by floor(ST_Area(area) / :splitValue)) " +
+            "from field;")
     List<Object> findAreasStatBySplitValue(Double splitValue);
 
     @Query(nativeQuery = true, value = "select distinct on(fielder_id) email, telephone, " +

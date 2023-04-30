@@ -5,11 +5,6 @@ databaseChangeLog:
       sqlFile:
         path: classpath:db/changelog/v9/add_bank_account_bank_field.sql
   - changeSet:
-      id: add_bank_account_bank_idx
-      author: o.kedrovskikh
-      sqlFile:
-        path: classpath:db/changelog/v9/add_bank_account_bank_idx.sql
-  - changeSet:
       id: add_h_user_email_and_telephone_constraint
       author: o.kedrovskikh
       sqlFile:

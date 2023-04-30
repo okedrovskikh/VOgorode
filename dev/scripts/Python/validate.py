@@ -5,7 +5,7 @@ with open(file="users_data.sql", mode='r') as file:
         line = file.readline()
         if not line:
             break
-        if 'rancher' in line:
+        if 'handyman' in line:
             counter += 1
 
 print(counter)
