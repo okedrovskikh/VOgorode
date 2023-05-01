@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package ru.tinkoff.academy;
+
+option java_package = "ru.tinkoff.academy.proto.gardener";
+option java_multiple_files = true;
+
+message Gardener {
+
+}

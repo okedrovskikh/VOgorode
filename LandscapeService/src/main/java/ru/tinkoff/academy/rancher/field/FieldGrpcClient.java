@@ -10,7 +10,7 @@ import ru.tinkoff.academy.proto.field.FieldServiceGrpc;
 import java.util.Iterator;
 
 @Component
-public class FieldGrpcService {
+public class FieldGrpcClient {
     @GrpcClient("RancherService")
     private FieldServiceGrpc.FieldServiceBlockingStub fieldServiceBlockingStub;
 

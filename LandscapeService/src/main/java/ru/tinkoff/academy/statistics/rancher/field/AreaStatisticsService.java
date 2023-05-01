@@ -11,7 +11,7 @@ import ru.tinkoff.academy.proto.field.AreaStat;
 import ru.tinkoff.academy.proto.field.AreaStatRequest;
 import ru.tinkoff.academy.proto.field.AreaStatResponse;
 import ru.tinkoff.academy.proto.field.AreaStats;
-import ru.tinkoff.academy.rancher.field.FieldGrpcService;
+import ru.tinkoff.academy.rancher.field.FieldGrpcClient;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class AreaStatisticsService {
     private final AccountService accountService;
     private final AreaStatisticsMapper areaStatisticsMapper;
-    private final FieldGrpcService fieldServiceGrpc;
+    private final FieldGrpcClient fieldServiceGrpc;
 
     public Map<String, AreaStatisticsResponse> getAreasStatSplit(Double splitValue) {
         return doActionBasedOnSplitValue(splitValue);

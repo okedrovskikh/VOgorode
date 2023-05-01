@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Component
-public class BankAccountGrpcService {
+public class BankAccountGrpcClient {
     @GrpcClient("HandymanService")
     private BankAccountServiceGrpc.BankAccountServiceBlockingStub bankAccountServiceBlockingStub;
 
