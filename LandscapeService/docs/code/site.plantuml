@@ -1,0 +1,69 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Site {
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+  + hashCode(): int
+  + getId(): UUID
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + setId(UUID): void
+  + setLatitude(Double): void
+  + setLongitude(Double): void
+  + builder(): SiteBuilder
+}
+class SiteController {
+  + updateLatitudeAndLongitude(UUID, String, String): Site
+  + update(SiteUpdateDto): Site
+  + getById(UUID): Site
+  + findAll(): List<Site>
+  + delete(UUID): void
+  + findAllById(List<UUID>): List<Site>
+  + save(SiteCreateDto): Site
+}
+class SiteCreateDto {
+  + getLatitude(): String
+  + getLongitude(): String
+  + setLatitude(String): void
+  + setLongitude(String): void
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+  + hashCode(): int
+  + toString(): String
+}
+class SiteMapper {
+  + updateSite(SiteUpdateDto, Site): Site
+  + dtoToSite(SiteCreateDto): Site
+}
+interface SiteRepository << interface >>
+class SiteService {
+  + getById(UUID): Site
+  + update(SiteUpdateDto): Site
+  + updateLatitudeAndLongitude(UUID, String, String): Site
+  + findAllById(Iterable<UUID>): List<Site>
+  + save(SiteCreateDto): Site
+  + delete(UUID): void
+  + findAll(): List<Site>
+  + findById(UUID): Optional<Site>
+}
+class SiteUpdateDto {
+  + getLatitude(): String
+  + getId(): UUID
+  + getLongitude(): String
+  + setId(UUID): void
+  + setLatitude(String): void
+  + setLongitude(String): void
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+  + hashCode(): int
+  + toString(): String
+}
+
+SiteController "1" *-[#595959,plain]-> "siteService\n1" SiteService    
+SiteService    "1" *-[#595959,plain]-> "siteMapper\n1" SiteMapper     
+SiteService    "1" *-[#595959,plain]-> "siteRepository\n1" SiteRepository 
+@enduml

@@ -1,0 +1,106 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Fielder {
+  + getId(): Long
+  + builder(): FielderBuilder
+  + getName(): String
+  + getSurname(): String
+  + getEmail(): String
+  + setEmail(String): void
+  + getTelephone(): String
+  + setId(Long): void
+  + setName(String): void
+  + setTelephone(String): void
+  + setSurname(String): void
+  + setFields(List<Field>): void
+  + hashCode(): int
+  + equals(Object): boolean
+  + getFields(): List<Field>
+}
+class FielderController {
+  + getById(Long): FielderDto
+  + update(FielderUpdateDto): FielderDto
+  + findAll(): List<FielderDto>
+  + save(FielderCreateDto): FielderDto
+  + delete(Long): void
+}
+class FielderCreateDto {
+  + getTelephone(): String
+  + getName(): String
+  + toString(): String
+  # canEqual(Object): boolean
+  + getSurname(): String
+  + getEmail(): String
+  + getFieldsId(): List<Long>
+  + setName(String): void
+  + setSurname(String): void
+  + setEmail(String): void
+  + setTelephone(String): void
+  + setFieldsId(List<Long>): void
+  + hashCode(): int
+  + equals(Object): boolean
+}
+class FielderDto {
+  # canEqual(Object): boolean
+  + equals(Object): boolean
+  + setName(String): void
+  + setTelephone(String): void
+  + hashCode(): int
+  + getTelephone(): String
+  + getId(): Long
+  + getName(): String
+  + getSurname(): String
+  + setFields(List<FieldDto>): void
+  + getEmail(): String
+  + setEmail(String): void
+  + getFields(): List<FieldDto>
+  + builder(): FielderDtoBuilder
+  + setSurname(String): void
+  + toString(): String
+  + setId(Long): void
+}
+class FielderMapper {
+  + updateFielder(Fielder, FielderUpdateDto): Fielder
+  + toDto(Fielder): FielderDto
+  + dtoToFielder(FielderCreateDto): Fielder
+}
+interface FielderRepository << interface >> {
+  + findById(Long): Optional<Fielder>
+  + findAll(): List<Fielder>
+}
+class FielderService {
+  + findById(Long): Optional<Fielder>
+  + getById(Long): Fielder
+  + findAll(): List<Fielder>
+  + delete(Long): void
+  + update(FielderUpdateDto): Fielder
+  + save(FielderCreateDto): Fielder
+}
+class FielderUpdateDto {
+  + getTelephone(): String
+  + getId(): Long
+  + setFieldsId(List<Long>): void
+  + equals(Object): boolean
+  + getName(): String
+  + getSurname(): String
+  + getEmail(): String
+  + getFieldsId(): List<Long>
+  + setId(Long): void
+  + setName(String): void
+  + setSurname(String): void
+  + setTelephone(String): void
+  + toString(): String
+  + hashCode(): int
+  + setEmail(String): void
+  # canEqual(Object): boolean
+}
+
+FielderController "1" *-[#595959,plain]-> "fielderMapper\n1" FielderMapper     
+FielderController "1" *-[#595959,plain]-> "fielderService\n1" FielderService    
+FielderService    "1" *-[#595959,plain]-> "fielderMapper\n1" FielderMapper     
+FielderService    "1" *-[#595959,plain]-> "fielderRepository\n1" FielderRepository 
+@enduml

@@ -1,0 +1,53 @@
+@startuml Component
+!include <C4/C4_Component>
+
+!include <office/Servers/database_server>
+!include <office/Servers/application_server>
+
+AddContainerTag("webApp", $sprite="application_server", $legendText="web app container")
+AddContainerTag("db", $sprite="database_server", $legendText="database container")
+
+/'Services containers'/
+Container(landscape_service, "LandscapeService", "Container: Java and SpringBoot", "Управление пользователями, назначение на работы, управление ценой за работы, проставление рейтинга, сбор статистики.", $tags="webApp")
+Container(rancher_service, "RancherService", "Container: Java and SpringBoot", "Бэк обслуживающий участки, координаты, размеры поля, что посажено - когда что созреет и т.п.", $tags="webApp")
+
+/'Create databases containers'/
+ContainerDb(postgres, "Database", "Container: Postgis:15.5", "Хранит поля, работников на полях" ,$tags="db")
+ContainerDb(mongo, "Database", "Container: MongoDB", "Хранит сады", $tags="db")
+
+/'Create Rancher Service boundary'/
+Container_Boundary(rancher, "RancherService") {
+    Component(field_controller, "FieldController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с полями")
+    Component(field_service, "FieldService", "Component: Spring Service", "Реализует логику работы с полями")
+    Component(field_grpc_service, "FieldGrpcService", "Component: GrpcService", "Отправляет статистику по полям")
+    Component(fielder_controller, "FielderController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с работниками на полях")
+    Component(fielder_service, "FielderService", "Component: Spring Service", "Реализует логику работы с работниками на полях")
+    Component(garden_controller, "GardenController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с садами")
+    Component(garden_service, "GardenService", "Component: Spring Service", "Реализует логику работы с садами")
+}
+
+/'Create relations between service and controllers'/
+Rel(rancher_service, field_controller, "CRUD операции для полей.", "json/http")
+Rel(rancher_service, fielder_controller, "CRUD операции для работниках на полях.", "json/http")
+Rel(rancher_service, garden_controller, "CRUD операции для садов.", "json/http")
+
+/'Create relations between controllers and services'/
+Rel(field_controller, field_service, " ")
+Rel(fielder_controller, fielder_service, " ")
+Rel(garden_controller, garden_service, " ")
+
+/'Create relations between grpc services and services'/
+Rel(field_grpc_service, field_service, " ")
+
+/'Create relations between services and repositories'/
+Rel(field_service, postgres, "Пишет/Читает поля.", "SQL/JDBC")
+Rel(fielder_service, postgres, "Пишет/Читает работников полей.", "SQL/JDBC")
+Rel(garden_service, mongo, "Пишет/Читает сады.", "MongoDB wire protocol")
+
+/'Create relations between containers'/
+Rel(landscape_service, field_grpc_service, "Собирает статистику по полям.", "protocol buffer/grpc")
+Rel(garden_service, landscape_service, "Создает участок для сада.", "json/http")
+
+SHOW_LEGEND()
+
+@enduml

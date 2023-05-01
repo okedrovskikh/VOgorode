@@ -1,0 +1,123 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Field {
+  + getLatitude(): Double
+  + getId(): Long
+  + setLatitude(Double): void
+  + getAddress(): String
+  + getLongitude(): Double
+  + builder(): FieldBuilder
+  + setLongitude(Double): void
+  + getArea(): Polygon
+  + getFielder(): Fielder
+  + setFielder(Fielder): void
+  + setId(Long): void
+  + setArea(Polygon): void
+  + setAddress(String): void
+  + hashCode(): int
+  + equals(Object): boolean
+}
+class FieldController {
+  + delete(Long): void
+  + save(FieldCreateDto): FieldDto
+  + findAll(): List<FieldDto>
+  + getById(Long): FieldDto
+  + update(FieldUpdateDto): FieldDto
+}
+class FieldCreateDto {
+  + getAddress(): String
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + getArea(): String
+  + setAddress(String): void
+  + setLatitude(Double): void
+  + setLongitude(Double): void
+  + toString(): String
+  + setArea(String): void
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+  + hashCode(): int
+}
+class FieldDto {
+  + hashCode(): int
+  + equals(Object): boolean
+  + setAddress(String): void
+  # canEqual(Object): boolean
+  + setId(Long): void
+  + getId(): Long
+  + getFielder(): Fielder
+  + getAddress(): String
+  + getLatitude(): Double
+  + setLatitude(Double): void
+  + setArea(double): void
+  + setFielder(Fielder): void
+  + getLongitude(): Double
+  + setLongitude(Double): void
+  + toString(): String
+  + getArea(): double
+  + builder(): FieldDtoBuilder
+}
+class FieldGrpcServiceImpl {
+  - sendResponse(List<Object[]>, Function<Object[], AreaStat>, StreamObserver<AreaStatResponse>): void
+  + getAreasStatSplitByEmailAndTelephone(Empty, StreamObserver<AreaStatResponse>): void
+  - formEmailAndTelephoneSplitValue(String, String): String
+  + getAreasStatBySplitValue(AreaStatRequest, StreamObserver<AreaStatResponse>): void
+  - formSplitRange(long, long): String
+  - mapToAreaStatSplitByEmailAndTelephone(Object[]): AreaStat
+  - buildEmptyResponse(): Builder
+  - mapToAreaStatBySplitRange(Object[], long): AreaStat
+  - buildInternalError(Throwable): AreaStatResponse
+}
+class FieldMapper {
+  + dtoToField(FieldCreateDto): Field
+  # castToPolygon(String): Polygon
+  + updateField(Field, FieldUpdateDto): Field
+  + toDto(Field): FieldDto
+}
+interface FieldRepository << interface >> {
+  + findAreasStatBySplitValue(Double): List<Object>
+  + findAreasStat(): List<Object>
+}
+class FieldService {
+  + findAll(): List<Field>
+  + findAreasStat(): List<Object[]>
+  + findAllByIds(Iterable<Long>): List<Field>
+  + getById(Long): Field
+  + findById(Long): Optional<Field>
+  + save(FieldCreateDto): Field
+  + updateFieldsFielder(List<Long>, Fielder): List<Field>
+  + delete(Long): void
+  + findAreasStatBySplitValue(Double): List<Object[]>
+  + update(FieldUpdateDto): Field
+}
+class FieldUpdateDto {
+  + getId(): Long
+  + getAddress(): String
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + hashCode(): int
+  + getArea(): String
+  + setId(Long): void
+  + setAddress(String): void
+  + toString(): String
+  # canEqual(Object): boolean
+  + setLatitude(Double): void
+  + setLongitude(Double): void
+  + setArea(String): void
+  + equals(Object): boolean
+}
+class GeometryConfiguration {
+  + geometryFactory(): GeometryFactory
+  + wktReader(GeometryFactory): WKTReader
+}
+
+FieldController       "1" *-[#595959,plain]-> "fieldMapper\n1" FieldMapper           
+FieldController       "1" *-[#595959,plain]-> "fieldService\n1" FieldService          
+FieldGrpcServiceImpl  "1" *-[#595959,plain]-> "fieldService\n1" FieldService          
+FieldService          "1" *-[#595959,plain]-> "fieldMapper\n1" FieldMapper           
+FieldService          "1" *-[#595959,plain]-> "fieldRepository\n1" FieldRepository       
+@enduml
