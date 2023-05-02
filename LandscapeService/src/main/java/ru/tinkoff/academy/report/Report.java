@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class Report {
-    private GardenReport gardenReport;
+    private List<GardenReport> gardenReports;
     private List<Gardener> gardeners;
     private boolean isDeficit;
 }

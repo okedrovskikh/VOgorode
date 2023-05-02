@@ -1,10 +1,39 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+import "google/rpc/status.proto";
 package ru.tinkoff.academy;
 
 option java_package = "ru.tinkoff.academy.proto.gardener";
 option java_multiple_files = true;
 
-message Gardener {
+service GardenerService {
+  rpc findAllGardeners(google.protobuf.Empty) returns (stream GardenerResponse);
+}
 
+message GardenerResponse {
+  oneof message {
+    Gardeners gardeners = 1;
+    google.rpc.Status error = 2;
+  }
+}
+
+message Gardeners {
+  repeated Gardener gardeners = 1;
+}
+
+message Gardener {
+  int64 id = 1;
+  string name = 2;
+  string surname = 3;
+  string email = 4;
+  string telephone = 5;
+}
+
+message Field {
+  int64 id = 1;
+  string address = 2;
+  double latitude = 3;
+  double longitude = 4;
+  string area = 5;
 }
