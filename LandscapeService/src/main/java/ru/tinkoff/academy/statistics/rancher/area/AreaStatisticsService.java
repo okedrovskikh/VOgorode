@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.statistics.rancher.field;
+package ru.tinkoff.academy.statistics.rancher.area;
 
 import io.grpc.Status;
 import lombok.RequiredArgsConstructor;
@@ -7,11 +7,11 @@ import ru.tinkoff.academy.account.Account;
 import ru.tinkoff.academy.account.AccountService;
 import ru.tinkoff.academy.account.type.AccountType;
 import ru.tinkoff.academy.exceptions.GrpcStreamErrorException;
-import ru.tinkoff.academy.proto.field.AreaStat;
-import ru.tinkoff.academy.proto.field.AreaStatRequest;
-import ru.tinkoff.academy.proto.field.AreaStatResponse;
-import ru.tinkoff.academy.proto.field.AreaStats;
-import ru.tinkoff.academy.rancher.field.FieldGrpcClient;
+import ru.tinkoff.academy.proto.area.AreaStat;
+import ru.tinkoff.academy.proto.area.AreaStatRequest;
+import ru.tinkoff.academy.proto.area.AreaStatResponse;
+import ru.tinkoff.academy.proto.area.AreaStats;
+import ru.tinkoff.academy.rancher.area.AreaGrpcClient;
 
 import java.util.IdentityHashMap;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class AreaStatisticsService {
     private final AccountService accountService;
     private final AreaStatisticsMapper areaStatisticsMapper;
-    private final FieldGrpcClient fieldServiceGrpc;
+    private final AreaGrpcClient fieldServiceGrpc;
 
     public Map<String, AreaStatisticsResponse> getAreasStatSplit(Double splitValue) {
         return doActionBasedOnSplitValue(splitValue);

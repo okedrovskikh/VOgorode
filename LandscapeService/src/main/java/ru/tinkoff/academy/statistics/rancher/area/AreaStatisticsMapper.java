@@ -1,7 +1,7 @@
-package ru.tinkoff.academy.statistics.rancher.field;
+package ru.tinkoff.academy.statistics.rancher.area;
 
 import org.mapstruct.Mapper;
-import ru.tinkoff.academy.proto.field.AreaStat;
+import ru.tinkoff.academy.proto.area.AreaStat;
 
 @Mapper(componentModel = "spring")
 public interface AreaStatisticsMapper {

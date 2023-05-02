@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.statistics.rancher.field;
+package ru.tinkoff.academy.statistics.rancher.area;
 
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/stat/rancher")
+@RequestMapping("/stat/rancher/area")
 @RequiredArgsConstructor
 @Timed(
         value = "stat.request.duration",
@@ -21,7 +21,7 @@ import java.util.Map;
 public class AreaStatisticsController {
     private final AreaStatisticsService areaStatisticsService   ;
 
-    @GetMapping("/area")
+    @GetMapping("")
     public Map<String, AreaStatisticsResponse> getAreasStatSplit(
             @RequestParam(name = "splitValue", required = false, defaultValue = "0.0") Double splitValue) {
         return areaStatisticsService.getAreasStatSplit(splitValue);

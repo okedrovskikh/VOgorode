@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.statistics.handyman.bank.account;
+package ru.tinkoff.academy.statistics.handyman.bank;
 
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/stat/handyman")
+@RequestMapping("/stat/handyman/banks")
 @RequiredArgsConstructor
 @Timed(
         value = "stat.request.duration",
@@ -20,7 +20,7 @@ import java.util.List;
 public class BankAccountStatisticsController {
     private final BankAccountStatisticsService bankAccountStatisticsService;
 
-    @GetMapping("/banks/all")
+    @GetMapping("/all")
     public List<String> findAllBanks() {
         return bankAccountStatisticsService.findAllBanks();
     }

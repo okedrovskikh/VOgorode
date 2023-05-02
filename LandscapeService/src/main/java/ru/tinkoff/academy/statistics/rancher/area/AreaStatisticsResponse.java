@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.statistics.rancher.field;
+package ru.tinkoff.academy.statistics.rancher.area;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
