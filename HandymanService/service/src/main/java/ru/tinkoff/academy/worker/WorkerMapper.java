@@ -3,6 +3,7 @@ package ru.tinkoff.academy.worker;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.proto.worker.WorkerResponse;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 
@@ -20,4 +21,6 @@ public interface WorkerMapper {
     @Mapping(target = "latitude", source = "worker.latitude")
     @Mapping(target = "longitude", source = "worker.longitude")
     ExtendedByUserWorker toExtendedWorker(Worker worker, LandscapeUser landscapeUser);
+
+    WorkerResponse mapToGrpcResponse(Worker worker);
 }

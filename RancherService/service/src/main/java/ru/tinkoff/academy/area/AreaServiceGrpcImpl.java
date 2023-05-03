@@ -1,22 +1,21 @@
-package ru.tinkoff.academy.field;
+package ru.tinkoff.academy.area;
 
 import com.google.protobuf.Empty;
-import com.google.rpc.Status;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
-import ru.tinkoff.academy.proto.field.AreaStat;
-import ru.tinkoff.academy.proto.field.AreaStatRequest;
-import ru.tinkoff.academy.proto.field.AreaStatResponse;
-import ru.tinkoff.academy.proto.field.AreaStats;
-import ru.tinkoff.academy.proto.field.FieldServiceGrpc;
+import ru.tinkoff.academy.field.FieldService;
+import ru.tinkoff.academy.proto.area.AreaServiceGrpc;
+import ru.tinkoff.academy.proto.area.AreaStat;
+import ru.tinkoff.academy.proto.area.AreaStatRequest;
+import ru.tinkoff.academy.proto.area.AreaStatResponse;
 
 import java.util.List;
 import java.util.function.Function;
 
 @GrpcService
 @RequiredArgsConstructor
-public class FieldGrpcServiceImpl extends FieldServiceGrpc.FieldServiceImplBase {
+public class AreaServiceGrpcImpl extends AreaServiceGrpc.AreaServiceImplBase {
     private static final String splitRange = "%s - %s";
     private static final String splitByEmailAndTelephone = "%s:%s";
     private static final int MAX_AREA_STATS_PER_RESPONSE = 10000;
@@ -25,13 +24,9 @@ public class FieldGrpcServiceImpl extends FieldServiceGrpc.FieldServiceImplBase 
 
     @Override
     public void getAreasStatSplitByEmailAndTelephone(Empty request, StreamObserver<AreaStatResponse> responseObserver) {
-        try {
-            List<Object[]> stats = fieldService.findAreasStat();
+        List<Object[]> stats = fieldService.findAreasStat();
 
-            sendResponse(stats, this::mapToAreaStatSplitByEmailAndTelephone, responseObserver);
-        } catch (Throwable t) {
-            responseObserver.onNext(buildInternalError(t));
-        }
+        sendResponse(stats, this::mapToAreaStatSplitByEmailAndTelephone, responseObserver);
         responseObserver.onCompleted();
     }
 
@@ -55,10 +50,10 @@ public class FieldGrpcServiceImpl extends FieldServiceGrpc.FieldServiceImplBase 
             List<Object[]> stats = fieldService.findAreasStatBySplitValue(request.getSplitValue());
 
             sendResponse(stats, (stat) -> mapToAreaStatBySplitRange(stat, (long) request.getSplitValue()), responseObserver);
+            responseObserver.onCompleted();
         } catch (Throwable t) {
-            responseObserver.onNext(buildInternalError(t));
+            responseObserver.onError(t);
         }
-        responseObserver.onCompleted();
     }
 
     private AreaStat mapToAreaStatBySplitRange(Object[] stats, long splitValue) {
@@ -76,7 +71,7 @@ public class FieldGrpcServiceImpl extends FieldServiceGrpc.FieldServiceImplBase 
     }
 
     private void sendResponse(List<Object[]> stats, Function<Object[], AreaStat> mappingFunction, StreamObserver<AreaStatResponse> responseObserver) {
-        AreaStatResponse.Builder nextResponse = buildEmptyResponse();
+        AreaStatResponse.Builder nextResponse = AreaStatResponse.newBuilder();
         int counter = 0;
         for (Object[] stat : stats) {
             AreaStat areaStat = mappingFunction.apply(stat);
@@ -87,24 +82,10 @@ public class FieldGrpcServiceImpl extends FieldServiceGrpc.FieldServiceImplBase 
                 counter = 0;
             }
 
-            nextResponse.getStatsBuilder().addStats(areaStat);
+            nextResponse.addStats(areaStat);
             counter++;
         }
 
         responseObserver.onNext(nextResponse.build());
-    }
-
-    private AreaStatResponse.Builder buildEmptyResponse() {
-        return AreaStatResponse.newBuilder()
-                .setStats(AreaStats.newBuilder());
-    }
-
-    private AreaStatResponse buildInternalError(Throwable t) {
-        return AreaStatResponse.newBuilder()
-                .setError(Status.newBuilder()
-                        .setCode(io.grpc.Status.INTERNAL.getCode().value())
-                        .setMessage(t.getMessage())
-                        .build()
-                ).build();
     }
 }

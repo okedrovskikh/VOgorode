@@ -6,6 +6,9 @@ spring:
     enabled: true
     contexts: test
     change-log: classpath:db/changelog/db.changelog-test.yaml
+  data:
+    mongodb:
+      authentication-database: admin
 
 rest:
   landscape:

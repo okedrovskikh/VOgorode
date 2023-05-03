@@ -7,17 +7,24 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.utility.DockerImageName;
 
+import java.io.BufferedReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Map;
 
 public class Containers implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
-    public static final DockerImageName POSTGIS = DockerImageName.parse("postgis/postgis:15-3.3-alpine")
+    private static final DockerImageName POSTGIS = DockerImageName.parse("postgis/postgis:15-3.3-alpine")
             .asCompatibleSubstituteFor("postgres");
+
     public static final String POSTGRES_USER = "postgres";
     public static final String POSTGRES_PASSWORD = "123";
     public static final String POSTGRES_DATABASE = "vogorode";
+
+    public static final String MONOGO_DATABASE = "test";
 
     public static final Network network = Network.newNetwork();
 
@@ -41,10 +48,11 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
         postgres.start();
+        mongo.start();
     }
 
     @Override
-    public void close() throws Throwable {
+    public void close() {
         postgres.close();
         network.close();
     }

@@ -4,22 +4,15 @@ import "google/protobuf/empty.proto";
 import "google/rpc/status.proto";
 package ru.tinkoff.academy;
 
-option java_package = "ru.tinkoff.academy.proto.field";
+option java_package = "ru.tinkoff.academy.proto.area";
 option java_multiple_files = true;
 
-service FieldService {
+service AreaService {
   rpc getAreasStatSplitByEmailAndTelephone(google.protobuf.Empty) returns (stream AreaStatResponse);
   rpc getAreasStatBySplitValue(AreaStatRequest) returns (stream AreaStatResponse);
 }
 
 message AreaStatResponse {
-  oneof message{
-    AreaStats stats = 1;
-    google.rpc.Status error = 2;
-  }
-}
-
-message AreaStats {
   repeated AreaStat stats = 1;
 }
 

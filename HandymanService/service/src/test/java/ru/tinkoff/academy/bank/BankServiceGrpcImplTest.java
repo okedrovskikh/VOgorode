@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.bank.account;
+package ru.tinkoff.academy.bank;
 
 import com.google.protobuf.Empty;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
-import ru.tinkoff.academy.proto.bank.account.BankAccountResponse;
-import ru.tinkoff.academy.proto.bank.account.BankAccountServiceGrpc;
+import ru.tinkoff.academy.proto.bank.BankResponse;
+import ru.tinkoff.academy.proto.bank.BankServiceGrpc;
 
 import java.util.Iterator;
 import java.util.List;
@@ -23,21 +23,21 @@ import java.util.stream.StreamSupport;
 })
 @Import(GrpcTestConfiguration.class)
 @DirtiesContext
-public class BankAccountGrpcServiceImplTest extends AbstractIntegrationTest {
+public class BankServiceGrpcImplTest extends AbstractIntegrationTest {
     @GrpcClient("inProcess")
-    private BankAccountServiceGrpc.BankAccountServiceBlockingStub bankAccountServiceBlockingStub;
+    private BankServiceGrpc.BankServiceBlockingStub bankAccountServiceBlockingStub;
 
     @Test
     public void testWithCorrectRequest() {
-        List<BankAccountResponse> expectedResponses = List.of(
-                BankAccountResponse.newBuilder()
+        List<BankResponse> expectedResponses = List.of(
+                BankResponse.newBuilder()
                         .setBank("bank1")
                         .build()
         );
 
-        Iterator<BankAccountResponse> actualResponseIter = bankAccountServiceBlockingStub.findAllBanks(Empty.getDefaultInstance());
-        Iterable<BankAccountResponse> actualResponseIterable = () -> actualResponseIter;
-        List<BankAccountResponse> actualResponse = StreamSupport.stream(actualResponseIterable.spliterator(), false).toList();
+        Iterator<BankResponse> actualResponseIter = bankAccountServiceBlockingStub.findAll(Empty.getDefaultInstance());
+        Iterable<BankResponse> actualResponseIterable = () -> actualResponseIter;
+        List<BankResponse> actualResponse = StreamSupport.stream(actualResponseIterable.spliterator(), false).toList();
 
         Assertions.assertEquals(expectedResponses, actualResponse);
     }

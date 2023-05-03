@@ -10,7 +10,6 @@ import ru.tinkoff.academy.exceptions.GrpcStreamErrorException;
 import ru.tinkoff.academy.proto.area.AreaStat;
 import ru.tinkoff.academy.proto.area.AreaStatRequest;
 import ru.tinkoff.academy.proto.area.AreaStatResponse;
-import ru.tinkoff.academy.proto.area.AreaStats;
 import ru.tinkoff.academy.rancher.area.AreaGrpcClient;
 
 import java.util.IdentityHashMap;
@@ -65,15 +64,7 @@ public class AreaStatisticsService {
         while (responseStream.hasNext()) {
             AreaStatResponse response = responseStream.next();
 
-            if (response.hasError()) {
-                responseStream.forEachRemaining(remain -> {});
-                var error = response.getError();
-                throw new GrpcStreamErrorException(Status.fromCodeValue(error.getCode()), error.getMessage());
-            }
-
-            AreaStats stats = response.getStats();
-
-            for (AreaStat stat : stats.getStatsList()) {
+            for (AreaStat stat : response.getStatsList()) {
                 String splitValueKey = splitValueKeyFunction.apply(stat);
                 areasStat.put(splitValueKey, areaStatisticsMapper.mapToAreaStatisticsResponse(stat));
             }

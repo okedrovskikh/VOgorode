@@ -13,13 +13,6 @@ service AreaService {
 }
 
 message AreaStatResponse {
-  oneof message{
-    AreaStats stats = 1;
-    google.rpc.Status error = 2;
-  }
-}
-
-message AreaStats {
   repeated AreaStat stats = 1;
 }
 
