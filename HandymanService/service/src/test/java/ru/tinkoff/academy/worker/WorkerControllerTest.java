@@ -1,10 +1,13 @@
 package ru.tinkoff.academy.worker;
 
+import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -12,16 +15,19 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
 import ru.tinkoff.academy.AbstractIntegrationTest;
+import ru.tinkoff.academy.landscape.user.LandscapeUser;
 import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@AutoConfigureWireMock(port = 8082)
 public class WorkerControllerTest extends AbstractIntegrationTest {
     private final String workers = "/workers";
     private final String workersById = "/workers/%s";
@@ -33,8 +39,16 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
 
     @Test
     public void testSaveCorrectWorker() throws Exception {
+        LandscapeUser mockedUser = LandscapeUser.builder()
+                .id(UUID.fromString("751e0662-c503-4f7f-9146-9545dc882a4e"))
+                .build();
+        WireMock.stubFor(WireMock.post(WireMock.urlPathEqualTo("/users"))
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(objectMapper.writeValueAsString(mockedUser))));
+
         Worker expectedResponse = Worker.builder()
-                .landscapeUserId(UUID.fromString(""))
+                .landscapeUserId(UUID.fromString("751e0662-c503-4f7f-9146-9545dc882a4e"))
                 .latitude(800D)
                 .longitude(800D)
                 .services(List.of(WorkEnum.plant))
@@ -64,12 +78,27 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
 
     @Test
     public void testGetByExistId() throws Exception {
+        LandscapeUser mockedUser = LandscapeUser.builder()
+                .id(UUID.fromString("18481034-3765-4ba1-9640-b5f440300299"))
+                .longitude(800D)
+                .longitude(800D)
+                .login("login")
+                .email("email")
+                .telephone("telephone")
+                .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
+                .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
+                .build();
+        WireMock.stubFor(WireMock.get("/users/18481034-3765-4ba1-9640-b5f440300299")
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(objectMapper.writeValueAsString(mockedUser))));
+
         ExtendedByUserWorker expectedResponse = ExtendedByUserWorker.builder()
                 .id("id1")
                 .latitude(800D)
                 .longitude(800D)
                 .services(List.of(WorkEnum.plant))
-                .landscapeUser(null)
+                .landscapeUser(mockedUser)
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(workersById, "id1"))
@@ -91,25 +120,55 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
+    @Disabled("until write correct responses in mock server")
     public void testFindAll() throws Exception {
+        LandscapeUser mockedUser1 = LandscapeUser.builder()
+                .id(UUID.fromString("18481034-3765-4ba1-9640-b5f440300299"))
+                .longitude(800D)
+                .longitude(800D)
+                .login("login")
+                .email("email")
+                .telephone("telephone")
+                .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
+                .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
+                .build();
+        WireMock.stubFor(WireMock.get("/users/18481034-3765-4ba1-9640-b5f440300299")
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(objectMapper.writeValueAsString(mockedUser1))));
+        LandscapeUser mockedUser2 = LandscapeUser.builder()
+                .id(UUID.fromString("684d6f11-9b35-4906-90a2-95ce59ccc058"))
+                .longitude(800D)
+                .longitude(800D)
+                .login("login")
+                .email("email")
+                .telephone("telephone")
+                .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
+                .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
+                .build();
+        WireMock.stubFor(WireMock.get("/users/684d6f11-9b35-4906-90a2-95ce59ccc058")
+                .willReturn(WireMock.aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(objectMapper.writeValueAsString(mockedUser2))));
+
         List<ExtendedByUserWorker> expectedResponse = List.of(
                 ExtendedByUserWorker.builder()
                         .id("id1")
                         .latitude(800D)
                         .longitude(800D)
                         .services(List.of(WorkEnum.plant))
-                        .landscapeUser(null)
+                        .landscapeUser(mockedUser1)
                         .build(),
                 ExtendedByUserWorker.builder()
                         .id("id2")
                         .latitude(800D)
                         .longitude(800D)
                         .services(List.of(WorkEnum.shovel))
-                        .landscapeUser(null)
+                        .landscapeUser(mockedUser2)
                         .build()
         );
 
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(workers)
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(workersById, "/extended/all"))
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 

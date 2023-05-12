@@ -156,6 +156,13 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
                         .latitude(800D)
                         .longitude(700D)
                         .services(List.of(WorkEnum.water))
+                        .build(),
+                Worker.builder()
+                        .id("id4")
+                        .landscapeUserId(UUID.fromString("47230361-8b73-4c19-ac27-8040e5e0a907"))
+                        .latitude(800D)
+                        .longitude(700D)
+                        .services(List.of(WorkEnum.sow))
                         .build()
         );
 
