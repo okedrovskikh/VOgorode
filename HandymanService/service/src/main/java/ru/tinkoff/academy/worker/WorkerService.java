@@ -3,6 +3,7 @@ package ru.tinkoff.academy.worker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.landscape.UserWebClientHelper;
 import ru.tinkoff.academy.landscape.user.LandscapeUserMapper;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
@@ -36,7 +37,7 @@ public class WorkerService {
 
     public Worker getById(String id) {
         return findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Worker wasn't find by id: %s", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Worker wasn't find by id: %s", id)));
     }
 
     public Optional<Worker> findById(String id) {
@@ -48,8 +49,8 @@ public class WorkerService {
     }
 
     private ExtendedByUserWorker mapToExtended(Worker worker) {
-        LandscapeUser landscapeUser = this.webHelper.getUser(worker.getLandscapeUserId()).block();
-        return this.workerMapper.toExtendedWorker(worker, landscapeUser);
+        LandscapeUser landscapeUser = webHelper.getUser(worker.getLandscapeUserId()).block();
+        return workerMapper.toExtendedWorker(worker, landscapeUser);
     }
 
     public List<Worker> findAll() {
@@ -58,8 +59,8 @@ public class WorkerService {
 
     @Transactional
     public Worker update(WorkerUpdateDto workerUpdateDto) {
-        Worker worker = this.workerMapper.dtoToWorker(workerUpdateDto);
-        Worker oldWorker = this.getById(worker.getId());
+        Worker worker = workerMapper.dtoToWorker(workerUpdateDto);
+        Worker oldWorker = getById(worker.getId());
         worker.setLandscapeUserId(oldWorker.getLandscapeUserId());
         return workerRepository.save(worker);
     }

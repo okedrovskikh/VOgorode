@@ -10,7 +10,7 @@ import ru.tinkoff.academy.user.User;
 public class UserMigration {
     @Execution
     public void addValidator(MongoTemplate mongoTemplate) {
-        //mongoTemplate.createCollection(User.class);
+        mongoTemplate.createCollection(User.class);
     }
 
     @RollbackExecution

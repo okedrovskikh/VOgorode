@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.bank;
+package ru.tinkoff.academy.bank.account;
 
 import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;

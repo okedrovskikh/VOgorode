@@ -10,7 +10,7 @@ import ru.tinkoff.academy.bank.account.BankAccount;
 public class BankAccountMigration {
     @Execution
     public void addValidator(MongoTemplate mongoTemplate) {
-        //mongoTemplate.createCollection(BankAccount.class);
+        mongoTemplate.createCollection(BankAccount.class);
     }
 
     @RollbackExecution

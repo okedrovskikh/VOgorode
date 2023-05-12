@@ -33,7 +33,7 @@ public class BankAccountController {
     }
 
     @GetMapping("/{id}")
-    public BankAccount getById(@PathVariable("id") Long id) {
+    public BankAccount getById(@PathVariable("id") String id) {
         return bankAccountService.getById(id);
     }
 
@@ -48,7 +48,7 @@ public class BankAccountController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         bankAccountService.delete(id);
     }
 }

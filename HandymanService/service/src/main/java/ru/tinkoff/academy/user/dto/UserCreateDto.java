@@ -14,6 +14,6 @@ public class UserCreateDto {
     private String email;
     private String telephone;
     @JsonAlias({"accounts_id"})
-    private List<Long> accountsId;
+    private List<String> accountsId;
     private Byte[] photo;
 }

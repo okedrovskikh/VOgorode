@@ -6,7 +6,7 @@ import ru.tinkoff.academy.bank.account.payment.system.PaymentSystem;
 
 @Data
 public class BankAccountUpdateDto {
-    private Long id;
+    private String id;
     @JsonAlias({"card_id"})
     private String cardId;
     @JsonAlias({"payment_system"})
