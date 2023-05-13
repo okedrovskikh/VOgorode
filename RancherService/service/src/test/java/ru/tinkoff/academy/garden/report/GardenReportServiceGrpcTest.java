@@ -11,6 +11,7 @@ import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.configuration.test.GrpcTestConfiguration;
 import ru.tinkoff.academy.proto.garden.report.GardenReportResponse;
 import ru.tinkoff.academy.proto.garden.report.GardenReportServiceGrpc;
+import ru.tinkoff.academy.proto.work.WorkEnum;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ public class GardenReportServiceGrpcTest extends AbstractIntegrationTest {
     public void testFormReport() {
         List<GardenReportResponse> expectedResponses = List.of(
                 GardenReportResponse.newBuilder()
+                        .addAllWorks(List.of(WorkEnum.sow))
                 .build()
         );
 

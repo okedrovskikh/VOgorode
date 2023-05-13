@@ -41,6 +41,12 @@ public class SiteWebClientHelper {
                 .uri(String.format("/sites/%s", id))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
+                .onStatus(status -> HttpStatus.CONFLICT == status, response -> {
+                    throw new IllegalStateException("Invalid request");
+                })
+                .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
+                    throw new IllegalStateException("Service unavailable");
+                })
                 .bodyToMono(Site.class);
     }
 }

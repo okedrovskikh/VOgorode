@@ -15,9 +15,11 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.utility.DockerImageName;
 import ru.tinkoff.academy.garden.Garden;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 
 public class Containers implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
     private static final DockerImageName POSTGIS = DockerImageName.parse("postgis/postgis:15-3.3-alpine")
@@ -68,7 +70,48 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
     }
 
     public static class GardenTestData {
-        private static final List<Garden> testGarden = List.of();
+        private static final List<Garden> testGarden = List.of(
+                Garden.builder()
+                        .id("id1")
+                        .ownerId(UUID.fromString("30a5d2e9-f0e9-4e39-aca2-71a4d3752e56"))
+                        .siteId(UUID.fromString("08995a30-784e-491d-aad5-ec92ca8d1f5e"))
+                        .x1(30D)
+                        .y1(30D)
+                        .x2(60D)
+                        .y2(60D)
+                        .works(List.of(WorkEnum.sow))
+                        .build(),
+                Garden.builder()
+                        .id("id2")
+                        .ownerId(UUID.fromString("30a5d2e9-f0e9-4e39-aca2-71a4d3752e56"))
+                        .siteId(UUID.fromString("e2bfdf03-12a0-486b-9a28-9a8873dc5994"))
+                        .x1(30D)
+                        .y1(30D)
+                        .x2(60D)
+                        .y2(60D)
+                        .works(List.of(WorkEnum.plant))
+                        .build(),
+                Garden.builder()
+                        .id("id3")
+                        .ownerId(UUID.fromString("30a5d2e9-f0e9-4e39-aca2-71a4d3752e56"))
+                        .siteId(UUID.fromString("c6334fe8-2951-4e99-9d93-f1255900a426"))
+                        .x1(30D)
+                        .y1(30D)
+                        .x2(60D)
+                        .y2(60D)
+                        .works(List.of(WorkEnum.shovel))
+                        .build(),
+                Garden.builder()
+                        .id("id4")
+                        .ownerId(UUID.fromString("30a5d2e9-f0e9-4e39-aca2-71a4d3752e56"))
+                        .siteId(UUID.fromString("8c95b569-9eb6-4d9a-a27e-1c5cdde4f5a1"))
+                        .x1(30D)
+                        .y1(30D)
+                        .x2(60D)
+                        .y2(60D)
+                        .works(List.of(WorkEnum.water))
+                        .build()
+        );
 
         public static void addTestData(MongoTemplate mongoTemplate) {
             mongoTemplate.insertAll(testGarden);

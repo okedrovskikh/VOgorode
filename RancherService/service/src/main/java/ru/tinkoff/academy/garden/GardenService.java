@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.garden;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class GardenService {
 
     public Garden getById(String id) {
         return findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Garden wasn't find by id: %s", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Garden wasn't find by id: %s", id)));
     }
 
     public Optional<Garden> findById(String id) {
