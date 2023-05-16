@@ -1,21 +1,15 @@
 package ru.tinkoff.academy.fielder;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.tinkoff.academy.field.Field;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,36 +20,34 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "fielder")
-@Table(schema = "public", catalog = "vogorode")
-@NamedEntityGraph(name = "Fielder.fields",
-        attributeNodes = @NamedAttributeNode(value = "fields"))
+@Document(collection = "gardener")
 public class Fielder {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "name", nullable = false)
+    private String id;
+    @Field(name = "name")
     private String name;
-    @Column(name = "surname", nullable = false)
+    @Field(name = "surname")
     private String surname;
-    @Column(name = "email", nullable = false)
+    @Field(name = "email")
     private String email;
-    @OneToMany(mappedBy = "fielder")
+    @DocumentReference
+    @Field(name = "fields_id")
     @JsonIgnoreProperties({"fielder"})
-    private List<Field> fields;
-    @Column(name = "telephone")
+    private List<ru.tinkoff.academy.field.Field> fields;
+    @Field(name = "telephone")
     private String telephone;
 
-    public List<Field> getFields() {
+    public List<ru.tinkoff.academy.field.Field> getFields() {
         if (fields == null) {
-            return new ArrayList<>();
+            fields = new ArrayList<>();
         }
+
         return fields;
     }
 
     @Override
     public int hashCode() {
-        return id.intValue();
+        return Objects.hashCode(id);
     }
 
     @Override

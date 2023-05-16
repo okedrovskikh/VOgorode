@@ -35,7 +35,7 @@ public class FielderController {
     }
 
     @GetMapping("/{id}")
-    public FielderDto getById(@PathVariable("id") Long id) {
+    public FielderDto getById(@PathVariable("id") String id) {
         return fielderMapper.toDto(fielderService.getById(id));
     }
 
@@ -50,7 +50,7 @@ public class FielderController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         fielderService.delete(id);
     }
 }

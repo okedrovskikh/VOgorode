@@ -5,93 +5,89 @@ top to bottom direction
 skinparam linetype ortho
 
 class User {
-  + getId(): Long
-  + setId(Long): void
   + getName(): String
-  + setEmail(String): void
-  + setTelephone(String): void
-  + getSurname(): String
-  + builder(): UserBuilder
-  + setName(String): void
-  + setPhoto(Byte[]): void
-  + getSkills(): WorkEnum[]
-  + getEmail(): String
-  + setSkills(WorkEnum[]): void
   + setAccounts(List<BankAccount>): void
+  + setPhoto(Byte[]): void
+  + getId(): String
+  + getSurname(): String
+  + setName(String): void
+  + getSkills(): WorkEnum[]
+  + setEmail(String): void
+  + getEmail(): String
   + getTelephone(): String
   + getAccounts(): List<BankAccount>
+  + setId(String): void
+  + builder(): UserBuilder
   + getPhoto(): Byte[]
   + setSurname(String): void
-  + hashCode(): int
+  + setSkills(WorkEnum[]): void
+  + setTelephone(String): void
   + equals(Object): boolean
+  + hashCode(): int
 }
 class UserController {
-  + delete(Long): void
-  + getById(Long): User
-  + findAll(boolean): List<User>
   + update(UserUpdateDto): User
+  + getById(String): User
+  + delete(String): void
   + save(UserCreateDto): User
+  + findAll(boolean): List<User>
 }
 class UserCreateDto {
-  + getSkills(): WorkEnum[]
   + getName(): String
   + getSurname(): String
-  # canEqual(Object): boolean
-  + hashCode(): int
-  + setAccountsId(List<Long>): void
+  + setEmail(String): void
+  + getSkills(): WorkEnum[]
   + getEmail(): String
-  + getTelephone(): String
-  + getAccountsId(): List<Long>
-  + toString(): String
-  + getPhoto(): Byte[]
-  + equals(Object): boolean
-  + setName(String): void
   + setTelephone(String): void
+  + hashCode(): int
+  + getTelephone(): String
   + setPhoto(Byte[]): void
+  # canEqual(Object): boolean
+  + equals(Object): boolean
+  + getAccountsId(): List<String>
+  + setAccountsId(List<String>): void
+  + getPhoto(): Byte[]
+  + setName(String): void
+  + toString(): String
   + setSurname(String): void
   + setSkills(WorkEnum[]): void
-  + setEmail(String): void
 }
 class UserMapper {
-  + dtoToUser(UserCreateDto): User
   + updateUser(User, UserUpdateDto): User
+  + dtoToUser(UserCreateDto): User
 }
-interface UserRepository << interface >> {
-  + findAll(): List<User>
-  + findAll(Sort): List<User>
-  + findById(Long): Optional<User>
-}
+interface UserRepository << interface >>
 class UserService {
-  + getById(Long): User
   + findAllUnsorted(): List<User>
-  + findAll(boolean): List<User>
-  + update(UserUpdateDto): User
-  + save(UserCreateDto): User
-  + findById(Long): Optional<User>
   + findAllSortedBySurname(): List<User>
-  + delete(Long): void
+  + findAll(boolean): List<User>
+  + findById(String): Optional<User>
+  + save(UserCreateDto): User
+  + update(UserUpdateDto): User
+  + getById(String): User
+  + delete(String): void
 }
 class UserUpdateDto {
-  + getTelephone(): String
-  + getId(): Long
-  # canEqual(Object): boolean
   + getName(): String
+  + getId(): String
+  + setAccountsId(List<String>): void
+  + hashCode(): int
   + getSurname(): String
+  + equals(Object): boolean
+  + setEmail(String): void
+  + setTelephone(String): void
   + getSkills(): WorkEnum[]
   + getEmail(): String
-  + setSurname(String): void
-  + setSkills(WorkEnum[]): void
-  + getAccountsId(): List<Long>
-  + setEmail(String): void
+  # canEqual(Object): boolean
+  + getTelephone(): String
+  + getAccountsId(): List<String>
   + getPhoto(): Byte[]
-  + hashCode(): int
-  + setId(Long): void
-  + setTelephone(String): void
-  + setPhoto(Byte[]): void
-  + equals(Object): boolean
-  + toString(): String
+  + setSurname(String): void
+  + setId(String): void
+  + setSkills(WorkEnum[]): void
   + setName(String): void
-  + setAccountsId(List<Long>): void
+  + toString(): String
+  + setPhoto(Byte[]): void
 }
 
 UserController "1" *-[#595959,plain]-> "userService\n1" UserService    

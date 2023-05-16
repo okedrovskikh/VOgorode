@@ -7,11 +7,11 @@ import java.util.List;
 
 @Data
 public class FielderUpdateDto {
-    private Long id;
+    private String id;
     private String name;
     private String surname;
     private String email;
     private String telephone;
     @JsonAlias({"fields_id"})
-    private List<Long> fieldsId;
+    private List<String> fieldsId;
 }

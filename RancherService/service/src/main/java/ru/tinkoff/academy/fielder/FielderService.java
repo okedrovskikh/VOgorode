@@ -1,9 +1,9 @@
 package ru.tinkoff.academy.fielder;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.field.Field;
 import ru.tinkoff.academy.field.FieldService;
 import ru.tinkoff.academy.fielder.dto.FielderCreateDto;
@@ -27,12 +27,12 @@ public class FielderService {
         return fielderRepository.save(fielder);
     }
 
-    public Fielder getById(Long id) {
+    public Fielder getById(String id) {
         return findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Fielder wasn't find by id: %s", id)));
     }
 
-    public Optional<Fielder> findById(Long id) {
+    public Optional<Fielder> findById(String id) {
         return fielderRepository.findById(id);
     }
 
@@ -42,12 +42,12 @@ public class FielderService {
 
     @Transactional
     public Fielder update(FielderUpdateDto updateDto) {
-        Fielder fielder = fielderRepository.getReferenceById(updateDto.getId());
+        Fielder fielder = getById(updateDto.getId());
         fielder = fielderMapper.updateFielder(fielder, updateDto);
         return fielderRepository.save(fielder);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         fielderRepository.deleteById(id);
     }
 }

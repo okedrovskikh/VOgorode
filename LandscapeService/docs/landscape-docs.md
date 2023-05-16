@@ -11,3 +11,5 @@
 [Order](./code/order.plantuml)
 
 [Site](./code/site.plantuml)
+
+[Report](./code/report.plantuml)

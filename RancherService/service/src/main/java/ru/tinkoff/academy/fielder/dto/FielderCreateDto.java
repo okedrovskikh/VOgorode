@@ -12,5 +12,5 @@ public class FielderCreateDto {
     private String email;
     private String telephone;
     @JsonAlias({"fields_id"})
-    private List<Long> fieldsId;
+    private List<String> fieldsId;
 }

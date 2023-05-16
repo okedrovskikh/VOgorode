@@ -1,0 +1,32 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Report {
+  + getGardenReports(): List<GardenReport>
+  + getWorkers(): List<Worker>
+  + isDeficit(): boolean
+  + setGardenReports(List<GardenReport>): void
+  + setWorkers(List<Worker>): void
+  + setDeficit(boolean): void
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+  + hashCode(): int
+  + builder(): ReportBuilder
+  + toString(): String
+}
+class ReportController {
+  + formReport(): Report
+}
+class ReportMatcher {
+  + isDeficit(List<Worker>, List<GardenReport>): boolean
+}
+class ReportService {
+  + formReport(): Report
+}
+
+ReportController "1" *-[#595959,plain]-> "reportService\n1" ReportService    
+ReportService    "1" *-[#595959,plain]-> "reportMatcher\n1" ReportMatcher    
+@enduml

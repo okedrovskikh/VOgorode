@@ -6,104 +6,108 @@ skinparam linetype ortho
 
 class ExtendedByUserWorker {
   + getId(): String
-  + getLandscapeUserId(): UUID
-  + setLongitude(Double): void
-  # canEqual(Object): boolean
-  + builder(): ExtendedByUserWorkerBuilder
-  + getServices(): List<WorkEnum>
   + hashCode(): int
-  + equals(Object): boolean
   + toString(): String
+  + getServices(): List<WorkEnum>
   + getLatitude(): Double
+  + setLandscapeUser(LandscapeUser): void
+  + setLongitude(Double): void
+  + builder(): ExtendedByUserWorkerBuilder
   + getLongitude(): Double
+  # canEqual(Object): boolean
   + getLandscapeUser(): LandscapeUser
   + setId(String): void
-  + setLandscapeUserId(UUID): void
   + setServices(List<WorkEnum>): void
-  + setLandscapeUser(LandscapeUser): void
+  + equals(Object): boolean
   + setLatitude(Double): void
 }
 class Worker {
-  + getLandscapeUserId(): UUID
   + getId(): String
-  + hashCode(): int
+  + getLandscapeUserId(): UUID
   + getServices(): List<WorkEnum>
   + getLatitude(): Double
-  + getLongitude(): Double
-  + builder(): WorkerBuilder
-  + setId(String): void
-  + setLandscapeUserId(UUID): void
-  + setServices(List<WorkEnum>): void
-  + setLatitude(Double): void
-  + setLongitude(Double): void
+  + hashCode(): int
   + toString(): String
+  + getLongitude(): Double
   + equals(Object): boolean
   # canEqual(Object): boolean
+  + setId(String): void
+  + setLandscapeUserId(UUID): void
+  + builder(): WorkerBuilder
+  + setLatitude(Double): void
+  + setLongitude(Double): void
+  + setServices(List<WorkEnum>): void
 }
 class WorkerController {
+  + delete(String): void
+  + getById(String): ExtendedByUserWorker
   + save(WorkerCreateDto): Worker
   + findAll(): List<ExtendedByUserWorker>
   + update(WorkerUpdateDto): Worker
-  + delete(String): void
-  + getById(String): ExtendedByUserWorker
 }
 class WorkerCreateDto {
   + setLogin(String): void
   + getLogin(): String
   + getEmail(): String
-  + equals(Object): boolean
-  + toString(): String
   + getTelephone(): String
+  + setLongitude(Double): void
   + getServices(): List<WorkEnum>
   + getLatitude(): Double
-  # canEqual(Object): boolean
+  + setLatitude(Double): void
   + getLongitude(): Double
   + setEmail(String): void
-  + setTelephone(String): void
-  + setLongitude(Double): void
+  # canEqual(Object): boolean
   + hashCode(): int
+  + setTelephone(String): void
+  + equals(Object): boolean
   + setServices(List<WorkEnum>): void
-  + setLatitude(Double): void
+  + toString(): String
 }
-interface WorkerMapper << interface >> {
+class WorkerMapper {
   + dtoToWorker(WorkerCreateDto): Worker
   + dtoToWorker(WorkerUpdateDto): Worker
+  + mapToGrpcResponse(Worker): WorkerResponse
   + toExtendedWorker(Worker, LandscapeUser): ExtendedByUserWorker
 }
 interface WorkerRepository << interface >>
 class WorkerService {
-  + save(WorkerCreateDto): Worker
-  + findById(String): Optional<Worker>
-  + delete(String): void
-  - mapToExtended(Worker): ExtendedByUserWorker
-  + getById(String): Worker
-  + findAllExtended(): List<ExtendedByUserWorker>
-  + getExtendedById(String): ExtendedByUserWorker
   + update(WorkerUpdateDto): Worker
+  + findById(String): Optional<Worker>
   + findAll(): List<Worker>
+  + findAllExtended(): List<ExtendedByUserWorker>
+  + delete(String): void
+  + save(WorkerCreateDto): Worker
+  + getById(String): Worker
+  + getExtendedById(String): ExtendedByUserWorker
+  - mapToExtended(Worker): ExtendedByUserWorker
+}
+class WorkerServiceGrpcImpl {
+  + findAll(Empty, StreamObserver<WorkerResponse>): void
 }
 class WorkerUpdateDto {
-  + getEmail(): String
+  + setEmail(String): void
   + getLogin(): String
+  + setId(String): void
+  + setLatitude(Double): void
+  + getEmail(): String
   + getTelephone(): String
   + getId(): String
-  + getServices(): List<WorkEnum>
-  + setServices(List<WorkEnum>): void
-  + setLatitude(Double): void
-  + getLatitude(): Double
-  + toString(): String
-  + equals(Object): boolean
-  # canEqual(Object): boolean
-  + getLongitude(): Double
-  + setLogin(String): void
-  + setEmail(String): void
-  + setId(String): void
-  + setTelephone(String): void
-  + setLongitude(Double): void
   + hashCode(): int
+  + getServices(): List<WorkEnum>
+  # canEqual(Object): boolean
+  + toString(): String
+  + setLongitude(Double): void
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + setServices(List<WorkEnum>): void
+  + equals(Object): boolean
+  + setLogin(String): void
+  + setTelephone(String): void
 }
 
-WorkerController     "1" *-[#595959,plain]-> "workerService\n1" WorkerService        
-WorkerService        "1" *-[#595959,plain]-> "workerMapper\n1" WorkerMapper         
-WorkerService        "1" *-[#595959,plain]-> "workerRepository\n1" WorkerRepository     
+WorkerController      "1" *-[#595959,plain]-> "workerService\n1" WorkerService         
+WorkerService         "1" *-[#595959,plain]-> "workerMapper\n1" WorkerMapper          
+WorkerService         "1" *-[#595959,plain]-> "workerRepository\n1" WorkerRepository      
+WorkerServiceGrpcImpl "1" *-[#595959,plain]-> "workerMapper\n1" WorkerMapper          
+WorkerServiceGrpcImpl "1" *-[#595959,plain]-> "workerService\n1" WorkerService         
 @enduml
