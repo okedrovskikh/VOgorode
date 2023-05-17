@@ -6,6 +6,6 @@
 
 [Field](./code/field.plantuml)
 
-[Fielder](./code/fielder.plantuml)
+[Fielder](./code/gardener.plantuml)
 
 [Garden](./code/garden.plantuml)

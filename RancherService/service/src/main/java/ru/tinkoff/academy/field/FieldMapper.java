@@ -24,7 +24,7 @@ public abstract class FieldMapper {
 
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "fielder", ignore = true)
+    @Mapping(target = "gardener", ignore = true)
     @Mapping(target = "area", expression = "java(castToPolygon(createDto.getArea()))")
     public abstract Field dtoToField(FieldCreateDto createDto);
 
@@ -50,7 +50,7 @@ public abstract class FieldMapper {
         return new Polygon(points);
     }
 
-    @Mapping(target = "area", expression = "java(field.getArea().getArea())")
+    @Mapping(target = "area", expression = "java(getAreaSquare(field))")
     public abstract FieldDto toDto(Field field);
 
     public double getAreaSquare(Field field) {

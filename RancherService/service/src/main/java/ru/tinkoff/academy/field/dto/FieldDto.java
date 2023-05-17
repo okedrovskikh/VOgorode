@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.tinkoff.academy.fielder.Fielder;
+import ru.tinkoff.academy.gardener.Gardener;
 
 @Data
 @AllArgsConstructor
@@ -18,5 +18,5 @@ public class FieldDto {
     private Double longitude;
     private double area;
     @JsonIgnoreProperties({"fields"})
-    private Fielder fielder;
+    private Gardener gardener;
 }

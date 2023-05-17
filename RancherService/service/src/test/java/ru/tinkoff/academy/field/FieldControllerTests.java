@@ -15,7 +15,7 @@ import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
-import ru.tinkoff.academy.fielder.Fielder;
+import ru.tinkoff.academy.gardener.Gardener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,20 +26,20 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     private final String fields = "/fields";
     private final String fieldsById = "/fields/%s";
 
-    private final Fielder testFielder1 = Fielder.builder()
-            .id(1L)
+    private final Gardener testGardener1 = Gardener.builder()
+            .id("id1")
             .name("name1")
             .surname("surname1")
             .email("email1@email.com")
             .build();
-    private final Fielder testFielder2 = Fielder.builder()
-            .id(2L)
+    private final Gardener testGardener2 = Gardener.builder()
+            .id("id2")
             .name("name2")
             .surname("surname2")
             .email("email2@email.com")
             .build();
-    private final Fielder testFielder3 = Fielder.builder()
-            .id(3L)
+    private final Gardener testGardener3 = Gardener.builder()
+            .id("id3")
             .name("name3")
             .surname("surname3")
             .email("email3@email.com")
@@ -54,7 +54,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     @Test
     public void testSaveCorrectField() throws Exception {
         FieldDto expectedField = FieldDto.builder()
-                .id(6L)
+                .id("id7")
                 .address("addr4")
                 .longitude(500D)
                 .latitude(490.2)
@@ -65,7 +65,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         request.setAddress("addr4");
         request.setLongitude(500.0);
         request.setLatitude(490.2);
-        request.setArea("POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))");
+        request.setArea(List.of(0D, 0D, 0D, 5D, 5D, 5D, 5D, 0D, 0D, 0D));
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(fields)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,12 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 
         FieldDto actualField = objectMapper.readValue(response.getResponse().getContentAsString(), FieldDto.class);
-        Assertions.assertEquals(expectedField, actualField);
+
+        Assertions.assertEquals(expectedField.getAddress(), actualField.getAddress());
+        Assertions.assertEquals(expectedField.getLatitude(), actualField.getLatitude());
+        Assertions.assertEquals(expectedField.getLongitude(), actualField.getLongitude());
+        Assertions.assertEquals(expectedField.getArea(), actualField.getArea());
+        Assertions.assertEquals(expectedField.getGardener(), actualField.getGardener());
     }
 
     @Test
@@ -90,14 +95,14 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testGetByExistId() throws Exception {
-        Long id = 2L;
+        String id = "id2";
         FieldDto expectedField = FieldDto.builder()
                 .id(id)
                 .address("addr3")
                 .latitude(800D)
                 .longitude(800D)
                 .area(25.0)
-                .fielder(testFielder3)
+                .gardener(testGardener3)
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(fieldsById, id))
@@ -112,20 +117,20 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     public void testFindAll() throws Exception {
         List<FieldDto> expectedFields = List.of(
                 FieldDto.builder()
-                        .id(1L)
+                        .id("id1")
                         .address("addr1")
                         .latitude(800D)
                         .longitude(800D)
                         .area(25.0)
-                        .fielder(testFielder2)
+                        .gardener(testGardener2)
                         .build(),
                 FieldDto.builder()
-                        .id(2L)
+                        .id("id2")
                         .address("addr3")
                         .latitude(800D)
                         .longitude(800D)
                         .area(25.0)
-                        .fielder(testFielder3)
+                        .gardener(testGardener3)
                         .build()
         );
 
@@ -148,14 +153,14 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testUpdateCorrectField() throws Exception {
-        Long id = 3L;
+        String id = "id3";
         FieldDto expectedField = FieldDto.builder()
                 .id(id)
                 .address("addr33")
                 .latitude(800D)
                 .longitude(800D)
                 .area(25.0)
-                .fielder(testFielder1)
+                .gardener(testGardener1)
                 .build();
 
         FieldUpdateDto request = new FieldUpdateDto();
@@ -163,7 +168,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
         request.setId(id);
         request.setLatitude(800D);
         request.setLongitude(800D);
-        request.setArea("POLYGON ((3 0, 3 5, 8 5, 8 0, 3 0))");
+        request.setArea(List.of(3D, 0D, 3D, 5D, 8D, 5D, 8D, 0D, 3D, 0D));
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put(fields)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -178,7 +183,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
     @Test
     public void testUpdateIncorrectField() throws Exception {
         FieldUpdateDto request = new FieldUpdateDto();
-        request.setId(3L);
+        request.setId("id3");
         request.setAddress("addr33");
 
         mockMvc.perform(MockMvcRequestBuilders.put(fields)
@@ -190,7 +195,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteByExistId() throws Exception {
-        Long id = 4L;
+        String id = "id4";
 
         Assertions.assertTrue(fieldRepository.existsById(id));
 
@@ -203,7 +208,7 @@ public class FieldControllerTests extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteByNotExistId() throws Exception {
-        Long id = 1000L;
+        String id = "id1000";
 
         Assertions.assertFalse(fieldRepository.existsById(id));
 

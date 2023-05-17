@@ -42,7 +42,7 @@ public class AreaServiceGrpcImpl extends AreaServiceGrpc.AreaServiceImplBase {
 
         for (Field field : fields) {
             double areaSquare = fieldMapper.getAreaSquare(field);
-            String key = formEmailAndTelephoneSplitValue(field.getFielder().getEmail(), field.getFielder().getTelephone());
+            String key = formEmailAndTelephoneSplitValue(field.getGardener().getEmail(), field.getGardener().getTelephone());
             res.compute(key, (k, v) -> v == null ? new ArrayList<>(List.of(areaSquare)) : add(v, areaSquare));
         }
 

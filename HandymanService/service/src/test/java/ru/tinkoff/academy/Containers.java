@@ -96,6 +96,7 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
                         .name("user1")
                         .surname("surname1")
                         .skills(new WorkEnum[]{WorkEnum.shovel})
+                        .accounts(BankAccountTestData.testBankAccounts)
                         .email("email1@email.com")
                         .telephone("telephone")
                         .photo(new Byte[]{})

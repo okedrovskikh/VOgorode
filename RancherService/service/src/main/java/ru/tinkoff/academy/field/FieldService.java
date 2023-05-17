@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
-import ru.tinkoff.academy.fielder.Fielder;
+import ru.tinkoff.academy.gardener.Gardener;
 
 import java.util.Optional;
 import java.util.List;
@@ -48,8 +48,8 @@ public class FieldService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public List<Field> updateFieldsFielder(List<String> fieldsId, Fielder fielder) {
-        List<Field> fields = findAllByIds(fieldsId).stream().peek((field) -> field.setFielder(fielder)).toList();
+    public List<Field> updateFieldsFielder(List<String> fieldsId, Gardener gardener) {
+        List<Field> fields = findAllByIds(fieldsId).stream().peek((field) -> field.setGardener(gardener)).toList();
         return fieldRepository.saveAll(fields);
     }
 

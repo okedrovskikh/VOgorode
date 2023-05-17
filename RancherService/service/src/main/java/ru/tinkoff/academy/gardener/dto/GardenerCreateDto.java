@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.fielder.dto;
+package ru.tinkoff.academy.gardener.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
@@ -6,8 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class FielderUpdateDto {
-    private String id;
+public class GardenerCreateDto {
     private String name;
     private String surname;
     private String email;

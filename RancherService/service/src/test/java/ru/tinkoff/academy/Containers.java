@@ -8,40 +8,27 @@ import org.bson.UuidRepresentation;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.geo.Point;
+import org.springframework.data.geo.Polygon;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.utility.DockerImageName;
+import ru.tinkoff.academy.field.Field;
+import ru.tinkoff.academy.gardener.Gardener;
 import ru.tinkoff.academy.garden.Garden;
 import ru.tinkoff.academy.work.WorkEnum;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Containers implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
-    private static final DockerImageName POSTGIS = DockerImageName.parse("postgis/postgis:15-3.3-alpine")
-            .asCompatibleSubstituteFor("postgres");
 
-    public static final String POSTGRES_USER = "postgres";
-    public static final String POSTGRES_PASSWORD = "123";
-    public static final String POSTGRES_DATABASE = "vogorode";
-
-    public static final String MONOGO_DATABASE = "test";
+    public static final String MONGO_DATABASE = "test";
 
     public static final Network network = Network.newNetwork();
-
-    public static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(POSTGIS)
-            .withNetwork(network)
-            .withNetworkAliases("postgres")
-            .withDatabaseName(POSTGRES_DATABASE)
-            .withUsername(POSTGRES_USER)
-            .withPassword(POSTGRES_PASSWORD)
-            .withExposedPorts(5432)
-            .withStartupTimeout(Duration.ofMinutes(3))
-            .withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(PostgreSQLContainer.class)));
 
     public static final MongoDBContainer mongo = new MongoDBContainer("mongo")
             .withNetwork(network)
@@ -52,20 +39,21 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
 
     @Override
     public void beforeAll(ExtensionContext context) {
-        postgres.start();
         mongo.start();
         try (MongoClient mongoClient = MongoClients.create(MongoClientSettings.builder()
                 .applyConnectionString(new ConnectionString(mongo.getConnectionString()))
                 .uuidRepresentation(UuidRepresentation.JAVA_LEGACY)
                 .build())) {
-            MongoTemplate mongoTemplate = new MongoTemplate(mongoClient, MONOGO_DATABASE);
+            MongoTemplate mongoTemplate = new MongoTemplate(mongoClient, MONGO_DATABASE);
             GardenTestData.addTestData(mongoTemplate);
+            FieldTestData.addTestData(mongoTemplate);
+            GardenerTestData.addTestData(mongoTemplate);
         }
     }
 
     @Override
     public void close() {
-        postgres.close();
+        mongo.close();
         network.close();
     }
 
@@ -115,6 +103,126 @@ public class Containers implements BeforeAllCallback, ExtensionContext.Store.Clo
 
         public static void addTestData(MongoTemplate mongoTemplate) {
             mongoTemplate.insertAll(testGarden);
+        }
+    }
+
+    public static class FieldTestData {
+        public static final List<Field> fieldTestData = List.of(
+                Field.builder()
+                        .id("id1")
+                        .address("addr1")
+                        .latitude(800D)
+                        .longitude(800D)
+                        .area(polygon(List.of(0D, 0D, 0D, 5D, 5D, 5D, 5D, 0D, 0D, 0D)))
+                        .gardener(Gardener.builder().id("id2").build())
+                        .build(),
+                Field.builder()
+                        .id("id2")
+                        .address("addr3")
+                        .latitude(800D)
+                        .longitude(800D)
+                        .area(polygon(List.of(0D, 0D, 0D, 5D, 5D, 5D, 5D, 0D, 0D, 0D)))
+                        .gardener(Gardener.builder().id("id3").build())
+                        .build(),
+                Field.builder()
+                        .id("id3")
+                        .address("addr1")
+                        .latitude(800D)
+                        .longitude(800D)
+                        .area(polygon(List.of(0D, 0D, 0D, 5D, 5D, 5D, 5D, 0D, 0D, 0D)))
+                        .gardener(Gardener.builder().id("id1").build())
+                        .build(),
+                Field.builder()
+                        .id("id4")
+                        .address("addr1")
+                        .latitude(800D)
+                        .longitude(800D)
+                        .area(polygon(List.of(0D, 0D, 0D, 5D, 5D, 5D, 5D, 0D, 0D, 0D)))
+                        .gardener(Gardener.builder().id("id1").build())
+                        .build(),
+                Field.builder()
+                        .id("id5")
+                        .address("addr5")
+                        .latitude(800D)
+                        .longitude(800D)
+                        .area(polygon(List.of(0D, 0D, 0D, 5D, 5D, 5D, 5D, 0D, 0D, 0D)))
+                        .gardener(Gardener.builder().id("id1").build())
+                        .build()
+        );
+
+        public static void addTestData(MongoTemplate mongoTemplate) {
+            mongoTemplate.insertAll(fieldTestData);
+        }
+
+        private static Polygon polygon(List<Double> coords) {
+            List<Point> points = new ArrayList<>();
+
+            for (int i = 0; i < coords.size(); i += 2) {
+                points.add(new Point(coords.get(i), coords.get(i + 1)));
+            }
+
+            return new Polygon(points);
+        }
+    }
+
+    public static class GardenerTestData {
+        public static List<Gardener> gardenTestData = List.of(
+                Gardener.builder()
+                        .id("id1")
+                        .name("name1")
+                        .surname("surname1")
+                        .email("email1@email.com")
+                        .fields(List.of(
+                                FieldTestData.fieldTestData.get(2),
+                                FieldTestData.fieldTestData.get(3),
+                                FieldTestData.fieldTestData.get(4)
+                        ))
+                        .build(),
+                Gardener.builder()
+                        .id("id2")
+                        .name("name2")
+                        .surname("surname2")
+                        .email("email2@email.com")
+                        .fields(List.of(
+                                FieldTestData.fieldTestData.get(0)
+                        ))
+                        .build(),
+                Gardener.builder()
+                        .id("id3")
+                        .name("name3")
+                        .surname("surname3")
+                        .email("email3@email.com")
+                        .telephone("800-800-800")
+                        .fields(List.of(
+                                FieldTestData.fieldTestData.get(1)
+                        ))
+                        .build(),
+                Gardener.builder()
+                        .id("id4")
+                        .name("name4")
+                        .surname("surname4")
+                        .email("email4@email.com")
+                        .fields(List.of())
+                        .build(),
+                Gardener.builder()
+                        .id("id5")
+                        .name("name5")
+                        .surname("surname5")
+                        .email("email5@email.com")
+                        .fields(List.of())
+                        .build(),
+                Gardener.builder()
+                        .id("id6")
+                        .name("name6")
+                        .surname("surname6")
+                        .email("email6@email.com")
+                        .telephone("890-900-678")
+                        .fields(List.of())
+                        .build()
+        );
+
+        public static void addTestData(MongoTemplate mongoTemplate) {
+            mongoTemplate.insertAll(gardenTestData);
         }
     }
 }

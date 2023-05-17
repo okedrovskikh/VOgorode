@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.fielder;
+package ru.tinkoff.academy.gardener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -21,7 +23,10 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @Document(collection = "gardener")
-public class Fielder {
+@CompoundIndexes(
+        @CompoundIndex(def = "{ 'email': 1, 'telephone': 1 }", unique = true)
+)
+public class Gardener {
     @Id
     private String id;
     @Field(name = "name")
@@ -52,10 +57,10 @@ public class Fielder {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Fielder fielder)) {
+        if (!(obj instanceof Gardener gardener)) {
             return false;
         }
 
-        return Objects.equals(id, fielder.id);
+        return Objects.equals(id, gardener.id);
     }
 }

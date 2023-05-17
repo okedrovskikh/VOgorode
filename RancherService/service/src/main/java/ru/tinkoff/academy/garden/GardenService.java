@@ -1,9 +1,9 @@
 package ru.tinkoff.academy.garden;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 import ru.tinkoff.academy.landscape.SiteWebClientHelper;

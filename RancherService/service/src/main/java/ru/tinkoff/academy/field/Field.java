@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.geo.Polygon;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
-import ru.tinkoff.academy.fielder.Fielder;
+import ru.tinkoff.academy.gardener.Gardener;
 
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ public class Field {
     private Polygon area;
     @DocumentReference
     @org.springframework.data.mongodb.core.mapping.Field(name = "fielder_id")
-    private Fielder fielder;
+    private Gardener gardener;
 
     @Override
     public int hashCode() {

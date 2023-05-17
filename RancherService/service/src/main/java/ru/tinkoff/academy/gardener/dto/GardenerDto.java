@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.fielder.dto;
+package ru.tinkoff.academy.gardener.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -13,12 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FielderDto {
+public class GardenerDto {
     private String id;
     private String name;
     private String surname;
     private String email;
-    @JsonIgnoreProperties({"fielder"})
+    @JsonIgnoreProperties({"gardener"})
     private List<FieldDto> fields;
     private String telephone;
 }

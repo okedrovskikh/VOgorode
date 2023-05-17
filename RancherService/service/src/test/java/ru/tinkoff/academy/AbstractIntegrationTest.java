@@ -16,10 +16,7 @@ public class AbstractIntegrationTest {
 
     @DynamicPropertySource
     static void postgresProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", Containers.postgres::getJdbcUrl);
-        registry.add("spring.datasource.password", Containers.postgres::getPassword);
-        registry.add("spring.datasource.username", Containers.postgres::getUsername);
         registry.add("spring.data.mongodb.uri", Containers.mongo::getConnectionString);
-        registry.add("spring.data.mongodb.database", () -> Containers.MONOGO_DATABASE);
+        registry.add("spring.data.mongodb.database", () -> Containers.MONGO_DATABASE);
     }
 }
