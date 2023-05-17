@@ -10,9 +10,6 @@ services:
     container_name: handyman-service
     restart: always
     environment:
-      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/vogorode
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
       LANDSCAPE_URL: http://landscape-service:8082
       MONGO_DB_AUTH_DB: admin
       MONGO_DB_USERNAME: root
@@ -33,9 +30,6 @@ services:
     container_name: rancher-service
     restart: always
     environment:
-      POSTGRES_DB_URL: jdbc:postgresql://postgres:5432/vogorode
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
       LANDSCAPE_URL: http://landscape-service:8082
       MONGO_DB_AUTH_DB: admin
       MONGO_DB_USERNAME: root

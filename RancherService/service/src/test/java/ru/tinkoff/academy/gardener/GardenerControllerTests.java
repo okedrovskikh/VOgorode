@@ -74,7 +74,7 @@ public class GardenerControllerTests extends AbstractIntegrationTest {
     }
 
     @Test
-    @Disabled("disable until validator creation")
+    @Disabled("until validator creation")
     public void testSaveIncorrectFielder() throws Exception {
         GardenerCreateDto request = new GardenerCreateDto();
         request.setName("name6");
