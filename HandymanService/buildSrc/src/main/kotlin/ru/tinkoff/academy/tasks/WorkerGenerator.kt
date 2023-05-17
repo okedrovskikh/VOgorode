@@ -5,6 +5,9 @@ import net.datafaker.Faker
 class WorkerGenerator(private val faker: Faker) {
     fun generate(): WorkerRequest =
         WorkerRequest(
+            login = faker.name().username(),
+            email = faker.internet().emailAddress(),
+            telephone = faker.phoneNumber().phoneNumber(),
             services = faker.random().let {
                 val size = it.nextInt(1, 5)
                 val res = mutableSetOf<WorkEnum>()

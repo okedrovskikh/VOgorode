@@ -1,9 +1,10 @@
-package ru.tinkoff.academy.landscape.user;
+package ru.tinkoff.academy.landscape.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.tinkoff.academy.landscape.account.type.AccountType;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -12,9 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LandscapeUser {
+public class Account {
     private UUID id;
-    private String type;
+    private AccountType type;
     private String login;
     private String email;
     private String telephone;

@@ -1,15 +1,13 @@
-package ru.tinkoff.academy.landscape.user.dto;
+package ru.tinkoff.academy.landscape.account.dto;
 
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.UUID;
+import ru.tinkoff.academy.landscape.account.type.AccountType;
 
 @Data
 @Builder
-public class LandscapeUserUpdateDto {
-    private UUID id;
-    private String type;
+public class AccountCreateDto {
+    private AccountType type;
     private String login;
     private String email;
     private String telephone;

@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
 import ru.tinkoff.academy.AbstractIntegrationTest;
-import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.landscape.account.Account;
 import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
@@ -39,7 +39,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
 
     @Test
     public void testSaveCorrectWorker() throws Exception {
-        LandscapeUser mockedUser = LandscapeUser.builder()
+        Account mockedUser = Account.builder()
                 .id(UUID.fromString("751e0662-c503-4f7f-9146-9545dc882a4e"))
                 .build();
         WireMock.stubFor(WireMock.post(WireMock.urlPathEqualTo("/users"))
@@ -78,7 +78,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
 
     @Test
     public void testGetByExistId() throws Exception {
-        LandscapeUser mockedUser = LandscapeUser.builder()
+        Account mockedUser = Account.builder()
                 .id(UUID.fromString("18481034-3765-4ba1-9640-b5f440300299"))
                 .longitude(800D)
                 .longitude(800D)
@@ -98,7 +98,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
                 .latitude(800D)
                 .longitude(800D)
                 .services(List.of(WorkEnum.plant))
-                .landscapeUser(mockedUser)
+                .account(mockedUser)
                 .build();
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(workersById, "id1"))
@@ -122,7 +122,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
     @Test
     @Disabled("until write correct responses in mock server")
     public void testFindAll() throws Exception {
-        LandscapeUser mockedUser1 = LandscapeUser.builder()
+        Account mockedUser1 = Account.builder()
                 .id(UUID.fromString("18481034-3765-4ba1-9640-b5f440300299"))
                 .longitude(800D)
                 .longitude(800D)
@@ -136,7 +136,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
                 .willReturn(WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(objectMapper.writeValueAsString(mockedUser1))));
-        LandscapeUser mockedUser2 = LandscapeUser.builder()
+        Account mockedUser2 = Account.builder()
                 .id(UUID.fromString("684d6f11-9b35-4906-90a2-95ce59ccc058"))
                 .longitude(800D)
                 .longitude(800D)
@@ -157,14 +157,14 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
                         .latitude(800D)
                         .longitude(800D)
                         .services(List.of(WorkEnum.plant))
-                        .landscapeUser(mockedUser1)
+                        .account(mockedUser1)
                         .build(),
                 ExtendedByUserWorker.builder()
                         .id("id2")
                         .latitude(800D)
                         .longitude(800D)
                         .services(List.of(WorkEnum.shovel))
-                        .landscapeUser(mockedUser2)
+                        .account(mockedUser2)
                         .build()
         );
 

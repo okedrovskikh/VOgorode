@@ -3,7 +3,7 @@ package ru.tinkoff.academy.worker;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.landscape.account.Account;
 import ru.tinkoff.academy.proto.worker.WorkerResponse;
 import ru.tinkoff.academy.work.WorkEnumMapper;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
@@ -22,10 +22,10 @@ public abstract class WorkerMapper {
     public abstract Worker dtoToWorker(WorkerUpdateDto workerCreateDto);
 
     @Mapping(target = "id", source = "worker.id")
-    @Mapping(target = "landscapeUser", source = "landscapeUser")
+    @Mapping(target = "account", source = "account")
     @Mapping(target = "latitude", source = "worker.latitude")
     @Mapping(target = "longitude", source = "worker.longitude")
-    public abstract ExtendedByUserWorker toExtendedWorker(Worker worker, LandscapeUser landscapeUser);
+    public abstract ExtendedByUserWorker toExtendedWorker(Worker worker, Account account);
 
     public WorkerResponse mapToGrpcResponse(Worker worker) {
         return WorkerResponse.newBuilder()

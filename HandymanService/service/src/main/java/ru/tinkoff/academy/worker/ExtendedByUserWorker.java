@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.landscape.account.Account;
 import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -20,5 +19,5 @@ public class ExtendedByUserWorker {
     private Double latitude;
     private Double longitude;
 
-    private LandscapeUser landscapeUser;
+    private Account account;
 }

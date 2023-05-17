@@ -25,6 +25,9 @@ enum class WorkEnum {
 }
 
 data class WorkerRequest(
+    val login: String,
+    val email: String,
+    val telephone: String,
     val services: List<WorkEnum>,
     val latitude: Double,
     val longitude: Double
