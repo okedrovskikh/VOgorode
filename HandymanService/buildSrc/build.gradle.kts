@@ -4,7 +4,7 @@
 }
 
 group = "ru.tinkoff.academy"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -12,7 +12,6 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-RC")
     implementation("net.datafaker:datafaker:1.9.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
 }

@@ -23,3 +23,9 @@ data class UserRequest(
 enum class WorkEnum {
     plant, water, sow, shovel
 }
+
+data class WorkerRequest(
+    val services: List<WorkEnum>,
+    val latitude: Double,
+    val longitude: Double
+)

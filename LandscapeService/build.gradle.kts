@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.tinkoff.academy"
-version = "1.8.0"
+version = "1.11.0"
 
 java {
     toolchain {

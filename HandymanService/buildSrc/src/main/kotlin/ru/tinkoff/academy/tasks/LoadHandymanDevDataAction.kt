@@ -9,8 +9,7 @@ import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 
-abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
-    private val client = HttpClient.newBuilder().build()
+abstract class LoadHandymanDevDataAction : HttpWorkAction<LoadHandymanDevDataWork>() {
 
     override fun execute() {
         val accountsId = (1..faker.random().nextInt(5))
@@ -19,21 +18,6 @@ abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
             .map { it.id }
         val pair = getEmailAndTelephone(parameters.getLine().get())
         executeHttp(userGenerator.generate(pair.first, pair.second, accountsId), URI.create(parameters.getUsers().get()))
-    }
-
-    private fun <T> executeHttp(obj: T, uri: URI): HttpResponse<String> {
-        val request = HttpRequest.newBuilder()
-            .uri(uri)
-            .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(obj)))
-            .header("Content-Type", "application/json")
-            .build()
-
-        return client.send(request, HttpResponse.BodyHandlers.ofString()).also {
-            if (it.statusCode() != 200) {
-                println(it.body())
-                error(it.body())
-            }
-        }
     }
 
     private inline fun <reified R> com.fasterxml.jackson.databind.ObjectMapper.readFromHttpBody(httpResponse: HttpResponse<String>): R =
@@ -47,7 +31,6 @@ abstract class LoadHandymanDevDataAction : WorkAction<LoadHandymanDevDataWork> {
         private val faker = Faker()
         private val bankAccountGenerator = BankAccountGenerator(faker)
         private val userGenerator = UserGenerator(faker)
-        private val mapper = jacksonObjectMapper()
         val regex = Regex("\\('.*', '.*', '(.*)', '(.*)', '.*', '.*'\\)")
     }
 }
