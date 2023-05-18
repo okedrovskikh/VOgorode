@@ -29,6 +29,7 @@ spring:
       database: ${MONGO_DB_DB:vogorode}
       host: ${MONGO_DB_HOST:localhost}
       port: ${MONGO_DB_PORT:27017}
+      auto-index-creation: true
 
 mongock:
   enabled: true

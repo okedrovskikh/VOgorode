@@ -1,12 +1,10 @@
 package ru.tinkoff.academy.statistics.rancher.area;
 
-import io.grpc.Status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.account.Account;
 import ru.tinkoff.academy.account.AccountService;
 import ru.tinkoff.academy.account.type.AccountType;
-import ru.tinkoff.academy.exceptions.GrpcStreamErrorException;
 import ru.tinkoff.academy.proto.area.AreaStat;
 import ru.tinkoff.academy.proto.area.AreaStatRequest;
 import ru.tinkoff.academy.proto.area.AreaStatResponse;
