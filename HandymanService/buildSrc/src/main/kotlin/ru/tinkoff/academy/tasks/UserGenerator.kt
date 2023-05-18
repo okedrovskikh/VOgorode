@@ -1,8 +1,6 @@
 package ru.tinkoff.academy.tasks
 
 import net.datafaker.Faker
-import java.nio.file.Files
-import java.nio.file.Path
 
 class UserGenerator(private val faker: Faker) {
     fun generate(email: String, telephone: String, accountsId: List<Long>): UserRequest =

@@ -1,2 +1,2 @@
-rootProject.name = "LandscapeService"
+include("service")
 

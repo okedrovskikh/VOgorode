@@ -1,5 +1,5 @@
 FROM gradle:7.4-jdk17 as build
-COPY ./ /usr/LandscapeService
+COPY ./service /usr/LandscapeService
 WORKDIR /usr/LandscapeService
 RUN gradle build -x test
 
