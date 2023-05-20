@@ -66,7 +66,7 @@ public class AreaServiceGrpcImpl extends AreaServiceGrpc.AreaServiceImplBase {
 
         for (Field field : fields) {
             double areaSquare = fieldMapper.getAreaSquare(field);
-            String key = formSplitRange((long) areaSquare, splitValue.longValue());
+            String key = formSplitRange((long) (areaSquare / splitValue), splitValue.longValue());
             res.compute(key, (k, v) -> v == null ? new ArrayList<>(List.of(areaSquare)) : add(v, areaSquare));
         }
 

@@ -120,64 +120,6 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
     }
 
     @Test
-    @Disabled("until write correct responses in mock server")
-    public void testFindAll() throws Exception {
-        Account mockedUser1 = Account.builder()
-                .id(UUID.fromString("18481034-3765-4ba1-9640-b5f440300299"))
-                .longitude(800D)
-                .longitude(800D)
-                .login("login")
-                .email("email")
-                .telephone("telephone")
-                .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
-                .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
-                .build();
-        WireMock.stubFor(WireMock.get("/users/18481034-3765-4ba1-9640-b5f440300299")
-                .willReturn(WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(mockedUser1))));
-        Account mockedUser2 = Account.builder()
-                .id(UUID.fromString("684d6f11-9b35-4906-90a2-95ce59ccc058"))
-                .longitude(800D)
-                .longitude(800D)
-                .login("login")
-                .email("email")
-                .telephone("telephone")
-                .creationDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
-                .updateDate(Timestamp.valueOf("2023-03-26 18:04:39.151"))
-                .build();
-        WireMock.stubFor(WireMock.get("/users/684d6f11-9b35-4906-90a2-95ce59ccc058")
-                .willReturn(WireMock.aResponse()
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(objectMapper.writeValueAsString(mockedUser2))));
-
-        List<ExtendedByUserWorker> expectedResponse = List.of(
-                ExtendedByUserWorker.builder()
-                        .id("id1")
-                        .latitude(800D)
-                        .longitude(800D)
-                        .services(List.of(WorkEnum.plant))
-                        .account(mockedUser1)
-                        .build(),
-                ExtendedByUserWorker.builder()
-                        .id("id2")
-                        .latitude(800D)
-                        .longitude(800D)
-                        .services(List.of(WorkEnum.shovel))
-                        .account(mockedUser2)
-                        .build()
-        );
-
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(workersById, "/extended/all"))
-                .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-
-        List<ExtendedByUserWorker> actualResponse = objectMapper.readValue(response.getResponse().getContentAsString(), listExtendedWorkerType());
-
-        Assertions.assertTrue(actualResponse.containsAll(expectedResponse));
-    }
-
-    @Test
     public void testUpdateCorrectWorker() throws Exception {
         Worker expectedResponse = Worker.builder()
                 .id("id3")

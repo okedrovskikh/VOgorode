@@ -1,5 +1,6 @@
 import ru.tinkoff.academy.tasks.LoadGardensTask
 import ru.tinkoff.academy.tasks.LoadRancherDevDataTask
+import java.net.URI
 import java.nio.file.Path
 
 tasks.register<LoadRancherDevDataTask>("loadDevData") {
@@ -7,5 +8,5 @@ tasks.register<LoadRancherDevDataTask>("loadDevData") {
 }
 
 tasks.register<LoadGardensTask>("loadGardens") {
-
+    gardens = URI.create("http://localhost:9002/gardens")
 }

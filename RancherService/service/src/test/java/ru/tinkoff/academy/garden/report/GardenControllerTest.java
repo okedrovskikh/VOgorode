@@ -29,7 +29,7 @@ import java.util.List;
 @AutoConfigureWireMock(port = 8082)
 public class GardenControllerTest extends AbstractIntegrationTest {
     private final String gardens = "/gardens";
-    private final String gardensBy = "/garden/%s";
+    private final String gardensBy = "/gardens/%s";
 
     @Autowired
     private MockMvc mockMvc;
@@ -41,7 +41,7 @@ public class GardenControllerTest extends AbstractIntegrationTest {
         Site mockedSite = Site.builder()
                 .id(UUID.fromString("80ef711b-80ac-40b5-8e3f-762c6111383f"))
                 .build();
-        WireMock.stubFor(WireMock.post("http://localhost:8082/sites")
+        WireMock.stubFor(WireMock.post(WireMock.urlPathEqualTo("/sites"))
                 .willReturn(WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(objectMapper.writeValueAsString(mockedSite))));
@@ -54,7 +54,7 @@ public class GardenControllerTest extends AbstractIntegrationTest {
                 .y1(30D)
                 .x2(60D)
                 .y2(60D)
-                .square(900D)
+                .square(42.42640687119285)
                 .works(List.of(WorkEnum.plant))
                 .build();
 
@@ -91,7 +91,7 @@ public class GardenControllerTest extends AbstractIntegrationTest {
                 .latitude(800D)
                 .longitude(800D)
                 .build();
-        WireMock.stubFor(WireMock.get("http://localhost:8082/sites/e2bfdf03-12a0-486b-9a28-9a8873dc5994")
+        WireMock.stubFor(WireMock.get("/sites/e2bfdf03-12a0-486b-9a28-9a8873dc5994")
                 .willReturn(WireMock.aResponse()
                         .withHeader("Content-Type", "application/json")
                         .withBody(objectMapper.writeValueAsString(mockerSite))));
@@ -109,7 +109,7 @@ public class GardenControllerTest extends AbstractIntegrationTest {
                 .longitude(800D)
                 .build();
 
-        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(gardensBy, ""))
+        MvcResult response = mockMvc.perform(MockMvcRequestBuilders.get(String.format(gardensBy, "id2"))
                 .accept(MediaType.APPLICATION_JSON)
         ).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
 

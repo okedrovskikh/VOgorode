@@ -27,7 +27,7 @@ public class ReportMatcher {
 
         for (Entry<Set<WorkEnum>, Integer> entry : worksCount.entrySet()) {
 
-            if (entry.getValue() > servicesCount.get(entry.getKey())) {
+            if (entry.getValue() > servicesCount.getOrDefault(entry.getKey(), 0)) {
                 isDeficit = true;
                 break;
             }
