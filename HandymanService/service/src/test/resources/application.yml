@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    show-sql: true
+    open-in-view: false
+  liquibase:
+    enabled: true
+    contexts: test
+    change-log: classpath:db/changelog/db.changelog-test.yaml
+
+rest:
+  landscape:
+    url: http://localhost:8082
+
+grpc:
+  server:
+    port: 9093
