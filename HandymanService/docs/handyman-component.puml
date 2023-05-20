@@ -48,6 +48,7 @@ Rel(worker_service, mongo, "Пишет/Читает работников.", "Mon
 Rel(landscape_service, bank_account_grpc_service, "Собирает статистику по банковским аккаунтам.", "protocol buffer/grpc")
 Rel(worker_service, landscape_service, "Создает новый аккаунт для работника.", "json/http")
 
+/'Show legend'/
 SHOW_LEGEND()
 
 @enduml
