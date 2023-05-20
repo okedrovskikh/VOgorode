@@ -1,0 +1,46 @@
+# LandscapeService pods
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: landscape-service
+spec:
+  selector:
+    matchLabels:
+      app: landscape-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: landscape-service
+    spec:
+      containers:
+        - image: landscape-service:latest
+          name: landscape-service
+          imagePullPolicy: Never
+          env:
+            - name: HANDYMAN_GRPC_SERVER_ADDRESS
+              value: 'handyman-service-service:9090'
+            - name: RANCHER_GRPC_SERVER_ADDRESS
+              value: 'rancher-service-service:9091'
+            - name: POSTGRES_DB_URL
+              value: jdbc:postgresql://postgres-service:5432/vogorode
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: '123'
+          ports:
+            - name: server
+              containerPort: 8082
+---
+# LandscapeService service
+apiVersion: v1
+kind: Service
+metadata:
+  name: landscape-service-service
+spec:
+  selector:
+    app: landscape-service
+  ports:
+    - port: 8082
+      targetPort: server
+  type: LoadBalancer

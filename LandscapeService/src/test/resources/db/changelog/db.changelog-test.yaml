@@ -14,3 +14,8 @@ databaseChangeLog:
       context: test
       sqlFile:
         path: classpath:db/changelog/v6/sites_test_data.sql
+  - changeSet:
+      id: add_order_test_data
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v8/order_test_data.sql

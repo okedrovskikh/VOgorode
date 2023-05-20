@@ -1,18 +1,18 @@
 package ru.tinkoff.academy.user.dto;
 
-import lombok.Builder;
 import lombok.Data;
+import ru.tinkoff.academy.work.WorkEnum;
 
-import java.util.UUID;
+import java.util.List;
 
 @Data
-@Builder
 public class UserUpdateDto {
-    private UUID id;
-    private String type;
-    private String login;
+    private Long id;
+    private String name;
+    private String surname;
+    private WorkEnum[] skills;
     private String email;
     private String telephone;
-    private String latitude;
-    private String longitude;
+    private List<Long> accountsId;
+    private Byte[] photo;
 }

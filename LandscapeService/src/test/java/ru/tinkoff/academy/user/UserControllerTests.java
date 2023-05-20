@@ -14,6 +14,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.JavaType;
 import ru.tinkoff.academy.AbstractIntegrationTest;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
+import ru.tinkoff.academy.user.type.UserType;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;

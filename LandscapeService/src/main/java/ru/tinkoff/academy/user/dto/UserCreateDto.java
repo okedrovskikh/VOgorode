@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.user.dto;
 
 import lombok.Data;
-import ru.tinkoff.academy.user.UserType;
+import ru.tinkoff.academy.user.type.UserType;
 
 @Data
 public class UserCreateDto {

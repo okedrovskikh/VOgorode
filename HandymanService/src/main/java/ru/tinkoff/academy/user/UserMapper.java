@@ -2,19 +2,32 @@ package ru.tinkoff.academy.user;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.tinkoff.academy.user.dto.UserUpdateDto;
-import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.tinkoff.academy.account.AccountService;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
-import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
-
-import java.util.UUID;
+import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
-    @Mapping(target = "type", expression = "java(\"handyman\")")
-    UserCreateDto workerCreateDtoToUserCreateDto(WorkerCreateDto workerCreateDto);
+public abstract class UserMapper {
+    @Autowired
+    protected AccountService accountService;
 
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "type", expression = "java(\"handyman\")")
-    UserUpdateDto workerUpdateDtoToUserUpdateDto(WorkerUpdateDto workerUpdateDto, UUID id);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "accounts", expression = "java(createDto.getAccountsId() != null ? accountService.findAllByIds(createDto.getAccountsId()) : null)")
+    public abstract User dtoToUser(UserCreateDto createDto);
+
+    public User updateUser(User user, UserUpdateDto updateDto) {
+        user.setName(updateDto.getName());
+        user.setSurname(updateDto.getSurname());
+        user.setSkills(updateDto.getSkills());
+        user.setEmail(updateDto.getEmail());
+        user.setTelephone(updateDto.getTelephone());
+        if (updateDto.getAccountsId() != null) {
+            user.setAccounts(accountService.findAllByIds(updateDto.getAccountsId()));
+        } else {
+            user.setAccounts(null);
+        }
+        user.setPhoto(updateDto.getPhoto());
+        return user;
+    }
 }

@@ -2,7 +2,8 @@ package ru.tinkoff.academy.worker;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.tinkoff.academy.user.User;
+import ru.tinkoff.academy.landscape.user.LandscapeUser;
+import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,10 +12,10 @@ import java.util.UUID;
 @Builder
 public class ExtendedByUserWorker {
     private String id;
-    private UUID userId;
+    private UUID landscapeUserId;
     private List<WorkEnum> services;
     private Double latitude;
     private Double longitude;
 
-    private User user;
+    private LandscapeUser landscapeUser;
 }

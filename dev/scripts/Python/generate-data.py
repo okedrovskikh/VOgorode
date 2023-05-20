@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(
     prog='Users Generator',
     description=des
 )
-parser.add_argument('--type', default='u_type', help='Value is a name of column with user type')
+parser.add_argument('--type', default='u_type', help='Value is a name of column with landscapeUser type')
 parser.add_argument('--login', default='u_login', help='Value is a name of login column')
 parser.add_argument('--email', default='email', help='Value is a email column name')
 parser.add_argument('--telephone', default='telephone', help='value is a phone number column name')
