@@ -31,12 +31,14 @@ ext {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.data:spring-data-mongodb")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("net.devh:grpc-client-spring-boot-starter:2.14.0.RELEASE")
-    implementation("org.liquibase:liquibase-core")
+    implementation("org.springframework:spring-aspects")
+    implementation("net.devh:grpc-spring-boot-starter:2.14.0.RELEASE")
     implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.mongodb:mongodb-driver-sync")
     compileOnly("org.projectlombok:lombok")
     compileOnly("org.mapstruct:mapstruct:1.5.3.Final")
     compileOnly("jakarta.annotation:jakarta.annotation-api:1.3.5")

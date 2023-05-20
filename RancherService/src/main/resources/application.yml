@@ -9,8 +9,11 @@ management:
       path-mapping:
         prometheus: "/metrics"
   metrics:
-    export:
-      prometheus:
+    tags:
+      service: rancher-service
+  prometheus:
+    metrics:
+      export:
         enabled: true
 
 grpc:

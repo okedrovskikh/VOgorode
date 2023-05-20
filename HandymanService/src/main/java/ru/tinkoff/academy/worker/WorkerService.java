@@ -3,7 +3,7 @@ package ru.tinkoff.academy.worker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.academy.landscape.UserWebClientHelper;
+import ru.tinkoff.academy.configuration.landscape.UserWebClientHelper;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 import ru.tinkoff.academy.user.User;

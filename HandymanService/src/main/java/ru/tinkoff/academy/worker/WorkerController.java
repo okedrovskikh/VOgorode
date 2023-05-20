@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.worker;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/workers")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "worker"},
+        description = "Duration of Handyman service Worker process handling",
+        histogram = true
+)
 public class WorkerController {
     private final WorkerService workerService;
 

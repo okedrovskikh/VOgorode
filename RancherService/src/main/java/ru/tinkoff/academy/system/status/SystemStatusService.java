@@ -10,7 +10,6 @@ public class SystemStatusService {
     @Getter
     private SystemStatus systemStatus = SystemStatus.OK;
 
-
     private final Logger logger = LoggerFactory.getLogger(SystemStatusService.class);
 
     /**
@@ -20,9 +19,9 @@ public class SystemStatusService {
      *                   if {@code false} change status to {@link SystemStatus#OK}
      */
     public synchronized void changeToMalfunction(boolean isChangeTo) {
-        SystemStatus oldSystemStatus = this.systemStatus;
-        this.systemStatus = isChangeTo ? SystemStatus.MALFUNCTION : SystemStatus.OK;
-        this.logger.info(createChangeSystemStatusLogString(oldSystemStatus, this.systemStatus));
+        SystemStatus oldSystemStatus = systemStatus;
+        systemStatus = isChangeTo ? SystemStatus.MALFUNCTION : SystemStatus.OK;
+        logger.info(createChangeSystemStatusLogString(oldSystemStatus, systemStatus));
     }
 
     private String createChangeSystemStatusLogString(SystemStatus oldStatus, SystemStatus newStatus) {

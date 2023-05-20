@@ -17,5 +17,7 @@ public interface WorkerMapper {
 
     @Mapping(target = "id", source = "worker.id")
     @Mapping(target = "user", source = "user")
+    @Mapping(target = "latitude", source = "worker.latitude")
+    @Mapping(target = "longitude", source = "worker.longitude")
     ExtendedByUserWorker toExtendedWorker(Worker worker, User user);
 }

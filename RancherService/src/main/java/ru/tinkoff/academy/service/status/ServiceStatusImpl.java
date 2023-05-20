@@ -25,7 +25,7 @@ public class ServiceStatusImpl extends ServiceStatusGrpc.ServiceStatusImplBase {
     @Override
     public void getReadiness(Empty request, StreamObserver<ReadinessResponse> responseObserver) {
         ReadinessResponse readinessResponse = ReadinessResponse.newBuilder()
-                .setStatus(this.systemStatusService.getSystemStatus().name())
+                .setStatus(systemStatusService.getSystemStatus().name())
                 .build();
         responseObserver.onNext(readinessResponse);
         responseObserver.onCompleted();

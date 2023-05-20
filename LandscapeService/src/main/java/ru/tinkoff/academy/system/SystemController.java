@@ -30,17 +30,18 @@ public class SystemController {
      */
     @GetMapping("/readiness")
     public Map<String, SystemStatus> getReadiness() {
-        return this.systemService.getReadiness();
+        return systemService.getReadiness();
     }
 
     /**
      * Change service status to Malfunction defined on value of {@code isChangeTo}
      *
-     * @param isChangeTo if {@code true} change status to {@link SystemStatus#MALFUNCTION},
+     * @param isChangeToMalfunctionOrOk if {@code true} change status to {@link SystemStatus#MALFUNCTION},
      *                   if {@code false} change status to {@link SystemStatus#OK}
      */
     @GetMapping("/forceMalfunction")
-    public void forceMalfunction(@RequestParam(name = "isChangeTo", required = false, defaultValue = "true") boolean isChangeTo) {
-        this.systemService.forceMalfunction(isChangeTo);
+    public void forceMalfunction(@RequestParam(name = "isChangeToMalfunctionOrOk", required = false, defaultValue = "true")
+                                     boolean isChangeToMalfunctionOrOk) {
+        systemService.forceMalfunction(isChangeToMalfunctionOrOk);
     }
 }

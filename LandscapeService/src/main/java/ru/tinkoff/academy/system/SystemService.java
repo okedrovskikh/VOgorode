@@ -20,16 +20,20 @@ public class SystemService {
      * @return {@link Map} with service name as key and {@link SystemStatus} readiness state as value
      */
     public Map<String, SystemStatus> getReadiness() {
-        return Map.of(this.buildProperties.getName(), this.systemStatusService.getSystemStatus());
+        return Map.of(buildProperties.getName(), systemStatusService.getSystemStatus());
     }
 
     /**
-     * Change service status to Malfunction defined on value of {@code isChangeTo}
+     * Change service status to Malfunction defined on value of {@code isChangeToMalfunctionOrOk}
      *
-     * @param isChangeTo if {@code true} change status to {@link SystemStatus#MALFUNCTION},
-     *                   if {@code false} change status to {@link SystemStatus#OK}
+     * @param isChangeToMalfunctionOrOk if {@code true} change status to {@link SystemStatus#MALFUNCTION},
+     *                                  if {@code false} change status to {@link SystemStatus#OK}
      */
-    public void forceMalfunction(boolean isChangeTo) {
-        this.systemStatusService.changeToMalfunction(isChangeTo);
+    public void forceMalfunction(boolean isChangeToMalfunctionOrOk) {
+        if (isChangeToMalfunctionOrOk) {
+            systemStatusService.switchToMalfunction();
+        } else {
+            systemStatusService.switchToOK();
+        }
     }
 }

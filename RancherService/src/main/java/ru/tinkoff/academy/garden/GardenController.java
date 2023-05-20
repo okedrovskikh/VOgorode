@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.garden;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +14,16 @@ import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController()
 @RequestMapping("/gardens")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "garden"},
+        description = "Duration of Rancher service Garden process handling",
+        histogram = true
+)
 public class GardenController {
     private final GardenService gardenService;
 

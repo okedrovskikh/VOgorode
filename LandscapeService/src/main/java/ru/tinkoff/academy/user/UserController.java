@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.user;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "user"},
+        description = "Duration Landscape service User process handling",
+        histogram = true
+)
 public class UserController {
     private final UserService userService;
 
