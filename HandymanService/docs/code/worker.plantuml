@@ -1,0 +1,109 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ExtendedByUserWorker {
+  + getId(): String
+  + getLandscapeUserId(): UUID
+  + setLongitude(Double): void
+  # canEqual(Object): boolean
+  + builder(): ExtendedByUserWorkerBuilder
+  + getServices(): List<WorkEnum>
+  + hashCode(): int
+  + equals(Object): boolean
+  + toString(): String
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + getLandscapeUser(): LandscapeUser
+  + setId(String): void
+  + setLandscapeUserId(UUID): void
+  + setServices(List<WorkEnum>): void
+  + setLandscapeUser(LandscapeUser): void
+  + setLatitude(Double): void
+}
+class Worker {
+  + getLandscapeUserId(): UUID
+  + getId(): String
+  + hashCode(): int
+  + getServices(): List<WorkEnum>
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + builder(): WorkerBuilder
+  + setId(String): void
+  + setLandscapeUserId(UUID): void
+  + setServices(List<WorkEnum>): void
+  + setLatitude(Double): void
+  + setLongitude(Double): void
+  + toString(): String
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+}
+class WorkerController {
+  + save(WorkerCreateDto): Worker
+  + findAll(): List<ExtendedByUserWorker>
+  + update(WorkerUpdateDto): Worker
+  + delete(String): void
+  + getById(String): ExtendedByUserWorker
+}
+class WorkerCreateDto {
+  + setLogin(String): void
+  + getLogin(): String
+  + getEmail(): String
+  + equals(Object): boolean
+  + toString(): String
+  + getTelephone(): String
+  + getServices(): List<WorkEnum>
+  + getLatitude(): Double
+  # canEqual(Object): boolean
+  + getLongitude(): Double
+  + setEmail(String): void
+  + setTelephone(String): void
+  + setLongitude(Double): void
+  + hashCode(): int
+  + setServices(List<WorkEnum>): void
+  + setLatitude(Double): void
+}
+interface WorkerMapper << interface >> {
+  + dtoToWorker(WorkerCreateDto): Worker
+  + dtoToWorker(WorkerUpdateDto): Worker
+  + toExtendedWorker(Worker, LandscapeUser): ExtendedByUserWorker
+}
+interface WorkerRepository << interface >>
+class WorkerService {
+  + save(WorkerCreateDto): Worker
+  + findById(String): Optional<Worker>
+  + delete(String): void
+  - mapToExtended(Worker): ExtendedByUserWorker
+  + getById(String): Worker
+  + findAllExtended(): List<ExtendedByUserWorker>
+  + getExtendedById(String): ExtendedByUserWorker
+  + update(WorkerUpdateDto): Worker
+  + findAll(): List<Worker>
+}
+class WorkerUpdateDto {
+  + getEmail(): String
+  + getLogin(): String
+  + getTelephone(): String
+  + getId(): String
+  + getServices(): List<WorkEnum>
+  + setServices(List<WorkEnum>): void
+  + setLatitude(Double): void
+  + getLatitude(): Double
+  + toString(): String
+  + equals(Object): boolean
+  # canEqual(Object): boolean
+  + getLongitude(): Double
+  + setLogin(String): void
+  + setEmail(String): void
+  + setId(String): void
+  + setTelephone(String): void
+  + setLongitude(Double): void
+  + hashCode(): int
+}
+
+WorkerController     "1" *-[#595959,plain]-> "workerService\n1" WorkerService        
+WorkerService        "1" *-[#595959,plain]-> "workerMapper\n1" WorkerMapper         
+WorkerService        "1" *-[#595959,plain]-> "workerRepository\n1" WorkerRepository     
+@enduml

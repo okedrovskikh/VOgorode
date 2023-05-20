@@ -1,0 +1,127 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class ExtendedGarden {
+  + getOwnerId(): UUID
+  + getId(): String
+  + setY2(Double): void
+  + setY1(Double): void
+  # canEqual(Object): boolean
+  + getSiteId(): UUID
+  + getX1(): Double
+  + toString(): String
+  + setWorks(List<WorkEnum>): void
+  + getY1(): Double
+  + setSiteId(UUID): void
+  + hashCode(): int
+  + builder(): ExtendedGardenBuilder
+  + getX2(): Double
+  + setOwnerId(UUID): void
+  + setX1(Double): void
+  + getY2(): Double
+  + setLongitude(Double): void
+  + equals(Object): boolean
+  + setSquare(Double): void
+  + setLatitude(Double): void
+  + setId(String): void
+  + setX2(Double): void
+  + getSquare(): Double
+  + getLatitude(): Double
+  + getLongitude(): Double
+  + getWorks(): List<WorkEnum>
+}
+class Garden {
+  + getX1(): Double
+  + getId(): String
+  + getOwnerId(): UUID
+  + setWorks(List<WorkEnum>): void
+  + hashCode(): int
+  + setY2(Double): void
+  + setX1(Double): void
+  + setX2(Double): void
+  + equals(Object): boolean
+  + getSiteId(): UUID
+  + setOwnerId(UUID): void
+  + setSiteId(UUID): void
+  + toString(): String
+  + setSquare(Double): void
+  + getY1(): Double
+  # canEqual(Object): boolean
+  + getX2(): Double
+  + getY2(): Double
+  + getSquare(): Double
+  + getWorks(): List<WorkEnum>
+  + setId(String): void
+  + builder(): GardenBuilder
+  + setY1(Double): void
+}
+class GardenController {
+  + findAllExtended(): List<ExtendedGarden>
+  + update(GardenUpdateDto): Garden
+  + save(GardenCreateDto): Garden
+  + delete(String): void
+  + getById(String): ExtendedGarden
+}
+class GardenCreateDto {
+  + getX1(): Double
+  + getOwnerId(): UUID
+  + getY1(): Double
+  # canEqual(Object): boolean
+  + hashCode(): int
+  + getX2(): Double
+  + getY2(): Double
+  + getWorks(): List<WorkEnum>
+  + setOwnerId(UUID): void
+  + setX1(Double): void
+  + setY1(Double): void
+  + setY2(Double): void
+  + equals(Object): boolean
+  + setX2(Double): void
+  + toString(): String
+  + setWorks(List<WorkEnum>): void
+}
+interface GardenMapper << interface >> {
+  + dtoToGarden(GardenUpdateDto): Garden
+  + dtoToGarden(GardenCreateDto): Garden
+  + toExtendedGarden(Garden, Site): ExtendedGarden
+}
+interface GardenRepository << interface >>
+class GardenService {
+  + findById(String): Optional<Garden>
+  + save(GardenCreateDto): Garden
+  + getExtendedById(String): ExtendedGarden
+  + findAllExtended(): List<ExtendedGarden>
+  - mapToExtended(Garden): ExtendedGarden
+  + findAll(): List<Garden>
+  + update(GardenUpdateDto): Garden
+  + delete(String): void
+  + getById(String): Garden
+}
+class GardenUpdateDto {
+  + getX1(): Double
+  + getId(): String
+  + getOwnerId(): UUID
+  + getY1(): Double
+  + hashCode(): int
+  + getX2(): Double
+  + getY2(): Double
+  + equals(Object): boolean
+  + toString(): String
+  + getWorks(): List<WorkEnum>
+  + setY1(Double): void
+  # canEqual(Object): boolean
+  + setY2(Double): void
+  + setWorks(List<WorkEnum>): void
+  + setX2(Double): void
+  + setId(String): void
+  + setOwnerId(UUID): void
+  + setX1(Double): void
+}
+
+GardenController "1" *-[#595959,plain]-> "gardenService\n1" GardenService    
+GardenService    "1" *-[#595959,plain]-> "gardenMapper\n1" GardenMapper     
+GardenService    "1" *-[#595959,plain]-> "gardenRepository\n1" GardenRepository 
+@enduml

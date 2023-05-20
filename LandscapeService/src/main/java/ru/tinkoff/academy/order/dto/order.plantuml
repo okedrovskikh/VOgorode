@@ -1,0 +1,89 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Order {
+  + getId(): Long
+  + setStatus(OrderStatus): void
+  + setWorks(WorkEnum[]): void
+  + getGardenId(): Long
+  + getUserId(): Long
+  + getWorks(): WorkEnum[]
+  + getStatus(): OrderStatus
+  + builder(): OrderBuilder
+  + getCreatedAt(): Timestamp
+  + setId(Long): void
+  + setCreatedAt(Timestamp): void
+  + setGardenId(Long): void
+  + setUserId(Long): void
+  + prePersist(): void
+  + hashCode(): int
+  + equals(Object): boolean
+}
+class OrderController {
+  + findAll(): List<Order>
+  + update(OrderUpdateDto): Order
+  + getById(Long): Order
+  + save(OrderCreateDto): Order
+  + delete(Long): void
+  + searchPage(int, int): Page<Order>
+}
+class OrderCreateDto {
+  + equals(Object): boolean
+  + getGardenId(): Long
+  + getUserId(): Long
+  + getWorks(): WorkEnum[]
+  + setGardenId(Long): void
+  + setUserId(Long): void
+  + setWorks(WorkEnum[]): void
+  # canEqual(Object): boolean
+  + hashCode(): int
+  + toString(): String
+}
+class OrderMapper {
+  + dtoToOrder(OrderCreateDto): Order
+  + updateOrder(Order, OrderUpdateDto): Order
+}
+interface OrderRepository << interface >>
+class OrderService {
+  + searchPage(int, int): Page<Order>
+  + save(OrderCreateDto): Order
+  + getById(Long): Order
+  + delete(Long): void
+  + findAll(): List<Order>
+  + findById(Long): Optional<Order>
+  + update(OrderUpdateDto): Order
+}
+enum OrderStatus << enumeration >> {
+  + values(): OrderStatus[]
+  + valueOf(String): OrderStatus
+}
+class OrderStatusEnumType {
+  + nullSafeSet(PreparedStatement, OrderStatus, int, SharedSessionContractImplementor): void
+  + nullSafeGet(ResultSet, int, SharedSessionContractImplementor, Object): OrderStatus
+}
+class OrderUpdateDto {
+  + getWorks(): WorkEnum[]
+  + getId(): Long
+  + getGardenId(): Long
+  # canEqual(Object): boolean
+  + getUserId(): Long
+  + getStatus(): OrderStatus
+  + setId(Long): void
+  + setGardenId(Long): void
+  + setUserId(Long): void
+  + setWorks(WorkEnum[]): void
+  + toString(): String
+  + setStatus(OrderStatus): void
+  + hashCode(): int
+  + equals(Object): boolean
+}
+
+Order               "1" *-[#595959,plain]-> "status\n1" OrderStatus         
+OrderController     "1" *-[#595959,plain]-> "orderService\n1" OrderService        
+OrderService        "1" *-[#595959,plain]-> "orderMapper\n1" OrderMapper         
+OrderService        "1" *-[#595959,plain]-> "orderRepository\n1" OrderRepository     
+OrderUpdateDto      "1" *-[#595959,plain]-> "status\n1" OrderStatus         
+@enduml

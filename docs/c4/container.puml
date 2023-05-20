@@ -1,0 +1,46 @@
+@startuml Container
+!include <C4/C4_Container>
+
+!include <office/Servers/database_server>
+!include <office/Servers/application_server>
+
+AddContainerTag("webApp", $sprite="application_server", $legendText="web app container")
+AddContainerTag("db", $sprite="database_server", $legendText="database container")
+
+/'Create users'/
+Person(owner, "Owner", "Владелец полей, может создавать заказы на работу.")
+Person(worker, "Worker", "Ищет работу, управляет своим расписанием и навыками.")
+Person(fielder, "Fielder", "Наблюдает за полями над которыми он работает.")
+
+/'Create app'/
+System_Boundary(vogorode, "VOgorode") {
+    Container(handyman_service, "HandymanService", "Container: Java and SpringBoot", "Бэк для клиентской части, обслуживающий людей которые предоставляют сервис", $tags="webApp")
+    Container(landscape_service, "LandscapeService", "Container: Java and SpringBoot", "Управление пользователями, назначение на работы, управление ценой за работы, проставление рейтинга, сбор статистики.", $tags="webApp")
+    Container(rancher_service, "RancherService", "Container: Java and SpringBoot", "Бэк обслуживающий участки, координаты, размеры поля, что посажено - когда что созреет и т.п.", $tags="webApp")
+    ContainerDb(postgres, "Database", "Container: Postgis:15.5", "Хранит аккаунты, участки, пользователей, работников на полях, поля, заказы, банковские аккаунты" ,$tags="db")
+    ContainerDb(mongo, "Database", "Container: MongoDB", "Хранит сады, работников", $tags="db")
+}
+
+/'Create relations between users and services'/
+Rel(owner, landscape_service, "Регистрируется, смотрит информацию об аккаунте, смотрит статистику, создает заказы.", "http")
+Rel(worker, landscape_service, "Регистрируется, смотрит информацию об аккаунте, смотрит статистику.", "http")
+Rel(fielder, landscape_service, "Регистрируется, смотрит информацию об аккаунте, смотрит статистику.", "http")
+Rel(worker, handyman_service, "Регистрируется как работник, изменяет банковские аккаунты, расписание, навыки.", "http")
+Rel(fielder, rancher_service, "Получает информацию о полях на которых работает.", "http")
+
+/'Create relations between services'/
+Rel_L(landscape_service, handyman_service, "Собирает статистику по банковским аккаунтам.", "grpc")
+Rel_R(landscape_service, rancher_service, "Собирает статистику по полям.", "grpc")
+Rel_R(handyman_service, landscape_service, "Создает новый аккаунт для работника.", "http")
+Rel_L(rancher_service, landscape_service, "Создает новый участок для сада.", "http")
+
+/'Create relations between services and databases'/
+Rel_R(handyman_service, postgres, "Пишет/Читает пользователей, банковские аккаунты, собирает статистику по банковским аккаунтам.", "SQL/JDBC")
+Rel_R(handyman_service, mongo, "Пишет/Читает работников.", "MongoDB wire protocol")
+Rel_D(landscape_service, postgres, "Пишет/Читает аккаунты, участки, заказы, собирает статистику по аккаунтам.", "SQL/JDBC")
+Rel_L(rancher_service, postgres, "Пишет/Читает поля, работников на полях, собирает статистику по полям.", "MongoDB wire protocol")
+Rel_L(rancher_service, mongo, "Пишет/Читает сады.", "MongoDB wire protocol")
+
+SHOW_LEGEND()
+
+@enduml

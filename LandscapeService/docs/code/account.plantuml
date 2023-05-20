@@ -1,0 +1,119 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Account {
+  + setLatitude(Double): void
+  + setUpdateDate(Timestamp): void
+  + getId(): UUID
+  + getType(): AccountType
+  + getLogin(): String
+  + setId(UUID): void
+  + setEmail(String): void
+  + setTelephone(String): void
+  + getEmail(): String
+  + getTelephone(): String
+  + getCreationDate(): Timestamp
+  + getUpdateDate(): Timestamp
+  + setCreationDate(Timestamp): void
+  + builder(): AccountBuilder
+  + setType(AccountType): void
+  + setLogin(String): void
+  + getLatitude(): Double
+  + setLongitude(Double): void
+  + getLongitude(): Double
+  + prePersist(): void
+  + equals(Object): boolean
+  + updateDate(): void
+  + hashCode(): int
+}
+class AccountController {
+  + update(AccountUpdateDto): Account
+  + save(AccountCreateDto): Account
+  + findAll(): List<Account>
+  + setLatitudeAndLongitude(UUID, String, String): Account
+  + delete(UUID): void
+  + getById(UUID): Account
+  + findAllById(List<UUID>): List<Account>
+}
+class AccountCreateDto {
+  + getLogin(): String
+  + getType(): AccountType
+  + setLongitude(String): void
+  + hashCode(): int
+  + getEmail(): String
+  + getTelephone(): String
+  # canEqual(Object): boolean
+  + toString(): String
+  + getLatitude(): String
+  + getLongitude(): String
+  + setType(AccountType): void
+  + setLogin(String): void
+  + setEmail(String): void
+  + setTelephone(String): void
+  + setLatitude(String): void
+  + equals(Object): boolean
+}
+class AccountEnumType {
+  + nullSafeSet(PreparedStatement, AccountType, int, SharedSessionContractImplementor): void
+  + nullSafeGet(ResultSet, int, SharedSessionContractImplementor, Object): AccountType
+}
+class AccountMapper {
+  + updateAccount(AccountUpdateDto, Account): Account
+  + dtoToAccount(AccountCreateDto): Account
+}
+interface AccountRepository << interface >> {
+  + findByEmailAndTelephone(String, String): Optional<Account>
+  + findLatestCreationDate(): Timestamp
+  + findAllByType(String): List<Account>
+  + findEarliestCreationDate(): Timestamp
+}
+class AccountService {
+  + save(AccountCreateDto): Account
+  + updateLatitudeAndLongitude(UUID, String, String): Account
+  + update(AccountUpdateDto): Account
+  + findAllByType(AccountType): List<Account>
+  + findByEmailAndTelephone(String, String): Optional<Account>
+  + findById(UUID): Optional<Account>
+  + getById(UUID): Account
+  + getByEmailAndTelephone(String, String): Account
+  + findAllById(Iterable<UUID>): List<Account>
+  + delete(UUID): void
+  + findLatestCreationDate(): Timestamp
+  + findAll(): List<Account>
+  + findEarliestCreationDate(): Timestamp
+}
+enum AccountType << enumeration >> {
+  + values(): AccountType[]
+  + valueOf(String): AccountType
+}
+class AccountUpdateDto {
+  + getType(): AccountType
+  + getId(): UUID
+  + hashCode(): int
+  + getLogin(): String
+  + getEmail(): String
+  + getTelephone(): String
+  + setTelephone(String): void
+  + equals(Object): boolean
+  + toString(): String
+  + getLatitude(): String
+  # canEqual(Object): boolean
+  + setEmail(String): void
+  + setLatitude(String): void
+  + getLongitude(): String
+  + setId(UUID): void
+  + setType(AccountType): void
+  + setLogin(String): void
+  + setLongitude(String): void
+}
+
+Account           "1" *-[#595959,plain]-> "type\n1" AccountType       
+AccountController "1" *-[#595959,plain]-> "accountService\n1" AccountService    
+AccountCreateDto  "1" *-[#595959,plain]-> "type\n1" AccountType       
+AccountService    "1" *-[#595959,plain]-> "accountMapper\n1" AccountMapper     
+AccountService    "1" *-[#595959,plain]-> "accountRepository\n1" AccountRepository 
+AccountUpdateDto  "1" *-[#595959,plain]-> "type\n1" AccountType       
+@enduml

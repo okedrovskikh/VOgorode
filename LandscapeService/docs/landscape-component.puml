@@ -1,0 +1,70 @@
+@startuml Component
+!include <C4/C4_Component>
+
+!include <office/Servers/database_server>
+!include <office/Servers/application_server>
+
+AddContainerTag("webApp", $sprite="application_server", $legendText="web app container")
+AddContainerTag("db", $sprite="database_server", $legendText="database container")
+
+/'Services containers'/
+Container(handyman_service, "HandymanService", "Container: Java and SpringBoot", "Бэк для клиентской части, обслуживающий людей которые предоставляют сервис", $tags="webApp")
+Container(landscape_service, "LandscapeService", "Container: Java and SpringBoot", "Управление пользователями, назначение на работы, управление ценой за работы, проставление рейтинга, сбор статистики", $tags="webApp")
+Container(rancher_service, "RancherService", "Container: Java and SpringBoot", "Бэк обслуживающий участки, координаты, размеры поля, что посажено - когда что созреет и т.п.", $tags="webApp")
+
+/'Create databases containers'/
+ContainerDb(postgres, "Database", "Container: Postgis:15.5", "Хранит аккаунты, участки, заказы." ,$tags="db")
+
+/'Create Landscape Service boundary'/
+Container_Boundary(landscape, "LandscapeService") {
+    Component(account_controller, "AccountController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с аккаунтами")
+    Component(account_service, "AccountService", "Component: Spring Service", "Реализует логику работы с аккаунтами")
+    Component(order_controller, "OrderController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с заказами")
+    Component(order_service, "OrderService", "Component: Spring Service", "Реализует логику работы с заказами")
+    Component(site_controller, "SiteController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с участками")
+    Component(site_service, "SiteService", "Component: Spring Service", "Реализует логику работы с участками")
+    Component(bank_account_grpc_client, "BankAccountGrpcClient", "Component: GrpcClient", "Получение статистики по банковским аккаунтам из HandymanService")
+    Component(field_grpc_client, "FieldGrpcClient", "Component: GrpcClient", "Получение статистики по полям из RancherService")
+    Component(account_stat_controller, "AccountStatisticsController", "Component: Spring RestController", "Предоставляет статистику по аккаунтам")
+    Component(account_stat_service, "AccountStatisticsService", "Component: Spring Service", "Реализует логику получения статистики по аккаунтам")
+    Component(bank_account_stat_controller, "BankAccountStatisticsController", "Component: Spring RestController", "Предоставляет статистику по банковским аккаунтам")
+    Component(bank_account_stat_service, "BankAccountStatisticsService", "Component: Spring Service", "Реализует логику получения статистики по банковским аккаунтам")
+    Component(area_stat_controller, "AreaStatisticsController", "Component: Spring RestController", "Предоставляет статистику по полям")
+    Component(area_stat_service, "AreaStatisticsService", "Component: Spring Service", "Реализует логику работы получения статистики по полям")
+}
+
+/'Create relations between service and controllers'/
+Rel(account_controller, account_service, " ")
+Rel(order_controller, order_service, " ")
+Rel(site_controller, site_service, " ")
+Rel(account_stat_controller, account_stat_service, " ")
+Rel(bank_account_stat_controller, bank_account_stat_service, " ")
+Rel(area_stat_controller, area_stat_service, " ")
+
+/'Create relations between service and controllers'/
+Rel(landscape_service, account_controller, "CRUD операции для аккаунтов.", "json/http")
+Rel(landscape_service, order_controller, "CRUD операции для заказов.", "json/http")
+Rel(landscape_service, site_controller, "CRUD операции для участков.", "json/http")
+Rel(landscape_service, account_stat_controller, "Получает статистику по аккаунтам.", "json/http")
+Rel(landscape_service, bank_account_stat_controller, "Получает статистику по банковским аккаунтам.", "json/http")
+Rel(landscape_service, area_stat_controller, "Получает статистику по полям.", "json/http")
+
+/'Create relations between services'/
+Rel(account_stat_service, account_service, " ")
+
+/'Create relations between services and grpc clients'/
+Rel(bank_account_stat_service, bank_account_grpc_client, " ")
+Rel(area_stat_service, field_grpc_client, " ")
+
+'Create relations between services and repositories'/
+Rel(account_service, postgres, "Пишет/Читает аккаунты.", "SQL/JDBC")
+Rel(order_service, postgres, "Пишет/Читает заказы.", "SQL/JDBC")
+Rel(site_service, postgres, "Пишет/Читает участки.", "SQL/JDBC")
+
+/'Create relations between grpc clients and containers'/
+Rel(bank_account_grpc_client, handyman_service, "Собирает статистику по банковским аккаунтам.", "protocol buffer/grpc")
+Rel(field_grpc_client, rancher_service, "Собирает статистику по полям.", "protocol buffer/grpc")
+
+SHOW_LEGEND()
+
+@enduml
