@@ -2,8 +2,7 @@ name: generate plantuml
 on: push
 jobs:
   generate_plantuml:
-    runs-on: alpine-latest
-    name: plantuml
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v1
