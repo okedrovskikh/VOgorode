@@ -243,7 +243,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"rancher-service\", process=\"garden\"}[10m])))",
+          "expr": "histogram_quantile(0.95, sum by(le, method) (rate(business_request_duration_seconds_bucket{service=\"rancher-service\", process=\"garden\"}[2m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -326,7 +326,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"rancher-service\", process=\"field\"}[10m])))",
+          "expr": "histogram_quantile(0.95, sum by(le, method) (rate(business_request_duration_seconds_bucket{service=\"rancher-service\", process=\"field\"}[2m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -409,7 +409,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"rancher-service\", process=\"fielder\"}[10m])))",
+          "expr": "histogram_quantile(0.95, sum by(le, method) (rate(business_request_duration_seconds_bucket{service=\"rancher-service\", process=\"fielder\"}[2m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"

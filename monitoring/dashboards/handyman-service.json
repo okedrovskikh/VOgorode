@@ -243,7 +243,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"worker\"}[10m])))",
+          "expr": "histogram_quantile(0.95, sum by(le, method) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"worker\"}[2m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -312,7 +312,7 @@
         "x": 12,
         "y": 9
       },
-      "id": 3,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
@@ -326,7 +326,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"account\"}[10m])))",
+          "expr": "histogram_quantile(0.95, sum by(le, method) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"account\"}[2m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -395,7 +395,7 @@
         "x": 0,
         "y": 18
       },
-      "id": 3,
+      "id": 5,
       "options": {
         "legend": {
           "calcs": [],
@@ -409,7 +409,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.8, sum by(le) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"user\"}[10m])))",
+          "expr": "histogram_quantile(0.95, sum by(le, method) (rate(business_request_duration_seconds_bucket{service=\"handyman-service\", process=\"user\"}[2m])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"

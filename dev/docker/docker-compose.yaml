@@ -44,7 +44,7 @@ services:
       MONGO_DB_HOST: mongo
       MONGO_DB_PORT: 27017
     ports:
-      - 8083:8081
+      - 8081:8081
       - 9091:9091
     networks:
       - vogorode-network
@@ -80,7 +80,7 @@ services:
     expose:
       - 5432
     ports:
-      - 5432:5432
+      - 5433:5432
     networks:
       - vogorode-network
   mongo:
@@ -110,7 +110,7 @@ services:
     expose:
       - 8081
     ports:
-      - 5433:8081
+      - 5434:8081
     networks:
       - vogorode-network
     depends_on:

@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_site_table
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v6/create_site_table.sql
+  - changeSet:
+      id: add_latitude_longitude_account
+      author: o.kedrovskikh
+      sqlFile:
+        path: classpath:db/changelog/v6/add_latitude_longitude_account.sql
