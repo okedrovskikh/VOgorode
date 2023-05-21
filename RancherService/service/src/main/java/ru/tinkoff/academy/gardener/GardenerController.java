@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.gardener;
 
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.gardener.dto.GardenerCreateDto;
 import ru.tinkoff.academy.gardener.dto.GardenerDto;
 import ru.tinkoff.academy.gardener.dto.GardenerUpdateDto;
+import ru.tinkoff.academy.landscape.order.Order;
+import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 
 import java.util.List;
 
@@ -32,6 +35,11 @@ public class GardenerController {
     @PostMapping("")
     public GardenerDto save(@RequestBody GardenerCreateDto createDto) {
         return gardenerMapper.toDto(gardenerService.save(createDto));
+    }
+
+    @PostMapping("")
+    public Order createOrder(@Valid OrderCreateDto createDto) {
+        return gardenerService.createOrder(createDto);
     }
 
     @GetMapping("/{id}")

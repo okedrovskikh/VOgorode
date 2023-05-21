@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.landscape;
+package ru.tinkoff.academy.landscape.account;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -6,25 +6,25 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.tinkoff.academy.landscape.site.Site;
-import ru.tinkoff.academy.landscape.site.dto.SiteCreateDto;
+import ru.tinkoff.academy.landscape.account.Account;
+import ru.tinkoff.academy.landscape.account.dto.AccountCreateDto;
 
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class SiteWebClientHelper {
+public class AccountWebClientHelper {
     private final WebClient landscapeWebClient;
 
     public WebClient webClient() {
         return landscapeWebClient;
     }
 
-    public Mono<Site> saveSite(SiteCreateDto siteCreateDto) {
+    public Mono<Account> saveUser(AccountCreateDto userCreateDto) {
         return landscapeWebClient.post()
-                .uri("/sites")
+                .uri("/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(siteCreateDto)
+                .bodyValue(userCreateDto)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .onStatus(status -> HttpStatus.CONFLICT == status, response -> {
@@ -33,20 +33,14 @@ public class SiteWebClientHelper {
                 .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
                     throw new IllegalStateException("Service unavailable");
                 })
-                .bodyToMono(Site.class);
+                .bodyToMono(Account.class);
     }
 
-    public Mono<Site> getSiteById(UUID id) {
+    public Mono<Account> getUser(UUID userID) {
         return landscapeWebClient.get()
-                .uri(String.format("/sites/%s", id))
+                .uri(String.format("/users/%s", userID))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .onStatus(status -> HttpStatus.CONFLICT == status, response -> {
-                    throw new IllegalStateException("Invalid request");
-                })
-                .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
-                    throw new IllegalStateException("Service unavailable");
-                })
-                .bodyToMono(Site.class);
+                .bodyToMono(Account.class);
     }
 }

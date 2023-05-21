@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.garden.dto.GardenCreateDto;
 import ru.tinkoff.academy.garden.dto.GardenUpdateDto;
-import ru.tinkoff.academy.landscape.SiteWebClientHelper;
+import ru.tinkoff.academy.landscape.site.SiteWebClientHelper;
 import ru.tinkoff.academy.landscape.site.Site;
 import ru.tinkoff.academy.landscape.site.SiteMapper;
 

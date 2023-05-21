@@ -35,6 +35,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework:spring-aspects")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("net.devh:grpc-spring-boot-starter:2.14.0.RELEASE")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("org.locationtech.jts:jts-core:1.18.2")

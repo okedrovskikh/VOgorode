@@ -9,6 +9,8 @@ option java_multiple_files = true;
 
 service WorkerService {
   rpc findAll(google.protobuf.Empty) returns (stream WorkerResponse);
+  rpc findByServices(WorkerByServicesRequest) returns (stream WorkerResponse);
+  rpc createRequest(WorkerJobRequest) returns (WorkerJobResponse);
 }
 
 message WorkerResponse {
@@ -17,4 +19,24 @@ message WorkerResponse {
   repeated ru.tinkoff.academy.WorkEnum services = 3;
   double latitude = 4;
   double longitude = 5;
+}
+
+message WorkerByServicesRequest {
+  repeated ru.tinkoff.academy.WorkEnum services = 1;
+}
+
+message WorkerJobRequest {
+  string id = 1;
+  repeated ru.tinkoff.academy.WorkEnum services = 2;
+  double latitude = 3;
+  double longitude = 4;
+}
+
+message WorkerJobResponse {
+  WorkerJobEnum decision = 1;
+}
+
+enum WorkerJobEnum {
+  rejected = 0;
+  accepted = 1;
 }

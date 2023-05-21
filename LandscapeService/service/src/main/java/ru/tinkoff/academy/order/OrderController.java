@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.order;
 
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +31,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("")
-    public Order save(@RequestBody OrderCreateDto createDto) {
+    public Order save(@RequestBody @Valid OrderCreateDto createDto) {
         return orderService.save(createDto);
     }
 

@@ -4,13 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.exceptions.EntityNotFoundException;
-import ru.tinkoff.academy.landscape.AccountWebClientHelper;
+import ru.tinkoff.academy.landscape.account.AccountWebClientHelper;
 import ru.tinkoff.academy.landscape.account.Account;
 import ru.tinkoff.academy.landscape.account.AccountMapper;
+import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +56,10 @@ public class WorkerService {
 
     public List<Worker> findAll() {
         return workerRepository.findAll();
+    }
+
+    public List<Worker> findAllByServices(Set<WorkEnum> services) {
+        return workerRepository.findAllByServicesContaining(services);
     }
 
     @Transactional
