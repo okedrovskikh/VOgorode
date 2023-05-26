@@ -8,9 +8,11 @@ import ru.tinkoff.academy.work.WorkEnum;
 @Data
 public class OrderCreateDto {
     @NotNull
-    private Long gardenId;
-    @NotNull
-    private Long workerId;
+    private String gardenId;
     @NotEmpty
     private WorkEnum[] works;
+    @NotNull
+    private Double latitude;
+    @NotNull
+    private Double longitude;
 }

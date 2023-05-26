@@ -37,7 +37,7 @@ public class GardenerController {
         return gardenerMapper.toDto(gardenerService.save(createDto));
     }
 
-    @PostMapping("")
+    @PostMapping("/createOrder")
     public Order createOrder(@Valid OrderCreateDto createDto) {
         return gardenerService.createOrder(createDto);
     }

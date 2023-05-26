@@ -11,6 +11,7 @@ import ru.tinkoff.academy.proto.worker.WorkerResponse;
 import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.work.WorkEnumMapper;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +38,7 @@ public class WorkerService {
                 .toList());
     }
 
-    public Optional<Worker> findWorker(Set<WorkEnum> works, Double latitude, Double longitude) {
+    public Optional<Worker> findWorker(Collection<WorkEnum> works, Double latitude, Double longitude) {
         Set<ru.tinkoff.academy.proto.work.WorkEnum> services = works.stream()
                 .map(workEnumMapper::toGrpcEnum)
                 .collect(Collectors.toSet());

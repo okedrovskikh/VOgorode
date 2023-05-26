@@ -36,9 +36,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "garden_id", nullable = false)
-    private Long gardenId;
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private String gardenId;
+    @Column(name = "worker_id")
+    private String workerId;
     @Column(name = "works", nullable = false)
     @Type(value = WorkEnumArrayType.class)
     private WorkEnum[] works;

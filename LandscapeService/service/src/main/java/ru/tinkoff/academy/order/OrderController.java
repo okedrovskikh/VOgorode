@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.order.dto.OrderCreateDto;
 import ru.tinkoff.academy.order.dto.OrderUpdateDto;
+import ru.tinkoff.academy.order.dto.StatusUpdateDto;
 
 import java.util.List;
 
@@ -54,6 +55,11 @@ public class OrderController {
     @PutMapping("")
     public Order update(@RequestBody OrderUpdateDto updateDto) {
         return orderService.update(updateDto);
+    }
+
+    @PutMapping("/status")
+    public Order update(@RequestBody StatusUpdateDto updateDto) {
+        return orderService.updateStatus(updateDto);
     }
 
     @DeleteMapping("/{id}")

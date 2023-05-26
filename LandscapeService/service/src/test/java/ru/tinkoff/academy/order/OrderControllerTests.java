@@ -220,7 +220,7 @@ public class OrderControllerTests extends AbstractIntegrationTest {
 
         OrderUpdateDto request = new OrderUpdateDto();
         request.setId(7L);
-        request.setUserId(10L);
+        request.setWorkerId(10L);
         request.setGardenId(10L);
         request.setWorks(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water});
         request.setStatus(OrderStatus.in_progress);
@@ -252,7 +252,7 @@ public class OrderControllerTests extends AbstractIntegrationTest {
     public void testUpdateByIncorrectDto() throws Exception {
         OrderUpdateDto request = new OrderUpdateDto();
         request.setId(7L);
-        request.setUserId(90L);
+        request.setWorkerId(90L);
 
         mockMvc.perform(MockMvcRequestBuilders.put(orders)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -299,7 +299,7 @@ public class OrderControllerTests extends AbstractIntegrationTest {
 
     private void assertEqualsOrder(Order expected, Order actual) {
         Assertions.assertEquals(expected.getId(), actual.getId());
-        Assertions.assertEquals(expected.getUserId(), actual.getUserId());
+        Assertions.assertEquals(expected.getWorkerId(), actual.getWorkerId());
         Assertions.assertEquals(expected.getGardenId(), actual.getGardenId());
         Assertions.assertArrayEquals(expected.getWorks(), actual.getWorks());
         Assertions.assertEquals(expected.getStatus(), actual.getStatus());
