@@ -1,7 +1,7 @@
-package ru.tinkoff.academy.order.dto;
+package ru.tinkoff.academy.landscape.order.dto;
 
 import lombok.Data;
-import ru.tinkoff.academy.order.status.OrderStatus;
+import ru.tinkoff.academy.landscape.order.status.OrderStatus;
 
 @Data
 public class StatusUpdateDto {

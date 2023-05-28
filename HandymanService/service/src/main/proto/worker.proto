@@ -26,7 +26,7 @@ message WorkerByServicesRequest {
 }
 
 message WorkerJobRequest {
-  string id = 1;
+  int64 id = 1;
   repeated ru.tinkoff.academy.WorkEnum services = 2;
   double latitude = 3;
   double longitude = 4;

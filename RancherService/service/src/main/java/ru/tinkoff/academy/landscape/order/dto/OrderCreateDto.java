@@ -6,11 +6,16 @@ import lombok.Data;
 import ru.tinkoff.academy.work.WorkEnum;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class OrderCreateDto {
     @NotNull
-    private String gardenId;
+    private UUID gardenId;
     @NotEmpty
     private List<WorkEnum> works;
+    @NotNull
+    private Double latitude;
+    @NotNull
+    private Double longitude;
 }

@@ -9,6 +9,7 @@ import ru.tinkoff.academy.field.FieldService;
 import ru.tinkoff.academy.gardener.dto.GardenerCreateDto;
 import ru.tinkoff.academy.gardener.dto.GardenerUpdateDto;
 import ru.tinkoff.academy.landscape.order.Order;
+import ru.tinkoff.academy.landscape.order.OrderWebClientHelper;
 import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class GardenerService {
     private final FieldService fieldService;
     private final GardenerRepository gardenerRepository;
     private final GardenerMapper gardenerMapper;
+    private final OrderWebClientHelper orderWebClientHelper;
 
     @Transactional
     public Gardener save(GardenerCreateDto createDto) {
@@ -30,7 +32,7 @@ public class GardenerService {
     }
 
     public Order createOrder(OrderCreateDto orderCreateDto) {
-        return null;
+        return orderWebClientHelper.createOrder(orderCreateDto).block();
     }
 
     public Gardener getById(String id) {

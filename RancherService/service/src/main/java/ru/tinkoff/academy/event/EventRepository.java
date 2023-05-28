@@ -1,8 +1,8 @@
-package ru.tinkoff.academy.events.order;
+package ru.tinkoff.academy.event;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OrderEventRepository extends JpaRepository<OrderEvent, Long> {
+public interface EventRepository extends JpaRepository<Event, Long> {
 }

@@ -12,6 +12,7 @@ import ru.tinkoff.academy.order.status.OrderStatus;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -37,15 +38,15 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<Order> findAllCreated() {
-        return orderRepository.findByStatusEqualsCreated();
+    public List<Order> findAllByStatus(OrderStatus orderStatus) {
+        return orderRepository.findAllByStatus(orderStatus);
     }
 
     public Page<Order> searchPage(int pageNumber, int pageSize) {
         return orderRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
 
-    public Order updateWorkerId(Long id, String workerId) {
+    public Order updateWorkerId(Long id, UUID workerId) {
         Order order = orderRepository.getReferenceById(id);
         order.setStatus(OrderStatus.in_progress);
         order.setWorkerId(workerId);

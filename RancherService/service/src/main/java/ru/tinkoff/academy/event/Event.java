@@ -1,6 +1,9 @@
-package ru.tinkoff.academy.events.order;
+package ru.tinkoff.academy.event;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.tinkoff.academy.landscape.order.status.OrderStatus;
 
 import java.util.Objects;
 
@@ -20,10 +24,15 @@ import java.util.Objects;
 @Builder
 @Entity(name = "order_event")
 @Table(schema = "public", catalog = "vogorode")
-public class OrderEvent {
+public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "identity_key")
+    private Long orderId;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EventStatus status;
 
     @Override
     public int hashCode() {
@@ -32,10 +41,10 @@ public class OrderEvent {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof OrderEvent orderEvent)) {
+        if (!(obj instanceof Event event)) {
             return false;
         }
 
-        return Objects.equals(id, orderEvent.id);
+        return Objects.equals(id, event.id);
     }
 }

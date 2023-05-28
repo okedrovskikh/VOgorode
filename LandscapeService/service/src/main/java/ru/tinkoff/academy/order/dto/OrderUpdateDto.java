@@ -12,8 +12,4 @@ public class OrderUpdateDto {
     private Long id;
     @NotEmpty
     private WorkEnum[] works;
-    @NotNull
-    private Double latitude;
-    @NotNull
-    private Double longitude;
 }
