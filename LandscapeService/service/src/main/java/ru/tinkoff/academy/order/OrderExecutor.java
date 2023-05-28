@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.tinkoff.academy.event.EventService;
+import ru.tinkoff.academy.event.EventStatus;
 import ru.tinkoff.academy.handyman.worker.Worker;
 import ru.tinkoff.academy.handyman.worker.WorkerService;
 import ru.tinkoff.academy.order.status.OrderStatus;
@@ -21,6 +23,7 @@ public class OrderExecutor {
     private final OrderService orderService;
     private final WorkerService workerService;
     private final SiteService siteService;
+    private final EventService eventService;
 
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
     @Transactional
@@ -33,8 +36,9 @@ public class OrderExecutor {
 
             if (worker.isPresent()) {
                 orderService.updateWorkerId(order.getId(), worker.get().getLandscapeId());
+                eventService.update(order.getId(), EventStatus.accepted);
             } else {
-
+                eventService.update(order.getId(), EventStatus.rejected);
             }
         }
     }
