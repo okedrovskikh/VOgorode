@@ -9,6 +9,8 @@ import reactor.core.publisher.Mono;
 import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 import ru.tinkoff.academy.landscape.order.dto.StatusUpdateDto;
 
+import java.time.Duration;
+
 @Component
 @RequiredArgsConstructor
 public class OrderWebClientHelper {
@@ -27,7 +29,9 @@ public class OrderWebClientHelper {
                 .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
                     throw new IllegalStateException("Service unavailable");
                 })
-                .bodyToMono(Order.class);
+                .bodyToMono(Order.class)
+                .retry(2)
+                .timeout(Duration.ofSeconds(10));
     }
 
     public Mono<Order> getOrderById(Long id) {

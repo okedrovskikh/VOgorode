@@ -49,10 +49,6 @@ public class Order {
     private OrderStatus status;
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
-    @Column(name = "latitude")
-    private Double latitude;
-    @Column(name = "longitude")
-    private Double longitude;
 
     @PrePersist
     public void prePersist() {

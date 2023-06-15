@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.academy.event.EventService;
-import ru.tinkoff.academy.event.EventStatus;
 import ru.tinkoff.academy.handyman.worker.Worker;
 import ru.tinkoff.academy.handyman.worker.WorkerService;
 import ru.tinkoff.academy.order.status.OrderStatus;
+import ru.tinkoff.academy.rancher.order.OrderInformClient;
 import ru.tinkoff.academy.site.Site;
 import ru.tinkoff.academy.site.SiteService;
 
@@ -23,7 +22,7 @@ public class OrderExecutor {
     private final OrderService orderService;
     private final WorkerService workerService;
     private final SiteService siteService;
-    private final EventService eventService;
+    private final OrderInformClient orderInformClient;
 
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.SECONDS)
     @Transactional
@@ -36,9 +35,8 @@ public class OrderExecutor {
 
             if (worker.isPresent()) {
                 orderService.updateWorkerId(order.getId(), worker.get().getLandscapeId());
-                eventService.update(order.getId(), EventStatus.accepted);
             } else {
-                eventService.update(order.getId(), EventStatus.rejected);
+                orderInformClient.inform(order.getId(), order.getGardenId().toString(), ru.tinkoff.academy.proto.order.OrderStatus.reject);
             }
         }
     }
@@ -48,7 +46,7 @@ public class OrderExecutor {
         List<Order> orders = orderService.findAllByStatus(OrderStatus.done);
 
         for (Order order : orders) {
-
+            orderInformClient.inform(order.getId(), order.getGardenId().toString(), ru.tinkoff.academy.proto.order.OrderStatus.done);
         }
     }
 }

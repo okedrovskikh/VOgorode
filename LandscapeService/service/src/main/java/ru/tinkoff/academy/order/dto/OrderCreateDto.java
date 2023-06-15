@@ -13,8 +13,4 @@ public class OrderCreateDto {
     private UUID gardenId;
     @NotEmpty
     private WorkEnum[] works;
-    @NotNull
-    private Double latitude;
-    @NotNull
-    private Double longitude;
 }

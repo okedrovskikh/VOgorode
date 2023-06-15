@@ -3,7 +3,6 @@ package ru.tinkoff.academy.gardener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.academy.event.EventService;
 import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.field.Field;
 import ru.tinkoff.academy.field.FieldService;
@@ -22,7 +21,6 @@ public class GardenerService {
     private final FieldService fieldService;
     private final GardenerRepository gardenerRepository;
     private final GardenerMapper gardenerMapper;
-    private final EventService eventService;
     private final OrderWebClientHelper orderWebClientHelper;
 
     @Transactional
