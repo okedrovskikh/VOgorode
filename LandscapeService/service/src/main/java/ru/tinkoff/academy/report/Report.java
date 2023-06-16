@@ -2,7 +2,7 @@ package ru.tinkoff.academy.report;
 
 import lombok.Builder;
 import lombok.Data;
-import ru.tinkoff.academy.handyman.worker.Worker;
+import ru.tinkoff.academy.handyman.worker.grpc.Worker;
 import ru.tinkoff.academy.rancher.garden.report.GardenReport;
 
 import java.util.List;

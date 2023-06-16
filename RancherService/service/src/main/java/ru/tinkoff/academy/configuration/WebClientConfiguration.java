@@ -9,7 +9,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientConfiguration {
     @Bean
     public WebClient landscapeWebClient(@Value("${rest.landscape.url}") String url) {
-        return WebClient.builder().baseUrl(url)
+        return WebClient.builder()
+                .baseUrl(url)
                 .build();
     }
 }

@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.handyman.worker;
+package ru.tinkoff.academy.handyman.worker.grpc;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
@@ -61,8 +61,6 @@ public class WorkerService {
             WorkerJobResponse response = workerGrpcClient.sendJobRequest(WorkerJobRequest.newBuilder()
                     .setId(workerResponse.getId())
                     .addAllServices(services)
-                    .setLatitude(latitude)
-                    .setLongitude(longitude)
                     .build());
 
             if (response.getDecision() == WorkerJobEnum.accepted) {

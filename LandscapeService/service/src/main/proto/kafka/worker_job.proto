@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "common/work_enum.proto";
+package ru.tinkoff.academy.kafka;
+
+option java_package = "ru.tinkoff.academy.proto.worker";
+option java_multiple_files = true;
+
+message WorkerJobRequest {
+  string id = 1;
+  repeated ru.tinkoff.academy.common.WorkEnum services = 2;
+}
+
+message WorkerJobResponse {
+  WorkerJobEnum decision = 1;
+
+  enum WorkerJobEnum {
+    rejected = 0;
+    accepted = 1;
+  }
+}

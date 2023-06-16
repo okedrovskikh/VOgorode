@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.handyman.worker;
+package ru.tinkoff.academy.handyman.worker.grpc;
 
 import com.google.protobuf.Empty;
 import lombok.RequiredArgsConstructor;

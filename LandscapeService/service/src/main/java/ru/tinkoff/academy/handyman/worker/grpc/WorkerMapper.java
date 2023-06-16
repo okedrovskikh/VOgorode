@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.handyman.worker;
+package ru.tinkoff.academy.handyman.worker.grpc;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

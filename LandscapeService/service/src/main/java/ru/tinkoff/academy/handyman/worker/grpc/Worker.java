@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.handyman.worker;
+package ru.tinkoff.academy.handyman.worker.grpc;
 
 import lombok.Data;
 import ru.tinkoff.academy.work.WorkEnum;

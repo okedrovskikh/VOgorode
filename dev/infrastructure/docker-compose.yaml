@@ -19,6 +19,9 @@ services:
       - 5432
     ports:
       - 5433:5432
+    healthcheck:
+      test: pg_isready -U postgres
+
   mongo:
     image: mongo
     container_name: infrastructure-mongo
@@ -35,6 +38,7 @@ services:
       - 27017:27017
     networks:
       - infrastructure-network
+
   mongo-express:
     image: mongo-express
     container_name: infrastructure-mongo-express
@@ -51,6 +55,34 @@ services:
       - infrastructure-network
     depends_on:
       - mongo
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: infrastructure-zookeeper
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - infrastructure-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: infrastructure-kafka
+    restart: always
+    environment:
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT, INTERNAL:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:10002, INTERNAL://kafka:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+    ports:
+      - 10002:9092
+    networks:
+      - infrastructure-network
+    depends_on:
+      - zookeeper
+
   prometheus:
     image: prom/prometheus
     container_name: infrastructure-prometheus
@@ -68,6 +100,7 @@ services:
       - ./prometheus_data:/prometheus
     networks:
       - infrastructure-network
+
   grafana:
     image: grafana/grafana:8.2.6
     container_name: infrastructure-grafana
