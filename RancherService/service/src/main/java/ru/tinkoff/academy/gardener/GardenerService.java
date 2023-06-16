@@ -15,9 +15,6 @@ import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * on new method, create deligating method in {@link ru.tinkoff.academy.gardener.GardenerServiceFacade}
- */
 @Service
 @RequiredArgsConstructor
 public class GardenerService {

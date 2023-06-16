@@ -26,10 +26,6 @@ public class GardenerServiceFacade {
         return gardenerService.getById(id);
     }
 
-    public Optional<Gardener> findById(String id) {
-        return gardenerService.findById(id);
-    }
-
     public List<Gardener> findAll() {
         return gardenerService.findAll();
     }
