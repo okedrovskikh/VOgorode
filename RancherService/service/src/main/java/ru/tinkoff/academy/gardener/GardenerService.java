@@ -15,13 +15,15 @@ import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * on new method, create deligating method in {@link ru.tinkoff.academy.gardener.GardenerServiceFacade}
+ */
 @Service
 @RequiredArgsConstructor
 public class GardenerService {
     private final FieldService fieldService;
     private final GardenerRepository gardenerRepository;
     private final GardenerMapper gardenerMapper;
-    private final OrderWebClientHelper orderWebClientHelper;
 
     @Transactional
     public Gardener save(GardenerCreateDto createDto) {
@@ -29,10 +31,6 @@ public class GardenerService {
         List<Field> fields = fieldService.updateFieldsFielder(createDto.getFieldsId(), gardener);
         gardener.setFields(fields);
         return gardenerRepository.save(gardener);
-    }
-
-    public Order createOrder(OrderCreateDto orderCreateDto) {
-        return orderWebClientHelper.createOrder(orderCreateDto).block();
     }
 
     public Gardener getById(String id) {

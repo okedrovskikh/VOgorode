@@ -5,23 +5,22 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import ru.tinkoff.academy.proto.worker.WorkerJobResponse;
 
 import java.util.Map;
 
 @Configuration
 public class KafkaListenerConfiguration {
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, WorkerJobResponse> workerResponseListenerContainerFactory(
-            ConsumerFactory<String, WorkerJobResponse> workerResponseListenerFactory
+    public ConcurrentKafkaListenerContainerFactory<String, Object> orderResponseListenerContainerFactory(
+            ConsumerFactory<String, Object> orderResponseListenerFactory
     ) {
-        var factory = new ConcurrentKafkaListenerContainerFactory<String, WorkerJobResponse>();
-        factory.setConsumerFactory(workerResponseListenerFactory);
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, Object>();
+        factory.setConsumerFactory(orderResponseListenerFactory);
         return factory;
     }
 
     @Bean
-    public ConsumerFactory<String, WorkerJobResponse> workerResponseListenerFactory() {
+    public ConsumerFactory<String, Object> orderResponseListenerFactory() {
         return new DefaultKafkaConsumerFactory<>(listenerProperties());
     }
 

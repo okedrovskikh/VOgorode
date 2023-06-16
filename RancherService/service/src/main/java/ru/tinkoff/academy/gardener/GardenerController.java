@@ -29,36 +29,36 @@ import java.util.List;
         histogram = true
 )
 public class GardenerController {
-    private final GardenerService gardenerService;
+    private final GardenerServiceFacade gardenerServiceFacade;
     private final GardenerMapper gardenerMapper;
 
     @PostMapping("")
     public GardenerDto save(@RequestBody GardenerCreateDto createDto) {
-        return gardenerMapper.toDto(gardenerService.save(createDto));
+        return gardenerMapper.toDto(gardenerServiceFacade.save(createDto));
     }
 
     @PostMapping("/createOrder")
     public Order createOrder(@Valid OrderCreateDto createDto) {
-        return gardenerService.createOrder(createDto);
+        return gardenerServiceFacade.createOrder(createDto);
     }
 
     @GetMapping("/{id}")
     public GardenerDto getById(@PathVariable("id") String id) {
-        return gardenerMapper.toDto(gardenerService.getById(id));
+        return gardenerMapper.toDto(gardenerServiceFacade.getById(id));
     }
 
     @GetMapping("/all")
     public List<GardenerDto> findAll() {
-        return gardenerService.findAll().stream().map(gardenerMapper::toDto).toList();
+        return gardenerServiceFacade.findAll().stream().map(gardenerMapper::toDto).toList();
     }
 
     @PutMapping("")
     public GardenerDto update(@RequestBody GardenerUpdateDto updateDto) {
-        return gardenerMapper.toDto(gardenerService.update(updateDto));
+        return gardenerMapper.toDto(gardenerServiceFacade.update(updateDto));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id) {
-        gardenerService.delete(id);
+        gardenerServiceFacade.delete(id);
     }
 }

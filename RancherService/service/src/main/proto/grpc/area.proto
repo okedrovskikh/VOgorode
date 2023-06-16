@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 import "google/rpc/status.proto";
-package ru.tinkoff.academy;
+package ru.tinkoff.academy.grpc;
 
 option java_package = "ru.tinkoff.academy.proto.area";
 option java_multiple_files = true;
