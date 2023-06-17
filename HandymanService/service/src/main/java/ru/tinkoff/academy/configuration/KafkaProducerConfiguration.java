@@ -1,5 +1,7 @@
 package ru.tinkoff.academy.configuration;
 
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufSerializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -20,7 +22,7 @@ public class KafkaProducerConfiguration {
 
     @Bean
     public ProducerFactory<String, WorkerJobResponse> workerJobResponseProducerFactory() {
-        return new DefaultKafkaProducerFactory<>(producerConfig());
+        return new DefaultKafkaProducerFactory<>(producerConfig(), StringSerializer::new, KafkaProtobufSerializer::new);
     }
 
     private Map<String, Object> producerConfig() {

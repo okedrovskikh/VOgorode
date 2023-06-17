@@ -32,6 +32,10 @@ public class JobRequestService {
         return jobRepository.findByWorkersIdContainsAndStatus(List.of(workerId), JobStatus.created);
     }
 
+    public List<Job> findAllRejected() {
+        return jobRepository.findAllByStatus(JobStatus.rejected);
+    }
+
     public Job deleteWorker(String jobRequestId, String workerId) {
         Job job = getById(jobRequestId);
         job.getWorkersId().remove(workerId);

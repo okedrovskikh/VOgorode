@@ -28,9 +28,17 @@ public class JobService {
         return jobRepository.findByIdAndStatus(id, JobStatus.accepted);
     }
 
+    public List<Job> findAllDone() {
+        return jobRepository.findAllByStatus(JobStatus.done);
+    }
+
     public Job updateStatus(String jobId, JobStatus status) {
         Job job = getById(jobId);
         job.setStatus(status);
         return jobRepository.save(job);
+    }
+
+    public void delete(String id) {
+        jobRepository.deleteById(id);
     }
 }

@@ -11,7 +11,10 @@ import ru.tinkoff.academy.proto.worker.WorkerJobRequest;
 public class JobRequestKafkaListener {
     private final JobRequestService jobRequestService;
 
-    @KafkaListener
+    @KafkaListener(
+            topics = "topic",
+            containerFactory = "workerJobRequestListenerContainerFactory"
+    )
     public void listen(@Payload WorkerJobRequest event) {
         jobRequestService.save(event);
     }
