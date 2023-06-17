@@ -2,7 +2,6 @@ package ru.tinkoff.academy.worker;
 
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -48,7 +47,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
                         .withBody(objectMapper.writeValueAsString(mockedUser))));
 
         Worker expectedResponse = Worker.builder()
-                .landscapeUserId(UUID.fromString("751e0662-c503-4f7f-9146-9545dc882a4e"))
+                .accountId(UUID.fromString("751e0662-c503-4f7f-9146-9545dc882a4e"))
                 .latitude(800D)
                 .longitude(800D)
                 .services(List.of(WorkEnum.plant))
@@ -70,7 +69,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
 
         Worker actualWorker = objectMapper.readValue(response.getResponse().getContentAsString(), Worker.class);
 
-        Assertions.assertEquals(expectedResponse.getLandscapeUserId(), actualWorker.getLandscapeUserId());
+        Assertions.assertEquals(expectedResponse.getAccountId(), actualWorker.getAccountId());
         Assertions.assertEquals(expectedResponse.getLatitude(), actualWorker.getLatitude());
         Assertions.assertEquals(expectedResponse.getLongitude(), actualWorker.getLongitude());
         Assertions.assertEquals(expectedResponse.getServices(), actualWorker.getServices());
@@ -123,7 +122,7 @@ public class WorkerControllerTest extends AbstractIntegrationTest {
     public void testUpdateCorrectWorker() throws Exception {
         Worker expectedResponse = Worker.builder()
                 .id("id3")
-                .landscapeUserId(UUID.fromString("4572c5f7-529b-4514-84a6-59547e6aa2c3"))
+                .accountId(UUID.fromString("4572c5f7-529b-4514-84a6-59547e6aa2c3"))
                 .latitude(600D)
                 .longitude(600D)
                 .services(List.of(WorkEnum.shovel, WorkEnum.water))

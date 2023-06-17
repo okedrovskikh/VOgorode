@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import ru.tinkoff.academy.landscape.order.dto.StatusUpdateDto;
+import ru.tinkoff.academy.landscape.order.dto.WorkerUpdateDto;
 
 @Component
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class OrderWebClientHelper {
                 .bodyToMono(Order.class);
     }
 
-    public Mono<Order> updateOrderStatus(StatusUpdateDto request) {
+    public Mono<Order> updateOrderStatus(WorkerUpdateDto request) {
         return landscapeWebClient.put()
                 .uri("/orders/status")
                 .contentType(MediaType.APPLICATION_JSON)
