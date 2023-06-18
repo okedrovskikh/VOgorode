@@ -14,9 +14,9 @@ public interface JobRepository extends MongoRepository<Job, String> {
     Optional<Job> findByOrderIdAndStatus(Long orderId, JobStatus status);
 
     /**
-     * Should contain only one id, else wouldn't throw any exception but have not determined result
+     * Should contain only one id, else wouldn't throw any exception but have incorrect result
      */
-    List<Job> findByWorkersIdContainsAndStatus(List<String> workerId, JobStatus status);
+    List<Job> findByWorkersIdContainsAndStatus(List<String> workersId, JobStatus status);
 
     List<Job> findAllByStatus(JobStatus status);
 }

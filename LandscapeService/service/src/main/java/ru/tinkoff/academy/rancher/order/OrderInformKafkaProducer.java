@@ -7,7 +7,7 @@ import ru.tinkoff.academy.proto.order.OrderInformResponse;
 
 @Service
 @RequiredArgsConstructor
-public class OrderInformKafkaSender {
+public class OrderInformKafkaProducer {
     private final KafkaTemplate<String, OrderInformResponse> orderResponseKafkaTemplate;
 
     public void sendEvent(OrderInformResponse event) {

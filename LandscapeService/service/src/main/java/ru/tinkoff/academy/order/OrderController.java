@@ -18,6 +18,7 @@ import ru.tinkoff.academy.order.dto.OrderUpdateDto;
 import ru.tinkoff.academy.order.dto.StatusUpdateDto;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/orders")
@@ -29,41 +30,46 @@ import java.util.List;
         histogram = true
 )
 public class OrderController {
-    private final OrderService orderService;
+    private final OrderServiceFacade orderServiceFacade;
 
     @PostMapping("")
     public Order save(@RequestBody @Valid OrderCreateDto createDto) {
-        return orderService.save(createDto);
+        return orderServiceFacade.save(createDto);
+    }
+
+    @PostMapping("/{id}/worker")
+    public Order updateWorkerId(@PathVariable("id") Long orderId, @RequestParam("worker") UUID workerId) {
+        return orderServiceFacade.updateWorkerId(orderId, workerId);
     }
 
     @GetMapping("/{id}")
     public Order getById(@PathVariable("id") Long id) {
-        return orderService.getById(id);
+        return orderServiceFacade.getById(id);
     }
 
     @GetMapping("/all")
     public List<Order> findAll() {
-        return orderService.findAll();
+        return orderServiceFacade.findAll();
     }
 
     @GetMapping("")
     public Page<Order> searchPage(@RequestParam(value = "page", defaultValue = "0") int pageNumber,
                                   @RequestParam(value = "size", defaultValue = "10") int pageSize) {
-        return orderService.searchPage(pageNumber, pageSize);
+        return orderServiceFacade.searchPage(pageNumber, pageSize);
     }
 
     @PutMapping("")
     public Order update(@RequestBody OrderUpdateDto updateDto) {
-        return orderService.update(updateDto);
+        return orderServiceFacade.update(updateDto);
     }
 
     @PutMapping("/status")
     public Order update(@RequestBody StatusUpdateDto updateDto) {
-        return orderService.updateStatus(updateDto);
+        return orderServiceFacade.update(updateDto);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
-        orderService.delete(id);
+        orderServiceFacade.delete(id);
     }
 }

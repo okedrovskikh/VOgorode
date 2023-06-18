@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.academy.proto.worker.WorkerJobEnum;
-import ru.tinkoff.academy.proto.worker.WorkerJobRequest;
-import ru.tinkoff.academy.proto.worker.WorkerJobResponse;
 import ru.tinkoff.academy.proto.worker.WorkerResponse;
 import ru.tinkoff.academy.work.WorkEnum;
 import ru.tinkoff.academy.work.WorkEnumMapper;
@@ -15,7 +12,6 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -38,7 +34,7 @@ public class WorkerService {
                 .toList());
     }
 
-    public Optional<Worker> findWorker(Collection<WorkEnum> works, Double latitude, Double longitude) {
+    public List<Worker> findWorker(Collection<WorkEnum> works, Double latitude, Double longitude) {
         Set<ru.tinkoff.academy.proto.work.WorkEnum> services = works.stream()
                 .map(workEnumMapper::toGrpcEnum)
                 .collect(Collectors.toSet());
@@ -47,7 +43,7 @@ public class WorkerService {
         List<WorkerResponse> workerResponses = StreamSupport.stream(workerByServicesResponses.spliterator(), false).toList();
 
         if (workerResponses.isEmpty()) {
-            return Optional.empty();
+            return List.of();
         }
 
         List<WorkerResponse> topWorkersByDistance = workerResponses.stream()
@@ -57,18 +53,7 @@ public class WorkerService {
                 .map(Pair::getFirst)
                 .toList();
 
-        for (WorkerResponse workerResponse : topWorkersByDistance) {
-            WorkerJobResponse response = workerGrpcClient.sendJobRequest(WorkerJobRequest.newBuilder()
-                    .setId(workerResponse.getId())
-                    .addAllServices(services)
-                    .build());
-
-            if (response.getDecision() == WorkerJobEnum.accepted) {
-                return Optional.of(workerMapper.mapFromGrpcResponse(workerResponse));
-            }
-        }
-
-        return Optional.empty();
+        return topWorkersByDistance.stream().map(workerMapper::mapFromGrpcResponse).toList();
     }
 
     private double distance(double x1, double x2, double y1, double y2) {
