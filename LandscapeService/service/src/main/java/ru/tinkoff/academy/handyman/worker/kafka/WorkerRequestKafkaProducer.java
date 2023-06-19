@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.proto.order.OrderInformResponse;
 import ru.tinkoff.academy.proto.worker.WorkerJobRequest;
 
+import static ru.tinkoff.academy.rancher.order.OrderUtils.buildOrderInform;
+
 @Service
 @RequiredArgsConstructor
 public class WorkerRequestKafkaProducer {
@@ -13,6 +15,12 @@ public class WorkerRequestKafkaProducer {
     private final KafkaTemplate<String, OrderInformResponse> orderResponseKafkaTemplate;
 
     public void sendEvent(WorkerJobRequest event) {
-        workerRequestKafkaTemplate.send("topic", event);
+        workerRequestKafkaTemplate.send("topic", event).whenComplete((res, ex) -> {
+            if (ex != null) {
+                orderResponseKafkaTemplate.send(
+                        "topic", buildOrderInform(event.getOrderId(), OrderInformResponse.OrderStatus.rejected)
+                );
+            }
+        });
     }
 }

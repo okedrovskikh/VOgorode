@@ -30,11 +30,7 @@ public class JobServiceFacade {
     }
 
     private void updateOrder(Job jobRequest, Worker worker) {
-        Order order = orderWebClientHelper.updateOrderStatus(WorkerUpdateDto.builder()
-                .id(jobRequest.getOrderId())
-                .workerId(worker.getAccountId())
-                .status(OrderStatus.in_progress)
-                .build()).block();
+        Order order = orderWebClientHelper.updateOrderWorkerId(jobRequest.getOrderId(), worker.getAccountId()).block();
 
         if (!worker.getAccountId().equals(order.getWorkerId())) {
             throw new JobAlreadyAcceptedException(String.format("Job request with id: %s already accepted", jobRequest.getId()));

@@ -1,5 +1,6 @@
 package ru.tinkoff.academy.job;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/job")
 @RequiredArgsConstructor
+@Timed(
+        value = "business.request.duration",
+        extraTags = {"process", "job"},
+        description = "Duration Handyman service Job process handling",
+        histogram = true
+)
 public class JobController {
     private final JobServiceFacade jobServiceFacade;
 

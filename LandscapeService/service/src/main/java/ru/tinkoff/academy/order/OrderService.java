@@ -42,10 +42,6 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public List<Order> findAllByStatus(OrderStatus orderStatus) {
-        return orderRepository.findAllByStatus(orderStatus);
-    }
-
     public Page<Order> searchPage(int pageNumber, int pageSize) {
         return orderRepository.findAll(PageRequest.of(pageNumber, pageSize));
     }
@@ -62,6 +58,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional(propagation = Propagation.SUPPORTS)
     public Order update(OrderUpdateDto updateDto) {
         Order order = orderRepository.getReferenceById(updateDto.getId());
         order = orderMapper.updateOrder(order, updateDto);

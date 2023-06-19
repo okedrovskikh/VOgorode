@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import static ru.tinkoff.academy.rancher.order.OrderUtils.buildOrderInform;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceFacade {
@@ -35,11 +37,7 @@ public class OrderServiceFacade {
         List<WorkerJobRequest> requests = buildRequests(order);
 
         if (requests.isEmpty()) {
-            orderInformKafkaProducer.sendEvent(OrderInformResponse.newBuilder()
-                    .setOrderId(order.getId())
-                    .setStatus(OrderInformResponse.OrderStatus.rejected)
-                    .build()
-            );
+            orderInformKafkaProducer.sendEvent(buildOrderInform(order.getId(), OrderInformResponse.OrderStatus.rejected));
         } else {
             requests.forEach(workerRequestKafkaProducer::sendEvent);
         }
@@ -76,16 +74,13 @@ public class OrderServiceFacade {
         return orderService.searchPage(pageNumber, pageSize);
     }
 
+    @Transactional
     public Order update(OrderUpdateDto orderUpdateDto) {
         Order order = orderService.update(orderUpdateDto);
         List<WorkerJobRequest> requests = buildRequests(order);
 
         if (requests.isEmpty()) {
-            orderInformKafkaProducer.sendEvent(OrderInformResponse.newBuilder()
-                    .setOrderId(order.getId())
-                    .setStatus(OrderInformResponse.OrderStatus.rejected)
-                    .build()
-            );
+            orderInformKafkaProducer.sendEvent(buildOrderInform(order.getId(), OrderInformResponse.OrderStatus.rejected));
         } else {
             requests.forEach(workerRequestKafkaProducer::sendEvent);
         }

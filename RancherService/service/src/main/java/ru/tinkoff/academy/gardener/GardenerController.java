@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.gardener.dto.GardenerCreateDto;
 import ru.tinkoff.academy.gardener.dto.GardenerDto;
 import ru.tinkoff.academy.gardener.dto.GardenerUpdateDto;
-import ru.tinkoff.academy.landscape.order.Order;
-import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 
 import java.util.List;
 
@@ -29,36 +27,31 @@ import java.util.List;
         histogram = true
 )
 public class GardenerController {
-    private final GardenerServiceFacade gardenerServiceFacade;
+    private final GardenerService gardenerService;
     private final GardenerMapper gardenerMapper;
 
     @PostMapping("")
-    public GardenerDto save(@RequestBody GardenerCreateDto createDto) {
-        return gardenerMapper.toDto(gardenerServiceFacade.save(createDto));
-    }
-
-    @PostMapping("/createOrder")
-    public Order createOrder(@Valid OrderCreateDto createDto) {
-        return gardenerServiceFacade.createOrder(createDto);
+    public GardenerDto save(@Valid @RequestBody GardenerCreateDto createDto) {
+        return gardenerMapper.toDto(gardenerService.save(createDto));
     }
 
     @GetMapping("/{id}")
     public GardenerDto getById(@PathVariable("id") String id) {
-        return gardenerMapper.toDto(gardenerServiceFacade.getById(id));
+        return gardenerMapper.toDto(gardenerService.getById(id));
     }
 
     @GetMapping("/all")
     public List<GardenerDto> findAll() {
-        return gardenerServiceFacade.findAll().stream().map(gardenerMapper::toDto).toList();
+        return gardenerService.findAll().stream().map(gardenerMapper::toDto).toList();
     }
 
     @PutMapping("")
-    public GardenerDto update(@RequestBody GardenerUpdateDto updateDto) {
-        return gardenerMapper.toDto(gardenerServiceFacade.update(updateDto));
+    public GardenerDto update(@Valid @RequestBody GardenerUpdateDto updateDto) {
+        return gardenerMapper.toDto(gardenerService.update(updateDto));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id) {
-        gardenerServiceFacade.delete(id);
+        gardenerService.delete(id);
     }
 }

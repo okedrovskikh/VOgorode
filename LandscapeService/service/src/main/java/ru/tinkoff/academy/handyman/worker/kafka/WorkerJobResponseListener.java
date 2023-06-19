@@ -10,6 +10,8 @@ import ru.tinkoff.academy.proto.order.OrderInformResponse;
 import ru.tinkoff.academy.proto.worker.WorkerJobResponse;
 import ru.tinkoff.academy.rancher.order.OrderInformKafkaProducer;
 
+import static ru.tinkoff.academy.rancher.order.OrderUtils.buildOrderInform;
+
 @Component
 @RequiredArgsConstructor
 public class WorkerJobResponseListener {
@@ -24,12 +26,5 @@ public class WorkerJobResponseListener {
         } else {
             orderInformKafkaProducer.sendEvent(buildOrderInform(event.getId(), OrderInformResponse.OrderStatus.rejected));
         }
-    }
-
-    private OrderInformResponse buildOrderInform(Long orderId, OrderInformResponse.OrderStatus orderStatus) {
-        return OrderInformResponse.newBuilder()
-                .setOrderId(orderId)
-                .setStatus(orderStatus)
-                .build();
     }
 }
