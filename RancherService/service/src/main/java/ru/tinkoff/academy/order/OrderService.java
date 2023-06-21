@@ -31,6 +31,7 @@ public class OrderService {
                     .status(OrderCreationStatus.created)
                     .build();
         }
+
         return orderRepository.save(orderStatus);
     }
 

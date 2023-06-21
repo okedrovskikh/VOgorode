@@ -4,7 +4,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import ru.tinkoff.academy.proto.worker.WorkerJobRequest;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring", imports = {List.class})
 public interface JobMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", expression = "java(JobStatus.created)")

@@ -36,7 +36,7 @@ public class OrderServiceFacade {
         OrderStatus orderStatus = orderService.getByGardenId(gardenId);
 
         if (!orderStatus.getStatus().equals(OrderCreationStatus.done)) {
-            throw new OrderIncompleteException(String.format("Order for garden with id: %s completed", gardenId));
+            throw new OrderIncompleteException(String.format("Order for garden with id: %s incompleted", gardenId));
         }
 
         orderWebClientHelper.updateOrderStatus(StatusUpdateDto.builder()

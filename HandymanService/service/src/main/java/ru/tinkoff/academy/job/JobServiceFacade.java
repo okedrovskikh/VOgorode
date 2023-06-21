@@ -5,8 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.exceptions.JobAlreadyAcceptedException;
 import ru.tinkoff.academy.landscape.order.Order;
 import ru.tinkoff.academy.landscape.order.OrderWebClientHelper;
-import ru.tinkoff.academy.landscape.order.dto.WorkerUpdateDto;
-import ru.tinkoff.academy.landscape.order.status.OrderStatus;
 import ru.tinkoff.academy.worker.Worker;
 import ru.tinkoff.academy.worker.WorkerService;
 

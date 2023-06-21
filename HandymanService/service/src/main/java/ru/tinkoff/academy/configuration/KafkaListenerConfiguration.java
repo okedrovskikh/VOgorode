@@ -1,13 +1,14 @@
 package ru.tinkoff.academy.configuration;
 
+import io.confluent.kafka.serializers.protobuf.KafkaProtobufDeserializer;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import ru.tinkoff.academy.properties.kafka.KafkaListenerProperties.JobRequestConsumerProperties;
 import ru.tinkoff.academy.proto.worker.WorkerJobRequest;
-
-import java.util.Map;
 
 @Configuration
 public class KafkaListenerConfiguration {
@@ -21,11 +22,7 @@ public class KafkaListenerConfiguration {
     }
 
     @Bean
-    public ConsumerFactory<String, WorkerJobRequest> workerJobRequestListenerFactory() {
-        return new DefaultKafkaConsumerFactory<>(listenerProperties());
-    }
-
-    private Map<String, Object> listenerProperties() {
-        return Map.of();
+    public ConsumerFactory<String, WorkerJobRequest> workerJobRequestListenerFactory(JobRequestConsumerProperties properties) {
+        return new DefaultKafkaConsumerFactory<>(properties.toPropertiesMap(), StringDeserializer::new, KafkaProtobufDeserializer::new);
     }
 }

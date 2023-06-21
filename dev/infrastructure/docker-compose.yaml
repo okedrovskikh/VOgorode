@@ -63,6 +63,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    expose:
+      - 2181
     networks:
       - infrastructure-network
 
@@ -71,17 +73,40 @@ services:
     container_name: infrastructure-kafka
     restart: always
     environment:
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: EXTERNAL:PLAINTEXT, INTERNAL:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:10002, INTERNAL://kafka:29092
+      KAFKA_ADVERTISED_LISTENERS: EXTERNAL://localhost:10092, INTERNAL://kafka:29092
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_SASL_ENABLED_MECHANISMS: PLAIN
+    expose:
+      - 10092
+      - 29092
     ports:
-      - 10002:9092
+      - 10092:10092
     networks:
       - infrastructure-network
     depends_on:
       - zookeeper
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.3.0
+    container_name: infrastructure-schema-registry
+    restart: always
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    expose:
+      - 8081
+    ports:
+      - 10001:8081
+    networks:
+      - infrastructure-network
+    depends_on:
+      - zookeeper
+      - kafka
 
   prometheus:
     image: prom/prometheus

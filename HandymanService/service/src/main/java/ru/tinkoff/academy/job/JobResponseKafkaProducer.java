@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.academy.properties.kafka.KafkaProducerProperties;
 import ru.tinkoff.academy.proto.worker.WorkerJobResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -12,8 +13,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class JobResponseKafkaProducer {
     private final KafkaTemplate<String, WorkerJobResponse> workerJobResponseKafkaTemplate;
+    private final KafkaProducerProperties.JobResponseProducerProperties jobResponseProducerProperties;
 
     public CompletableFuture<SendResult<String, WorkerJobResponse>> sendEvent(WorkerJobResponse event) {
-        return workerJobResponseKafkaTemplate.send("topic", event);
+        return workerJobResponseKafkaTemplate.send(jobResponseProducerProperties.getTopic(), event);
     }
 }
