@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.order;
+package ru.tinkoff.academy.order.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,10 +12,10 @@ import ru.tinkoff.academy.landscape.order.dto.StatusUpdateDto;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceFacade {
+public class OrderRequestServiceFacade {
     private final GardenService gardenService;
     private final OrderWebClientHelper orderWebClientHelper;
-    private final OrderService orderService;
+    private final OrderRequestService orderRequestService;
 
     public Order create(String gardenId) {
         Garden garden = gardenService.getById(gardenId);
@@ -24,18 +24,18 @@ public class OrderServiceFacade {
                 .works(garden.getWorks())
                 .build()
         ).block();
-        orderService.save(order, garden);
+        orderRequestService.save(order, garden);
         return order;
     }
 
     public OrderStatus getStatus(String gardenId) {
-        return orderService.getByGardenId(gardenId);
+        return orderRequestService.getByGardenId(gardenId);
     }
 
     public void approve(String gardenId) {
-        OrderStatus orderStatus = orderService.getByGardenId(gardenId);
+        OrderStatus orderStatus = orderRequestService.getByGardenId(gardenId);
 
-        if (!orderStatus.getStatus().equals(OrderCreationStatus.done)) {
+        if (!orderStatus.getStatus().equals(OrderRequestStatus.done)) {
             throw new OrderIncompleteException(String.format("Order for garden with id: %s incompleted", gardenId));
         }
 
@@ -45,6 +45,6 @@ public class OrderServiceFacade {
                 .build()
         ).block();
 
-        orderService.delete(orderStatus);
+        orderRequestService.delete(orderStatus);
     }
 }

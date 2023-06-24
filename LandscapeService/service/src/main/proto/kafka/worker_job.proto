@@ -12,7 +12,7 @@ message WorkerJobRequest {
 
 message WorkerJobResponse {
   int64 id = 1;
-  WorkerJobEnum decision = 2;
+  WorkerJobEnum status = 2;
 
   enum WorkerJobEnum {
     rejected = 0;

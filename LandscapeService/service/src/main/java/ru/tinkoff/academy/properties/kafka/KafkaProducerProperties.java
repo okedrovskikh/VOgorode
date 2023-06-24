@@ -21,7 +21,11 @@ public sealed class KafkaProducerProperties extends KafkaProperties {
         }};
     }
 
-    @ConfigurationProperties(prefix = "kafka.producer.job-response")
-    public static final class JobResponseProducerProperties extends KafkaProducerProperties {
+    @ConfigurationProperties(prefix = "kafka.producer.job-request")
+    public static final class JobRequestProducerProperties extends KafkaProducerProperties {
+    }
+
+    @ConfigurationProperties(prefix = "kafka.producer.order-inform")
+    public static final class OrderInformProducerProperties extends KafkaProducerProperties {
     }
 }

@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.order;
+package ru.tinkoff.academy.order.request;
 
 import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +22,22 @@ import ru.tinkoff.academy.landscape.order.Order;
         description = "Duration Rancher service Order process handling",
         histogram = true
 )
-public class OrderController {
-    private final OrderServiceFacade orderServiceFacade;
+public class OrderRequestController {
+    private final OrderRequestServiceFacade orderRequestServiceFacade;
 
     @PostMapping("/createOrder")
     public Order createOrder(@RequestParam("garden") String gardenId) {
-        return orderServiceFacade.create(gardenId);
+        return orderRequestServiceFacade.create(gardenId);
     }
 
     @GetMapping("/{id}")
     public OrderStatus getStatus(@PathVariable("id") String gardenId) {
-        return orderServiceFacade.getStatus(gardenId);
+        return orderRequestServiceFacade.getStatus(gardenId);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void approve(@PathVariable("id") String gardenId) {
-        orderServiceFacade.approve(gardenId);
+        orderRequestServiceFacade.approve(gardenId);
     }
 }

@@ -39,3 +39,9 @@ mongock:
 rest:
   landscape:
     url: ${LANDSCAPE_URL:http://localhost:8082}
+
+kafka:
+  consumer:
+    kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+    schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+    topic: vogorode.order-inform.queue

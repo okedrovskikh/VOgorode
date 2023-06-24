@@ -13,9 +13,9 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class JobResponseKafkaProducer {
     private final KafkaTemplate<String, WorkerJobResponse> workerJobResponseKafkaTemplate;
-    private final KafkaProducerProperties.JobResponseProducerProperties jobResponseProducerProperties;
+    private final KafkaProducerProperties.JobResponseProducerProperties properties;
 
     public CompletableFuture<SendResult<String, WorkerJobResponse>> sendEvent(WorkerJobResponse event) {
-        return workerJobResponseKafkaTemplate.send(jobResponseProducerProperties.getTopic(), event);
+        return workerJobResponseKafkaTemplate.send(properties.getTopic(), event);
     }
 }

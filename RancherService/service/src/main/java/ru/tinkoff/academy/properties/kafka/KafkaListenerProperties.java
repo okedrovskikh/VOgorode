@@ -24,7 +24,7 @@ public sealed class KafkaListenerProperties extends KafkaProperties {
         }};
     }
 
-    @ConfigurationProperties(prefix = "kafka.consumer.job-request")
-    public static final class JobRequestConsumerProperties extends KafkaListenerProperties {
+    @ConfigurationProperties(prefix = "kafka.consumer.order-inform")
+    public static final class OrderInformConsumerProperties extends KafkaListenerProperties {
     }
 }

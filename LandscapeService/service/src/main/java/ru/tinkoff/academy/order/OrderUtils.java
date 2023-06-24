@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.rancher.order;
+package ru.tinkoff.academy.order;
 
 import ru.tinkoff.academy.proto.order.OrderInformResponse;
 

@@ -41,15 +41,13 @@ rest:
     url: ${LANDSCAPE_URL:http://localhost:8082}
 
 kafka:
-  handyman:
-    producer:
-      job-response:
-        kafka-brokers: localhost:10092
-        schema-registry: http://localhost:10001
-        topic: vogorode.handyman.job-response.queue
-  landscape:
-    consumer:
-      job-request:
-        kafka-brokers: localhost:10092
-        schema-registry: http://localhost:10001
-        topic: vogorode.landscape.job-request.queue
+  producer:
+    job-response:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.job-response.queue
+  consumer:
+    job-request:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.job-request.queue

@@ -12,7 +12,6 @@ import ru.tinkoff.academy.order.dto.OrderUpdateDto;
 import ru.tinkoff.academy.order.dto.StatusUpdateDto;
 import ru.tinkoff.academy.proto.order.OrderInformResponse;
 import ru.tinkoff.academy.proto.worker.WorkerJobRequest;
-import ru.tinkoff.academy.rancher.order.OrderInformKafkaProducer;
 import ru.tinkoff.academy.site.Site;
 import ru.tinkoff.academy.site.SiteService;
 
@@ -20,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.tinkoff.academy.rancher.order.OrderUtils.buildOrderInform;
+import static ru.tinkoff.academy.order.OrderUtils.buildOrderInform;
 
 @Service
 @RequiredArgsConstructor

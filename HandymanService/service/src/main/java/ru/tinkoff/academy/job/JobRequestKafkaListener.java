@@ -14,7 +14,7 @@ public class JobRequestKafkaListener {
     @KafkaListener(
             id = "jobRequestListener",
             idIsGroup = false,
-            topics = "vogorode.landscape.job-request.queue",
+            topics = "vogorode.job-request.queue",
             containerFactory = "workerJobRequestListenerContainerFactory"
     )
     public void listen(@Payload WorkerJobRequest event) {

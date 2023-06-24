@@ -1,4 +1,4 @@
-package ru.tinkoff.academy.order;
+package ru.tinkoff.academy.order.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +23,7 @@ public class OrderStatus {
     @Field(name = "garden_id")
     private String gardenId;
     @Field(name = "status")
-    private OrderCreationStatus status;
+    private OrderRequestStatus status;
     @Field(name = "order_id")
     private Long orderId;
 
