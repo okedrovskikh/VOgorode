@@ -8,7 +8,7 @@ import ru.tinkoff.academy.proto.order.OrderInformResponse;
 
 @Component
 @RequiredArgsConstructor
-public class OrderRequestKafkaListener {
+public class OrderInformKafkaListener {
     private final OrderRequestService orderRequestService;
 
     @KafkaListener(

@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 package ru.tinkoff.academy.kafka;
 
 option java_package = "ru.tinkoff.academy.proto.order";

@@ -9,6 +9,7 @@ import ru.tinkoff.academy.work.WorkEnum;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -16,9 +17,9 @@ import java.util.List;
 @Builder
 public class Order {
     private Long id;
-    private String gardenId;
-    private String workerId;
+    private UUID gardenId;
+    private UUID workerId;
     private List<WorkEnum> works;
-    private OrderStatus orderStatus;
+    private OrderStatus status;
     private Timestamp createdAt;
 }

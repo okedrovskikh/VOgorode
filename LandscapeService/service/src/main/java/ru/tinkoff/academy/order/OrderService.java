@@ -65,6 +65,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order updateStatus(Long id, OrderStatus status) {
         Order order = orderRepository.getReferenceById(id);
         order.setStatus(status);

@@ -42,6 +42,7 @@ rest:
 
 kafka:
   consumer:
-    kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
-    schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
-    topic: vogorode.order-inform.queue
+    order-inform:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.order-inform.queue

@@ -39,23 +39,6 @@ services:
     networks:
       - infrastructure-network
 
-  mongo-express:
-    image: mongo-express
-    container_name: infrastructure-mongo-express
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
-      MONGO_INITDB_URL: mongodb://root:example@mongo:27017
-    expose:
-      - 8081
-    ports:
-      - 5434:8081
-    networks:
-      - infrastructure-network
-    depends_on:
-      - mongo
-
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
     container_name: infrastructure-zookeeper

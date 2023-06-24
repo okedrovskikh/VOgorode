@@ -22,10 +22,10 @@ public class WorkerJobResponseListener {
             id = "jobResponseListener",
             idIsGroup = false,
             topics = "vogorode.job-response.queue",
-            containerFactory = "workerJobRequestListenerContainerFactory"
+            containerFactory = "workerJobResponseListenerContainerFactory"
     )
     public void listen(@Payload WorkerJobResponse event) {
-        if (event.getDecision().equals(WorkerJobResponse.WorkerJobEnum.done)) {
+        if (event.getStatus().equals(WorkerJobResponse.WorkerJobEnum.done)) {
             orderService.updateStatus(event.getId(), OrderStatus.done);
             orderInformKafkaProducer.sendEvent(buildOrderInform(event.getId(), OrderInformResponse.OrderStatus.done));
         } else {

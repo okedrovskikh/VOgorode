@@ -43,7 +43,7 @@ public class JobController {
         jobServiceFacade.finishJob(jobId);
     }
 
-    @DeleteMapping("/{id}/request")
+    @DeleteMapping("/{id}/reject")
     @ResponseStatus(code = HttpStatus.ACCEPTED)
     public void rejectJobRequest(@PathVariable("id") String workerId, @RequestParam("jobRequest") String jobRequestId) {
         jobServiceFacade.rejectJobRequest(workerId, jobRequestId);

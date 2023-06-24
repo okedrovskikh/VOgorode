@@ -15,23 +15,11 @@ public class OrderRequestService {
     private final OrderRequestRepository orderRequestRepository;
 
     public OrderStatus save(Order order, Garden garden) {
-        Optional<OrderStatus> optionalOrderStatus = orderRequestRepository.findByGardenId(garden.getId());
-
-        OrderStatus orderStatus;
-        if (optionalOrderStatus.isPresent()) {
-            orderStatus = optionalOrderStatus.get();
-
-            if (orderStatus.getStatus().equals(OrderRequestStatus.done)) {
-                throw new OrderCompletedException(String.format("Order for garden with id: %s completed", garden.getId()));
-            }
-
-        } else {
-            orderStatus = OrderStatus.builder()
-                    .orderId(order.getId())
-                    .gardenId(garden.getId())
-                    .status(OrderRequestStatus.created)
-                    .build();
-        }
+        OrderStatus orderStatus = OrderStatus.builder()
+                .orderId(order.getId())
+                .gardenId(garden.getId())
+                .status(OrderRequestStatus.created)
+                .build();
 
         return orderRequestRepository.save(orderStatus);
     }
@@ -57,6 +45,10 @@ public class OrderRequestService {
     public OrderStatus updateStatus(OrderInformResponse event) {
         OrderStatus orderStatus = getByOrderId(event.getOrderId());
         orderStatus.setStatus(OrderRequestStatus.valueOf(event.getStatus().name()));
+        return orderRequestRepository.save(orderStatus);
+    }
+
+    public OrderStatus update(OrderStatus orderStatus) {
         return orderRequestRepository.save(orderStatus);
     }
 
