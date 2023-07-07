@@ -1,11 +1,13 @@
 syntax = "proto3";
 
+import "google/protobuf/wrappers.proto";
+
 package ru.tinkoff.academy.kafka;
 
 option java_package = "ru.tinkoff.academy.proto.order";
 option java_multiple_files = true;
 
-message OrderInformResponse {
+message OrderInformRequest {
   int64 orderId = 1;
   OrderStatus status = 2;
 
@@ -13,4 +15,10 @@ message OrderInformResponse {
     rejected = 0;
     done = 1;
   }
+}
+
+message OrderInformResponse {
+  int64 orderId = 1;
+  int32 rating = 2;
+  google.protobuf.StringValue description = 3;
 }

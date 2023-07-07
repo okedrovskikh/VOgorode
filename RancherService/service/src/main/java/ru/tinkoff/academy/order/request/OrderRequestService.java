@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.tinkoff.academy.exceptions.OrderCompletedException;
 import ru.tinkoff.academy.garden.Garden;
 import ru.tinkoff.academy.landscape.order.Order;
+import ru.tinkoff.academy.proto.order.OrderInformRequest;
 import ru.tinkoff.academy.proto.order.OrderInformResponse;
 
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class OrderRequestService {
         return orderRequestRepository.findByOrderId(orderId);
     }
 
-    public OrderStatus updateStatus(OrderInformResponse event) {
+    public OrderStatus updateStatus(OrderInformRequest event) {
         OrderStatus orderStatus = getByOrderId(event.getOrderId());
         orderStatus.setStatus(OrderRequestStatus.valueOf(event.getStatus().name()));
         return orderRequestRepository.save(orderStatus);

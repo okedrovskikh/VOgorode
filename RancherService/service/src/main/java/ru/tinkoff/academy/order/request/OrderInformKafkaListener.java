@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import ru.tinkoff.academy.proto.order.OrderInformRequest;
 import ru.tinkoff.academy.proto.order.OrderInformResponse;
 
 @Component
@@ -17,7 +18,7 @@ public class OrderInformKafkaListener {
             topics = "vogorode.order-inform.queue",
             containerFactory = "orderResponseListenerContainerFactory"
     )
-    public void listen(@Payload OrderInformResponse event) {
+    public void listen(@Payload OrderInformRequest event) {
         orderRequestService.updateStatus(event);
     }
 }

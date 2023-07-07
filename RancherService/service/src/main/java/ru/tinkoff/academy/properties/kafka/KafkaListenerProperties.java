@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import ru.tinkoff.academy.proto.order.OrderInformRequest;
 import ru.tinkoff.academy.proto.order.OrderInformResponse;
 
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public sealed class KafkaListenerProperties extends KafkaProperties {
         @Override
         public Map<String, Object> toPropertiesMap() {
             Map<String, Object> propertiesMap = super.toPropertiesMap();
-            propertiesMap.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, OrderInformResponse.class.getName());
+            propertiesMap.put(KafkaProtobufDeserializerConfig.SPECIFIC_PROTOBUF_VALUE_TYPE, OrderInformRequest.class.getName());
             return propertiesMap;
         }
     }
