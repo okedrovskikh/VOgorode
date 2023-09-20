@@ -19,11 +19,12 @@ ContainerDb(mongo, "Database", "Container: MongoDB", "Хранит сады", $t
 Container_Boundary(rancher, "RancherService") {
     Component(field_controller, "FieldController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с полями")
     Component(field_service, "FieldService", "Component: Spring Service", "Реализует логику работы с полями")
-    Component(field_grpc_service, "FieldGrpcService", "Component: GrpcService", "Отправляет статистику по полям")
+    Component(area_service_grpc, "AreaServiceGrpc", "Component: GrpcService", "Отправляет статистику по полям")
     Component(fielder_controller, "FielderController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с работниками на полях")
     Component(fielder_service, "FielderService", "Component: Spring Service", "Реализует логику работы с работниками на полях")
     Component(garden_controller, "GardenController", "Component: Spring RestController", "Предоставляет CRUD операции для работы с садами")
     Component(garden_service, "GardenService", "Component: Spring Service", "Реализует логику работы с садами")
+    Component(garden_report_service_grpc, "GardenReportServiceGrpc", "Component: GrpcService", "Предоставляет статистику по доступным для работы полям")
 }
 
 /'Create relations between service and controllers'/
@@ -37,15 +38,17 @@ Rel(fielder_controller, fielder_service, " ")
 Rel(garden_controller, garden_service, " ")
 
 /'Create relations between grpc services and services'/
-Rel(field_grpc_service, field_service, " ")
+Rel(area_service_grpc, field_service, " ")
+Rel(garden_report_service_grpc, garden_service, " ")
 
 /'Create relations between services and repositories'/
-Rel(field_service, postgres, "Пишет/Читает поля.", "SQL/JDBC")
-Rel(fielder_service, postgres, "Пишет/Читает работников полей.", "SQL/JDBC")
+Rel(field_service, mongo, "Пишет/Читает поля.", "MongoDB wire protocol")
+Rel(fielder_service, mongo, "Пишет/Читает работников полей.", "MongoDB wire protocol")
 Rel(garden_service, mongo, "Пишет/Читает сады.", "MongoDB wire protocol")
 
 /'Create relations between containers'/
-Rel(landscape_service, field_grpc_service, "Собирает статистику по полям.", "protocol buffer/grpc")
+Rel(landscape_service, area_service_grpc, "Собирает статистику по доступным для работы полям.", "protocol buffer/grpc")
+Rel(landscape_service, garden_report_service_grpc, "Собирает статистику по полям.", "protocol buffer/grpc")
 Rel(garden_service, landscape_service, "Создает участок для сада.", "json/http")
 
 SHOW_LEGEND()

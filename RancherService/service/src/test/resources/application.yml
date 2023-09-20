@@ -1,11 +1,7 @@
 spring:
-  jpa:
-    show-sql: true
-    open-in-view: false
-  liquibase:
-    enabled: true
-    contexts: test
-    change-log: classpath:db/changelog/db.changelog-test.yaml
+  data:
+    mongodb:
+      authentication-database: admin
 
 rest:
   landscape:

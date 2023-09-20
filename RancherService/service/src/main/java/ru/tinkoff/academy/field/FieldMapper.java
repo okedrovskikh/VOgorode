@@ -1,23 +1,30 @@
 package ru.tinkoff.academy.field;
 
-import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Polygon;
-import org.locationtech.jts.io.ParseException;
-import org.locationtech.jts.io.WKTReader;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.CoordinateXY;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.impl.CoordinateArraySequence;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Point;
+import org.springframework.data.geo.Polygon;
 import ru.tinkoff.academy.field.dto.FieldCreateDto;
 import ru.tinkoff.academy.field.dto.FieldDto;
 import ru.tinkoff.academy.field.dto.FieldUpdateDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public abstract class FieldMapper {
     @Autowired
-    private WKTReader wktReader;
+    private GeometryFactory geometryFactory;
+
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "fielder", ignore = true)
+    @Mapping(target = "gardener", ignore = true)
     @Mapping(target = "area", expression = "java(castToPolygon(createDto.getArea()))")
     public abstract Field dtoToField(FieldCreateDto createDto);
 
@@ -29,21 +36,33 @@ public abstract class FieldMapper {
         return field;
     }
 
-    @Mapping(target = "area", expression = "java(field.getArea().getArea())")
+    protected Polygon castToPolygon(List<Double> pointsCoords) {
+        if (pointsCoords.size() % 2 != 0) {
+            throw new IllegalArgumentException("Area size % 2 cannot be not 0");
+        }
+
+        List<Point> points = new ArrayList<>();
+
+        for (int i = 0; i < pointsCoords.size(); i += 2) {
+            points.add(new Point(pointsCoords.get(i), pointsCoords.get(i + 1)));
+        }
+
+        return new Polygon(points);
+    }
+
+    @Mapping(target = "area", expression = "java(getAreaSquare(field))")
     public abstract FieldDto toDto(Field field);
 
-    protected Polygon castToPolygon(String geometryString) {
-        Geometry geometry;
-        try {
-            geometry = wktReader.read(geometryString);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(e.getMessage());
-        }
+    public double getAreaSquare(Field field) {
+        Coordinate[] coordinates = field.getArea().getPoints().stream()
+                .map(this::toCoordinate)
+                .toArray(Coordinate[]::new);
+        LinearRing shell = new LinearRing(new CoordinateArraySequence(coordinates), geometryFactory);
 
-        if (!(geometry instanceof Polygon polygon)) {
-            throw new IllegalArgumentException(String.format("%s is not a polygon", geometry.toString()));
-        }
+        return new org.locationtech.jts.geom.Polygon(shell, null, geometryFactory).getArea();
+    }
 
-        return polygon;
+    private Coordinate toCoordinate(Point point) {
+        return new CoordinateXY(point.getX(), point.getY());
     }
 }

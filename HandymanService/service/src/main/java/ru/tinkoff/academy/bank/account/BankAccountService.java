@@ -1,12 +1,12 @@
 package ru.tinkoff.academy.bank.account;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.bank.account.dto.BankAccountCreateDto;
 import ru.tinkoff.academy.bank.account.dto.BankAccountUpdateDto;
+import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.user.User;
 
 import java.util.List;
@@ -23,12 +23,12 @@ public class BankAccountService {
         return bankAccountRepository.save(bankAccount);
     }
 
-    public BankAccount getById(Long id) {
+    public BankAccount getById(String id) {
         return findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Account wasn't find by id: %s", id)));
     }
 
-    public Optional<BankAccount> findById(Long id) {
+    public Optional<BankAccount> findById(String id) {
         return bankAccountRepository.findById(id);
     }
 
@@ -42,19 +42,19 @@ public class BankAccountService {
 
     @Transactional
     public BankAccount update(BankAccountUpdateDto updateDto) {
-        BankAccount bankAccount = bankAccountRepository.getReferenceById(updateDto.getId());
+        BankAccount bankAccount = getById(updateDto.getId());
         bankAccount = bankAccountMapper.updateAccount(bankAccount, updateDto);
         return bankAccountRepository.save(bankAccount);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
-    public List<BankAccount> updateBankAccountsUser(List<Long> fieldsId, User user) {
+    public List<BankAccount> updateBankAccountsUser(List<String> fieldsId, User user) {
         List<BankAccount> accounts = bankAccountRepository.findAllById(fieldsId);
         accounts.forEach(a -> a.setUser(user));
         return bankAccountRepository.saveAll(accounts);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         bankAccountRepository.deleteById(id);
     }
 }

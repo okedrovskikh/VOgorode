@@ -12,7 +12,6 @@ Container(handyman_service, "HandymanService", "Container: Java and SpringBoot",
 Container(landscape_service, "LandscapeService", "Container: Java and SpringBoot", "Управление пользователями, назначение на работы, управление ценой за работы, проставление рейтинга, сбор статистики", $tags="webApp")
 
 /'Create databases containers'/
-ContainerDb(postgres, "Database", "Container: Postgis:15.5", "Хранит пользователей, банковские аккаунты" ,$tags="db")
 ContainerDb(mongo, "Database", "Container: MongoDB", "Хранит работников", $tags="db")
 
 /'Create Handyman Service boundary'/
@@ -24,6 +23,7 @@ Container_Boundary(handyman, "HandymanService") {
     Component(user_service, "UserService", "Component: Spring Service", "Реализует логику работы с пользователями")
     Component(worker_controller, "WorkerController", "Component: Spring RestController", "Предоставляет CRUD операции для работы работниками")
     Component(worker_service, "WorkerService", "Component: Spring Service", "Реализует логику работы с работниками")
+    Component(worker_service_grpc, "WorkerServiceGrpc", "Component: GrpcService", "Представляет доступ к открытым вакансиям")
 }
 
 /'Create relations between service and controllers'/
@@ -36,16 +36,20 @@ Rel(bank_account_controller, bank_account_service, " ")
 Rel(user_controller, user_service, " ")
 Rel(worker_controller, worker_service, " ")
 
+/'Create relations between services'/
+Rel(user_service, bank_account_service, " ")
+
 /'Create relations between grpc services and services'/
 Rel(bank_account_grpc_service, bank_account_service, " ")
 
 /'Create relations between services and databases'/
-Rel(bank_account_service, postgres, "Пишет/Читает банковские аккаунты.", "SQL/JDBC")
-Rel(user_service, postgres, "Пишет/Читает пользователей", "SQL/JDBC")
+Rel(bank_account_service, mongo, "Пишет/Читает банковские аккаунты.", "MongoDB wire protocol")
+Rel(user_service, mongo, "Пишет/Читает пользователей", "MongoDB wire protocol")
 Rel(worker_service, mongo, "Пишет/Читает работников.", "MongoDB wire protocol")
 
 /'Create relations between grpc client and grpc service'/
 Rel(landscape_service, bank_account_grpc_service, "Собирает статистику по банковским аккаунтам.", "protocol buffer/grpc")
+Rel(landscape_service, worker_service_grpc, "Собирает статистику по открытым вакансиям.", "protocol buffer/grpc")
 Rel(worker_service, landscape_service, "Создает новый аккаунт для работника.", "json/http")
 
 SHOW_LEGEND()

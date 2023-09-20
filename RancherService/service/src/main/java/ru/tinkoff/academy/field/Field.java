@@ -1,21 +1,15 @@
 package ru.tinkoff.academy.field;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.Polygon;
-import ru.tinkoff.academy.fielder.Fielder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.geo.Polygon;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import ru.tinkoff.academy.gardener.Gardener;
 
 import java.util.Objects;
 
@@ -24,27 +18,25 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "field")
-@Table(schema = "public", catalog = "vogorode")
+@Document(collection = "field")
 public class Field {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "address", nullable = false)
+    private String id;
+    @org.springframework.data.mongodb.core.mapping.Field(name = "address")
     private String address;
-    @Column(name = "latitude", nullable = false)
+    @org.springframework.data.mongodb.core.mapping.Field(name = "latitude")
     private Double latitude;
-    @Column(name = "longitude", nullable = false)
+    @org.springframework.data.mongodb.core.mapping.Field(name = "longitude")
     private Double longitude;
-    @Column(name = "area", nullable = false)
+    @org.springframework.data.mongodb.core.mapping.Field(name = "area")
     private Polygon area;
-    @ManyToOne
-    @JoinColumn(name = "fielder_id")
-    private Fielder fielder;
+    @DocumentReference
+    @org.springframework.data.mongodb.core.mapping.Field(name = "fielder_id")
+    private Gardener gardener;
 
     @Override
     public int hashCode() {
-        return id.intValue();
+        return Objects.hashCode(id);
     }
 
     @Override

@@ -1,24 +1,19 @@
 package ru.tinkoff.academy.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.NamedAttributeNode;
-import jakarta.persistence.NamedEntityGraph;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 import ru.tinkoff.academy.bank.account.BankAccount;
 import ru.tinkoff.academy.work.WorkEnum;
-import ru.tinkoff.academy.work.WorkEnumArrayType;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,34 +23,32 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "h_user")
-@Table(schema = "public", catalog = "vogorode")
-@NamedEntityGraph(name = "User.bankAccounts",
-        attributeNodes = @NamedAttributeNode(value = "accounts"))
+@Document(collection = "user")
+@CompoundIndexes({
+        @CompoundIndex(name = "user_email_and_telephone_constraint", def = "{ 'email': 1, 'telephone': 1 }", unique = true)
+})
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(name = "name", nullable = false)
+    private String id;
+    @Field(name = "name")
     private String name;
-    @Column(name = "surname", nullable = false)
+    @Field(name = "surname")
     private String surname;
-    @Column(name = "skills", nullable = false)
-    @Type(value = WorkEnumArrayType.class)
+    @Field(name = "skills")
     private WorkEnum[] skills;
-    @Column(name = "email", nullable = false)
+    @Field(name = "email")
     private String email;
-    @Column(name = "telephone", nullable = false)
+    @Field(name = "telephone")
     private String telephone;
-    @OneToMany(mappedBy = "user")
+    @DocumentReference
     @JsonIgnoreProperties({"user"})
     private List<BankAccount> accounts;
-    @Column(name = "photo", nullable = false)
+    @Field(name = "photo")
     private Byte[] photo;
 
     @Override
     public int hashCode() {
-        return id.intValue();
+        return id.hashCode();
     }
 
     @Override

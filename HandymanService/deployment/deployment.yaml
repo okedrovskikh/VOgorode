@@ -18,12 +18,6 @@ spec:
           name: handyman-service
           imagePullPolicy: Never
           env:
-            - name: POSTGRES_DB_URL
-              value: jdbc:postgresql://postgres-service:5432/vogorode
-            - name: POSTGRES_USER
-              value: postgres
-            - name: POSTGRES_PASSWORD
-              value: '123'
             - name: LANDSCAPE_URL
               value: http://landscape-service-service:8082
             - name: MONGO_DB_AUTH_DB

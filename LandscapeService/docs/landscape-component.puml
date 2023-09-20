@@ -31,6 +31,10 @@ Container_Boundary(landscape, "LandscapeService") {
     Component(bank_account_stat_service, "BankAccountStatisticsService", "Component: Spring Service", "Реализует логику получения статистики по банковским аккаунтам")
     Component(area_stat_controller, "AreaStatisticsController", "Component: Spring RestController", "Предоставляет статистику по полям")
     Component(area_stat_service, "AreaStatisticsService", "Component: Spring Service", "Реализует логику работы получения статистики по полям")
+    Component(report_controller, "ReportController", "Component: Spring RestController", "Собирает статистику по открытым вакансиям и по доступным для работы полям")
+    Component(report_service, "ReportService", "Component: Spring Service", "Реализует логику работы получения статистики по открытым вакансиям и по доступным для работы полям")
+    Component(worker_grpc_client, "WorkerGrpcClient", "Component: GrpcClient", "Получение статистики по открытым вакансиям")
+    Component(garden_report_grpc_client, "GardenReportGrpcClient", "Component: GrpcClient", "Получение статистики по участкам на которых необходимо проводить работы")
 }
 
 /'Create relations between service and controllers'/
@@ -40,6 +44,7 @@ Rel(site_controller, site_service, " ")
 Rel(account_stat_controller, account_stat_service, " ")
 Rel(bank_account_stat_controller, bank_account_stat_service, " ")
 Rel(area_stat_controller, area_stat_service, " ")
+Rel(report_controller, report_service, " ")
 
 /'Create relations between service and controllers'/
 Rel(landscape_service, account_controller, "CRUD операции для аккаунтов.", "json/http")
@@ -48,6 +53,9 @@ Rel(landscape_service, site_controller, "CRUD операции для участ
 Rel(landscape_service, account_stat_controller, "Получает статистику по аккаунтам.", "json/http")
 Rel(landscape_service, bank_account_stat_controller, "Получает статистику по банковским аккаунтам.", "json/http")
 Rel(landscape_service, area_stat_controller, "Получает статистику по полям.", "json/http")
+Rel(landscape_service, report_controller, "Получает статистику по открытым вакансиям и по доступным для работы.", "json/http")
+Rel(handyman_service, account_controller, "Создает новый аккаунт для worker'a.", "json/http")
+Rel(rancher_service, site_controller, "Создает новый участок для садового участка.", "json/http")
 
 /'Create relations between services'/
 Rel(account_stat_service, account_service, " ")
@@ -55,6 +63,8 @@ Rel(account_stat_service, account_service, " ")
 /'Create relations between services and grpc clients'/
 Rel(bank_account_stat_service, bank_account_grpc_client, " ")
 Rel(area_stat_service, field_grpc_client, " ")
+Rel(report_service, worker_grpc_client, " ")
+Rel(report_service, garden_report_grpc_client, " ")
 
 'Create relations between services and repositories'/
 Rel(account_service, postgres, "Пишет/Читает аккаунты.", "SQL/JDBC")
@@ -64,6 +74,8 @@ Rel(site_service, postgres, "Пишет/Читает участки.", "SQL/JDBC
 /'Create relations between grpc clients and containers'/
 Rel(bank_account_grpc_client, handyman_service, "Собирает статистику по банковским аккаунтам.", "protocol buffer/grpc")
 Rel(field_grpc_client, rancher_service, "Собирает статистику по полям.", "protocol buffer/grpc")
+Rel(worker_grpc_client, handyman_service, "Собирает статистику по открытым вакансиям.", "protocol buffer/grpc")
+Rel(garden_report_grpc_client, rancher_service, "Собирает статистику по участкам на которых необходимо проводить работы.", "protocol buffer/grpc")
 
 SHOW_LEGEND()
 

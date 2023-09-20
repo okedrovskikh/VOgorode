@@ -35,7 +35,7 @@ public class FieldController {
     }
 
     @GetMapping("/{id}")
-    public FieldDto getById(@PathVariable("id") Long id) {
+    public FieldDto getById(@PathVariable("id") String id) {
         return fieldMapper.toDto(fieldService.getById(id));
     }
 
@@ -50,7 +50,7 @@ public class FieldController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long id) {
+    public void delete(@PathVariable("id") String id) {
         fieldService.delete(id);
     }
 }

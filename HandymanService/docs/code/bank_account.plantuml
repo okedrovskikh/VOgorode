@@ -5,29 +5,28 @@ top to bottom direction
 skinparam linetype ortho
 
 class BankAccount {
-  + getId(): Long
+  + getId(): String
+  + hashCode(): int
+  + setPaymentSystem(PaymentSystem): void
   + getUser(): User
   + getCardId(): String
   + getPaymentSystem(): PaymentSystem
-  + builder(): BankAccountBuilder
   + getBank(): String
-  + setId(Long): void
+  + setId(String): void
+  + setBank(String): void
+  + builder(): BankAccountBuilder
   + setUser(User): void
   + setCardId(String): void
-  + setPaymentSystem(PaymentSystem): void
-  + setBank(String): void
-  + hashCode(): int
   + equals(Object): boolean
 }
 class BankAccountController {
-  + save(BankAccountCreateDto): BankAccount
-  + getById(Long): BankAccount
   + findAll(): List<BankAccount>
+  + save(BankAccountCreateDto): BankAccount
+  + getById(String): BankAccount
+  + delete(String): void
   + update(BankAccountUpdateDto): BankAccount
-  + delete(Long): void
 }
 class BankAccountCreateDto {
-  # canEqual(Object): boolean
   + getCardId(): String
   + getPaymentSystem(): PaymentSystem
   + getBank(): String
@@ -35,58 +34,61 @@ class BankAccountCreateDto {
   + setPaymentSystem(PaymentSystem): void
   + setBank(String): void
   + equals(Object): boolean
+  # canEqual(Object): boolean
   + hashCode(): int
   + toString(): String
 }
-class BankAccountGrpcServiceImpl {
-  + findAllBanks(Empty, StreamObserver<BankAccountResponse>): void
-  - createResponse(String): BankAccountResponse
+interface BankAccountCustomRepository << interface >> {
+  + findAllBanks(): List<String>
+}
+class BankAccountCustomRepositoryImpl {
+  + findAllBanks(): List<String>
 }
 class BankAccountMapper {
   + dtoToAccount(BankAccountCreateDto): BankAccount
   + updateAccount(BankAccount, BankAccountUpdateDto): BankAccount
 }
-interface BankAccountRepository << interface >> {
-  + findAllBanks(): List<String>
-}
+interface BankAccountRepository << interface >>
 class BankAccountService {
-  + save(BankAccountCreateDto): BankAccount
-  + getById(Long): BankAccount
-  + findById(Long): Optional<BankAccount>
-  + findAllBanks(): List<String>
-  + updateBankAccountsUser(List<Long>, User): List<BankAccount>
+  + getById(String): BankAccount
   + update(BankAccountUpdateDto): BankAccount
+  + findById(String): Optional<BankAccount>
+  + findAllBanks(): List<String>
   + findAll(): List<BankAccount>
-  + delete(Long): void
+  + updateBankAccountsUser(List<String>, User): List<BankAccount>
+  + delete(String): void
+  + save(BankAccountCreateDto): BankAccount
 }
 class BankAccountUpdateDto {
-  + getBank(): String
-  + getId(): Long
+  + setId(String): void
+  + getId(): String
+  + toString(): String
   + getCardId(): String
   + getPaymentSystem(): PaymentSystem
-  + setId(Long): void
+  + getBank(): String
   + setCardId(String): void
   + setPaymentSystem(PaymentSystem): void
   + setBank(String): void
   + equals(Object): boolean
   # canEqual(Object): boolean
   + hashCode(): int
-  + toString(): String
+}
+class BankServiceGrpcImpl {
+  + findAll(Empty, StreamObserver<BankResponse>): void
+  - createResponse(String): BankResponse
 }
 enum PaymentSystem << enumeration >> {
-  + values(): PaymentSystem[]
   + valueOf(String): PaymentSystem
-}
-class PaymentSystemEnumType {
-  + nullSafeSet(PreparedStatement, PaymentSystem, int, SharedSessionContractImplementor): void
-  + nullSafeGet(ResultSet, int, SharedSessionContractImplementor, Object): PaymentSystem
+  + values(): PaymentSystem[]
 }
 
-BankAccount                "1" *-[#595959,plain]-> "paymentSystem\n1" PaymentSystem              
-BankAccountController      "1" *-[#595959,plain]-> "bankAccountService\n1" BankAccountService         
-BankAccountCreateDto       "1" *-[#595959,plain]-> "paymentSystem\n1" PaymentSystem              
-BankAccountGrpcServiceImpl "1" *-[#595959,plain]-> "bankAccountService\n1" BankAccountService         
-BankAccountService         "1" *-[#595959,plain]-> "bankAccountMapper\n1" BankAccountMapper          
-BankAccountService         "1" *-[#595959,plain]-> "bankAccountRepository\n1" BankAccountRepository      
-BankAccountUpdateDto       "1" *-[#595959,plain]-> "paymentSystem\n1" PaymentSystem              
+BankAccount                     "1" *-[#595959,plain]-> "paymentSystem\n1" PaymentSystem                   
+BankAccountController           "1" *-[#595959,plain]-> "bankAccountService\n1" BankAccountService              
+BankAccountCreateDto            "1" *-[#595959,plain]-> "paymentSystem\n1" PaymentSystem                   
+BankAccountCustomRepositoryImpl  -[#008200,dashed]-^  BankAccountCustomRepository     
+BankAccountRepository            -[#008200,plain]-^  BankAccountCustomRepository     
+BankAccountService              "1" *-[#595959,plain]-> "bankAccountMapper\n1" BankAccountMapper               
+BankAccountService              "1" *-[#595959,plain]-> "bankAccountRepository\n1" BankAccountRepository           
+BankAccountUpdateDto            "1" *-[#595959,plain]-> "paymentSystem\n1" PaymentSystem                   
+BankServiceGrpcImpl             "1" *-[#595959,plain]-> "bankAccountService\n1" BankAccountService              
 @enduml

@@ -1,12 +1,12 @@
 package ru.tinkoff.academy.user;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tinkoff.academy.bank.account.BankAccount;
 import ru.tinkoff.academy.bank.account.BankAccountService;
+import ru.tinkoff.academy.exceptions.EntityNotFoundException;
 import ru.tinkoff.academy.user.dto.UserCreateDto;
 import ru.tinkoff.academy.user.dto.UserUpdateDto;
 
@@ -32,12 +32,12 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User getById(Long id) {
+    public User getById(String id) {
         return findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("User wasn't find by id: %s", id)));
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<User> findById(String id) {
         return userRepository.findById(id);
     }
 
@@ -55,12 +55,12 @@ public class UserService {
 
     @Transactional
     public User update(UserUpdateDto updateDto) {
-        User user = userRepository.getReferenceById(updateDto.getId());
+        User user = getById(updateDto.getId());
         user = userMapper.updateUser(user, updateDto);
         return userRepository.save(user);
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         userRepository.deleteById(id);
     }
 }

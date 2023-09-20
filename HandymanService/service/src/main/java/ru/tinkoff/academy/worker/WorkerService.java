@@ -3,12 +3,12 @@ package ru.tinkoff.academy.worker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.tinkoff.academy.landscape.UserWebClientHelper;
-import ru.tinkoff.academy.landscape.user.LandscapeUserMapper;
+import ru.tinkoff.academy.exceptions.EntityNotFoundException;
+import ru.tinkoff.academy.landscape.AccountWebClientHelper;
+import ru.tinkoff.academy.landscape.account.Account;
+import ru.tinkoff.academy.landscape.account.AccountMapper;
 import ru.tinkoff.academy.worker.dto.WorkerCreateDto;
 import ru.tinkoff.academy.worker.dto.WorkerUpdateDto;
-import ru.tinkoff.academy.landscape.user.LandscapeUser;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -16,17 +16,17 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WorkerService {
     private final WorkerMapper workerMapper;
-    private final LandscapeUserMapper landscapeUserMapper;
+    private final AccountMapper accountMapper;
     private final WorkerRepository workerRepository;
-    private final UserWebClientHelper webHelper;
+    private final AccountWebClientHelper webHelper;
 
     @Transactional
     public Worker save(WorkerCreateDto workerCreateDto) {
-        LandscapeUser landscapeUser = webHelper.saveUser(
-                landscapeUserMapper.workerCreateDtoToUserCreateDto(workerCreateDto)
+        Account account = webHelper.saveUser(
+                accountMapper.workerCreateDtoToUserCreateDto(workerCreateDto)
         ).block();
         Worker worker = workerMapper.dtoToWorker(workerCreateDto);
-        worker.setLandscapeUserId(landscapeUser.getId());
+        worker.setLandscapeUserId(account.getId());
         return workerRepository.save(worker);
     }
 
@@ -36,7 +36,7 @@ public class WorkerService {
 
     public Worker getById(String id) {
         return findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Worker wasn't find by id: %s", id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Worker wasn't find by id: %s", id)));
     }
 
     public Optional<Worker> findById(String id) {
@@ -48,23 +48,23 @@ public class WorkerService {
     }
 
     private ExtendedByUserWorker mapToExtended(Worker worker) {
-        LandscapeUser landscapeUser = this.webHelper.getUser(worker.getLandscapeUserId()).block();
-        return this.workerMapper.toExtendedWorker(worker, landscapeUser);
+        Account account = webHelper.getUser(worker.getLandscapeUserId()).block();
+        return workerMapper.toExtendedWorker(worker, account);
     }
 
     public List<Worker> findAll() {
-        return this.workerRepository.findAll();
+        return workerRepository.findAll();
     }
 
     @Transactional
     public Worker update(WorkerUpdateDto workerUpdateDto) {
-        Worker worker = this.workerMapper.dtoToWorker(workerUpdateDto);
-        Worker oldWorker = this.getById(worker.getId());
+        Worker worker = workerMapper.dtoToWorker(workerUpdateDto);
+        Worker oldWorker = getById(worker.getId());
         worker.setLandscapeUserId(oldWorker.getLandscapeUserId());
         return workerRepository.save(worker);
     }
 
     public void delete(String id) {
-        this.workerRepository.deleteById(id);
+        workerRepository.deleteById(id);
     }
 }

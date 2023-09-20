@@ -11,11 +11,11 @@ class FieldGenerator(private val faker: Faker) {
             area = generatePolygon()
         )
 
-    private fun generatePolygon(): String {
+    private fun generatePolygon(): List<Double> {
         val x1 = (faker.random().nextDouble() + 0.1) * (faker.random().nextInt() + 0.1)
         val x2 = (faker.random().nextDouble() + 0.1) * (faker.random().nextInt() + 0.1)
         val y1 = (faker.random().nextDouble() + 0.1) * (faker.random().nextInt() + 0.1)
         val y2 = (faker.random().nextDouble() + 0.1) * (faker.random().nextInt() + 0.1)
-        return "POLYGON (($x1 $y1, $x1 $y2, $x2 $y2, $x2 $y1, $x1 $y1))"
+        return listOf(x1, y1, x1, y2, x2, y2, x2, y1, x1, y1)
     }
 }
