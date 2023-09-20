@@ -1,6 +1,7 @@
 package ru.tinkoff.academy.order;
 
 import io.micrometer.core.annotation.Timed;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.order.dto.OrderCreateDto;
 import ru.tinkoff.academy.order.dto.OrderUpdateDto;
+import ru.tinkoff.academy.order.dto.StatusUpdateDto;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("")
-    public Order save(@RequestBody OrderCreateDto createDto) {
+    public Order save(@RequestBody @Valid OrderCreateDto createDto) {
         return orderService.save(createDto);
     }
 
@@ -53,6 +55,11 @@ public class OrderController {
     @PutMapping("")
     public Order update(@RequestBody OrderUpdateDto updateDto) {
         return orderService.update(updateDto);
+    }
+
+    @PutMapping("/status")
+    public Order update(@RequestBody StatusUpdateDto updateDto) {
+        return orderService.updateStatus(updateDto);
     }
 
     @DeleteMapping("/{id}")

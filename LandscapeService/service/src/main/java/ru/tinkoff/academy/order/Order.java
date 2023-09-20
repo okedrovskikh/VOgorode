@@ -23,6 +23,7 @@ import ru.tinkoff.academy.work.WorkEnumArrayType;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -36,9 +37,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "garden_id", nullable = false)
-    private Long gardenId;
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    private UUID gardenId;
+    @Column(name = "worker_id")
+    private UUID workerId;
     @Column(name = "works", nullable = false)
     @Type(value = WorkEnumArrayType.class)
     private WorkEnum[] works;

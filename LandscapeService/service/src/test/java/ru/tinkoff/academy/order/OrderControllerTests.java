@@ -27,6 +27,7 @@ import ru.tinkoff.academy.work.WorkEnum;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -43,15 +44,14 @@ public class OrderControllerTests extends AbstractIntegrationTest {
     public void testSaveCorrectOrder() throws Exception {
         Order expectedOrder = Order.builder()
                 .id(9L)
-                .userId(1L)
-                .gardenId(1L)
+                .workerId(null)
+                .gardenId(UUID.fromString("0fac7f6f-fef5-4919-9df3-1a57b2378e72"))
                 .works(new WorkEnum[]{WorkEnum.sow})
                 .status(OrderStatus.created)
                 .build();
 
         OrderCreateDto request = new OrderCreateDto();
-        request.setUserId(1L);
-        request.setGardenId(1L);
+        request.setGardenId(UUID.fromString("0fac7f6f-fef5-4919-9df3-1a57b2378e72"));
         request.setWorks(new WorkEnum[]{WorkEnum.sow});
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.post(orders)
@@ -68,8 +68,7 @@ public class OrderControllerTests extends AbstractIntegrationTest {
     @Test
     public void testSaveIncorrectOrder() throws Exception {
         OrderCreateDto request = new OrderCreateDto();
-        request.setGardenId(90L);
-        request.setUserId(70L);
+        request.setGardenId(UUID.randomUUID());
 
         mockMvc.perform(MockMvcRequestBuilders.post(orders)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -83,8 +82,8 @@ public class OrderControllerTests extends AbstractIntegrationTest {
         Long id = 2L;
         Order expectedOrder = Order.builder()
                 .id(id)
-                .userId(2L)
-                .gardenId(2L)
+                .workerId(UUID.fromString("3b1635c7-abad-4198-adbe-c60c02bb0bf5"))
+                .gardenId(UUID.fromString("3b1635c7-abad-4198-adbe-c60c02bb0bf5"))
                 .works(new WorkEnum[]{WorkEnum.plant})
                 .status(OrderStatus.approved)
                 .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
@@ -113,48 +112,48 @@ public class OrderControllerTests extends AbstractIntegrationTest {
         List<Order> expectedOrders = List.of(
                 Order.builder()
                         .id(1L)
-                        .userId(1L)
-                        .gardenId(1L)
+                        .workerId(UUID.fromString("e37d98b9-e7d5-4517-887d-8e50d0e5b591"))
+                        .gardenId(UUID.fromString("e37d98b9-e7d5-4517-887d-8e50d0e5b591"))
                         .works(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(2L)
-                        .userId(2L)
-                        .gardenId(2L)
+                        .workerId(UUID.fromString("3b1635c7-abad-4198-adbe-c60c02bb0bf5"))
+                        .gardenId(UUID.fromString("3b1635c7-abad-4198-adbe-c60c02bb0bf5"))
                         .works(new WorkEnum[]{WorkEnum.plant})
                         .status(OrderStatus.approved)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(3L)
-                        .userId(3L)
-                        .gardenId(3L)
+                        .workerId(UUID.fromString("be6c5410-c8b2-4b5c-a56f-da6d48db6e0a"))
+                        .gardenId(UUID.fromString("be6c5410-c8b2-4b5c-a56f-da6d48db6e0a"))
                         .works(new WorkEnum[]{WorkEnum.plant})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(4L)
-                        .userId(4L)
-                        .gardenId(4L)
+                        .workerId(UUID.fromString("5a9abd5c-fcb3-4b79-8651-fb690b892cb3"))
+                        .gardenId(UUID.fromString("5a9abd5c-fcb3-4b79-8651-fb690b892cb3"))
                         .works(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(5L)
-                        .userId(5L)
-                        .gardenId(5L)
+                        .workerId(UUID.fromString("30f80f73-370f-4531-9a9b-9e55f685fc16"))
+                        .gardenId(UUID.fromString("30f80f73-370f-4531-9a9b-9e55f685fc16"))
                         .works(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(6L)
-                        .userId(6L)
-                        .gardenId(6L)
+                        .workerId(UUID.fromString("b96efb51-618c-4a11-b7b5-a8805910457c"))
+                        .gardenId(UUID.fromString("b96efb51-618c-4a11-b7b5-a8805910457c"))
                         .works(new WorkEnum[]{WorkEnum.sow})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
@@ -174,24 +173,24 @@ public class OrderControllerTests extends AbstractIntegrationTest {
         List<Order> expectedOrders = List.of(
                 Order.builder()
                         .id(4L)
-                        .userId(4L)
-                        .gardenId(4L)
+                        .workerId(UUID.fromString("5a9abd5c-fcb3-4b79-8651-fb690b892cb3"))
+                        .gardenId(UUID.fromString("5a9abd5c-fcb3-4b79-8651-fb690b892cb3"))
                         .works(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(5L)
-                        .userId(5L)
-                        .gardenId(5L)
+                        .workerId(UUID.fromString("30f80f73-370f-4531-9a9b-9e55f685fc16"))
+                        .gardenId(UUID.fromString("30f80f73-370f-4531-9a9b-9e55f685fc16"))
                         .works(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
                         .build(),
                 Order.builder()
                         .id(6L)
-                        .userId(6L)
-                        .gardenId(6L)
+                        .workerId(UUID.fromString("b96efb51-618c-4a11-b7b5-a8805910457c"))
+                        .gardenId(UUID.fromString("b96efb51-618c-4a11-b7b5-a8805910457c"))
                         .works(new WorkEnum[]{WorkEnum.sow})
                         .status(OrderStatus.created)
                         .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
@@ -211,8 +210,8 @@ public class OrderControllerTests extends AbstractIntegrationTest {
     public void testUpdateByCorrectDto() throws Exception {
         Order expectedOrder = Order.builder()
                 .id(7L)
-                .userId(10L)
-                .gardenId(10L)
+                .workerId(UUID.fromString("2946c578-5120-45f4-8cd6-8ab1b981dc5a"))
+                .gardenId(UUID.fromString("2946c578-5120-45f4-8cd6-8ab1b981dc5a"))
                 .works(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water})
                 .status(OrderStatus.in_progress)
                 .createdAt(Timestamp.valueOf("2023-03-26 17:04:39.151"))
@@ -220,10 +219,7 @@ public class OrderControllerTests extends AbstractIntegrationTest {
 
         OrderUpdateDto request = new OrderUpdateDto();
         request.setId(7L);
-        request.setUserId(10L);
-        request.setGardenId(10L);
         request.setWorks(new WorkEnum[]{WorkEnum.shovel, WorkEnum.water});
-        request.setStatus(OrderStatus.in_progress);
 
         MvcResult response = mockMvc.perform(MockMvcRequestBuilders.put(orders)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -252,7 +248,6 @@ public class OrderControllerTests extends AbstractIntegrationTest {
     public void testUpdateByIncorrectDto() throws Exception {
         OrderUpdateDto request = new OrderUpdateDto();
         request.setId(7L);
-        request.setUserId(90L);
 
         mockMvc.perform(MockMvcRequestBuilders.put(orders)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -299,7 +294,7 @@ public class OrderControllerTests extends AbstractIntegrationTest {
 
     private void assertEqualsOrder(Order expected, Order actual) {
         Assertions.assertEquals(expected.getId(), actual.getId());
-        Assertions.assertEquals(expected.getUserId(), actual.getUserId());
+        Assertions.assertEquals(expected.getWorkerId(), actual.getWorkerId());
         Assertions.assertEquals(expected.getGardenId(), actual.getGardenId());
         Assertions.assertArrayEquals(expected.getWorks(), actual.getWorks());
         Assertions.assertEquals(expected.getStatus(), actual.getStatus());
@@ -316,18 +311,6 @@ public class OrderControllerTests extends AbstractIntegrationTest {
                                 @JsonProperty("totalPages") int totalPages, @JsonProperty("sort") JsonNode sort, @JsonProperty("first") boolean first,
                                 @JsonProperty("numberOfElements") int numberOfElements, @JsonProperty("empty") boolean empty) {
             super(content, PageRequest.of(number, size), totalElements);
-        }
-
-        public RestResponsePage(List<T> content, Pageable pageable, long total) {
-            super(content, pageable, total);
-        }
-
-        public RestResponsePage(List<T> content) {
-            super(content);
-        }
-
-        public RestResponsePage() {
-            super(new ArrayList<T>());
         }
     }
 }
