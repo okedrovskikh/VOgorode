@@ -15,10 +15,10 @@ public abstract class WorkerMapper {
     protected WorkEnumMapper workEnumMapper;
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "landscapeUserId", ignore = true)
+    @Mapping(target = "accountId", ignore = true)
     public abstract Worker dtoToWorker(WorkerCreateDto workerCreateDto);
 
-    @Mapping(target = "landscapeUserId", ignore = true)
+    @Mapping(target = "accountId", ignore = true)
     public abstract Worker dtoToWorker(WorkerUpdateDto workerCreateDto);
 
     @Mapping(target = "id", source = "worker.id")
@@ -30,7 +30,7 @@ public abstract class WorkerMapper {
     public WorkerResponse mapToGrpcResponse(Worker worker) {
         return WorkerResponse.newBuilder()
                 .setId(worker.getId())
-                .setLandscapeId(worker.getLandscapeUserId().toString())
+                .setLandscapeId(worker.getAccountId().toString())
                 .setLatitude(worker.getLatitude())
                 .setLongitude(worker.getLongitude())
                 .addAllServices(worker.getServices().stream().map(workEnumMapper::toGrpcWorkEnum).toList())

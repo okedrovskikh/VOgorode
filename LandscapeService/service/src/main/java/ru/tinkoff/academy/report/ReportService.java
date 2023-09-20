@@ -2,9 +2,9 @@ package ru.tinkoff.academy.report;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.tinkoff.academy.handyman.worker.WorkerService;
+import ru.tinkoff.academy.handyman.worker.grpc.WorkerService;
 import ru.tinkoff.academy.rancher.garden.report.GardenReportService;
-import ru.tinkoff.academy.handyman.worker.Worker;
+import ru.tinkoff.academy.handyman.worker.grpc.Worker;
 import ru.tinkoff.academy.rancher.garden.report.GardenReport;
 
 import java.util.List;

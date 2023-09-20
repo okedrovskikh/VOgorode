@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "common/work_enum.proto";
+package ru.tinkoff.academy.grpc;
+
+option java_package = "ru.tinkoff.academy.proto.worker";
+option java_multiple_files = true;
+
+service WorkerService {
+  rpc findAll(google.protobuf.Empty) returns (stream WorkerResponse);
+  rpc findByServices(WorkerByServicesRequest) returns (stream WorkerResponse);
+}
+
+message WorkerResponse {
+  string id = 1;
+  string landscapeId = 2;
+  repeated ru.tinkoff.academy.common.WorkEnum services = 3;
+  double latitude = 4;
+  double longitude = 5;
+}
+
+message WorkerByServicesRequest {
+  repeated ru.tinkoff.academy.common.WorkEnum services = 1;
+}

@@ -39,3 +39,15 @@ mongock:
 rest:
   landscape:
     url: ${LANDSCAPE_URL:http://localhost:8082}
+
+kafka:
+  producer:
+    job-response:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.job-response.queue
+  consumer:
+    job-request:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.job-request.queue

@@ -22,7 +22,7 @@ import java.util.UUID;
 public class Worker {
     @Id
     private String id;
-    private UUID landscapeUserId;
+    private UUID accountId;
     private List<WorkEnum> services;
     private Double latitude;
     private Double longitude;

@@ -28,7 +28,7 @@ public class WorkerService {
                 accountMapper.workerCreateDtoToUserCreateDto(workerCreateDto)
         ).block();
         Worker worker = workerMapper.dtoToWorker(workerCreateDto);
-        worker.setLandscapeUserId(account.getId());
+        worker.setAccountId(account.getId());
         return workerRepository.save(worker);
     }
 
@@ -50,7 +50,7 @@ public class WorkerService {
     }
 
     private ExtendedByUserWorker mapToExtended(Worker worker) {
-        Account account = webHelper.getUser(worker.getLandscapeUserId()).block();
+        Account account = webHelper.getUser(worker.getAccountId()).block();
         return workerMapper.toExtendedWorker(worker, account);
     }
 
@@ -66,7 +66,7 @@ public class WorkerService {
     public Worker update(WorkerUpdateDto workerUpdateDto) {
         Worker worker = workerMapper.dtoToWorker(workerUpdateDto);
         Worker oldWorker = getById(worker.getId());
-        worker.setLandscapeUserId(oldWorker.getLandscapeUserId());
+        worker.setAccountId(oldWorker.getAccountId());
         return workerRepository.save(worker);
     }
 

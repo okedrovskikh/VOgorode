@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
+import ru.tinkoff.academy.landscape.order.dto.OrderUpdateDto;
 import ru.tinkoff.academy.landscape.order.dto.StatusUpdateDto;
-
-import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
@@ -29,9 +28,7 @@ public class OrderWebClientHelper {
                 .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
                     throw new IllegalStateException("Service unavailable");
                 })
-                .bodyToMono(Order.class)
-                .retry(2)
-                .timeout(Duration.ofSeconds(10));
+                .bodyToMono(Order.class);
     }
 
     public Mono<Order> getOrderById(Long id) {
@@ -39,6 +36,22 @@ public class OrderWebClientHelper {
                 .uri(String.format("/orders/%s", id))
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
+                .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
+                    throw new IllegalStateException("Service unavailable");
+                })
+                .bodyToMono(Order.class);
+    }
+
+    public Mono<Order> updateOrder(OrderUpdateDto updateDto) {
+        return landscapeWebClient.put()
+                .uri("/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(updateDto)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .onStatus(status -> HttpStatus.CONFLICT == status, response -> {
+                    throw new IllegalStateException("Invalid request");
+                })
                 .onStatus(status -> HttpStatus.INTERNAL_SERVER_ERROR == status, response -> {
                     throw new IllegalStateException("Service unavailable");
                 })

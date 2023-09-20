@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.tinkoff.academy.gardener.dto.GardenerCreateDto;
 import ru.tinkoff.academy.gardener.dto.GardenerDto;
 import ru.tinkoff.academy.gardener.dto.GardenerUpdateDto;
-import ru.tinkoff.academy.landscape.order.Order;
-import ru.tinkoff.academy.landscape.order.dto.OrderCreateDto;
 
 import java.util.List;
 
@@ -33,13 +31,8 @@ public class GardenerController {
     private final GardenerMapper gardenerMapper;
 
     @PostMapping("")
-    public GardenerDto save(@RequestBody GardenerCreateDto createDto) {
+    public GardenerDto save(@Valid @RequestBody GardenerCreateDto createDto) {
         return gardenerMapper.toDto(gardenerService.save(createDto));
-    }
-
-    @PostMapping("/createOrder")
-    public Order createOrder(@Valid OrderCreateDto createDto) {
-        return gardenerService.createOrder(createDto);
     }
 
     @GetMapping("/{id}")
@@ -53,7 +46,7 @@ public class GardenerController {
     }
 
     @PutMapping("")
-    public GardenerDto update(@RequestBody GardenerUpdateDto updateDto) {
+    public GardenerDto update(@Valid @RequestBody GardenerUpdateDto updateDto) {
         return gardenerMapper.toDto(gardenerService.update(updateDto));
     }
 

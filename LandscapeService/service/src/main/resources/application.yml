@@ -33,3 +33,19 @@ spring:
     url: ${POSTGRES_DB_URL:jdbc:postgresql://localhost:5433/vogorode}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:123}
+
+kafka:
+  consumer:
+    job-response:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.job-response.queue
+  producer:
+    job-request:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.job-request.queue
+    order-inform:
+      kafka-brokers: ${KAFKA_BROKERS:localhost:10092}
+      schema-registry: ${SCHEMA_REGISTRY:http://localhost:10001}
+      topic: vogorode.order-inform.queue

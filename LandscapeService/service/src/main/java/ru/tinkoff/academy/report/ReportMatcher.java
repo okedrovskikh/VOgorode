@@ -1,7 +1,7 @@
 package ru.tinkoff.academy.report;
 
 import org.springframework.stereotype.Service;
-import ru.tinkoff.academy.handyman.worker.Worker;
+import ru.tinkoff.academy.handyman.worker.grpc.Worker;
 import ru.tinkoff.academy.rancher.garden.report.GardenReport;
 import ru.tinkoff.academy.work.WorkEnum;
 

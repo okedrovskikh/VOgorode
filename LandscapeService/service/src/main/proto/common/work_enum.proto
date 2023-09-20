@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package ru.tinkoff.academy.common;
+
+option java_package = "ru.tinkoff.academy.proto.work";
+option java_multiple_files = true;
+
+enum WorkEnum {
+  unknown = 0;
+  shovel = 1;
+  plant = 2;
+  water = 3;
+  sow = 4;
+}

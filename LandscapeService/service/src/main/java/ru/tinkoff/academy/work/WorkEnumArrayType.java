@@ -34,9 +34,6 @@ public class WorkEnumArrayType extends UserTypeSupport<Object> {
     @Override
     public WorkEnum[] nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
             throws SQLException {
-        if (rs.wasNull()) {
-            return null;
-        }
         Array array = rs.getArray(position);
         if (array == null) {
             return null;

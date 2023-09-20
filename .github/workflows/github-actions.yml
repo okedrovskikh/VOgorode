@@ -12,7 +12,7 @@ jobs:
         id: plantuml
         uses: grassedge/generate-plantuml-action@v1.5
         with:
-          path: ./docs/c4/*
+          path: ./docs/c4
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,7 +27,7 @@ jobs:
         id: plantuml
         uses: grassedge/generate-plantuml-action@v1.5
         with:
-          path: ./HandymanService/docs/*
+          path: ./HandymanService/docs
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
         id: plantuml
         uses: grassedge/generate-plantuml-action@v1.5
         with:
-          path: ./LandscapeService/docs/*
+          path: ./LandscapeService/docs
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
         id: plantuml
         uses: grassedge/generate-plantuml-action@v1.5
         with:
-          path: ./RancherService/docs/*
+          path: ./RancherService/docs
           message: "Render PlantUML files"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

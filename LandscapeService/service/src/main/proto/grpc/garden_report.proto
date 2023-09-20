@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "common/work_enum.proto";
+package ru.tinkoff.academy.grpc;
+
+option java_package = "ru.tinkoff.academy.proto.garden.report";
+option java_multiple_files = true;
+
+service GardenReportService {
+  rpc formReport(google.protobuf.Empty) returns (stream GardenReportResponse);
+}
+
+message GardenReportResponse {
+  reserved 1;
+  repeated ru.tinkoff.academy.common.WorkEnum works = 2;
+}
